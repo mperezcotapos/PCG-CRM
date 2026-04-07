@@ -9,6 +9,7 @@ import Clients    from './views/Clients'
 import Projects   from './views/Projects'
 import Providers  from './views/Providers'
 import Import     from './views/Import'
+import Chat       from './views/Chat'
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
               <Route path="/proyectos"   element={<Projects />} />
               <Route path="/proveedores" element={<Providers />} />
               <Route path="/importar"    element={<Import />} />
+              <Route path="/chat"        element={<Chat />} />
               <Route path="*"            element={<Navigate to="/" />} />
             </Routes>
           </main>

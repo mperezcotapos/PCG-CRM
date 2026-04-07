@@ -38,6 +38,7 @@ const MAIN_NAV = [
 ]
 
 const MORE_NAV = [
+  { to: '/chat',        label: '✨ Asistente IA' },
   { to: '/proyectos',   label: 'Proyectos y Partidas' },
   { to: '/proveedores', label: 'Proveedores' },
   { to: '/importar',    label: 'Importar datos' },
