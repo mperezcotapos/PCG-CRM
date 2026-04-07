@@ -132,8 +132,37 @@ export default function Chat() {
   const [displayMessages, setDisplayMessages] = useState([])
   const [input, setInput]   = useState('')
   const [busy, setBusy]     = useState(false)
+  const [recording, setRecording] = useState(false)
   const bottomRef = useRef(null)
   const textareaRef = useRef(null)
+  const recognitionRef = useRef(null)
+
+  const startRecording = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    if (!SpeechRecognition) {
+      alert('Tu navegador no soporta reconocimiento de voz. Usá Chrome.')
+      return
+    }
+    const recognition = new SpeechRecognition()
+    recognition.lang = 'es-CL'
+    recognition.interimResults = false
+    recognition.maxAlternatives = 1
+    recognitionRef.current = recognition
+
+    recognition.onstart  = () => setRecording(true)
+    recognition.onend    = () => setRecording(false)
+    recognition.onerror  = () => setRecording(false)
+    recognition.onresult = (e) => {
+      const transcript = e.results[0][0].transcript
+      sendMessage(transcript)
+    }
+    recognition.start()
+  }
+
+  const stopRecording = () => {
+    recognitionRef.current?.stop()
+    setRecording(false)
+  }
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -434,15 +463,34 @@ ${ctx.proyectos.map(p => `[${p.id}] ${p.name}`).join('\n')}`
           }}
           disabled={busy}
         />
-        <button
-          className="btn-primary px-3 self-end"
-          onClick={() => sendMessage(input)}
-          disabled={busy || !input.trim()}
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-          </svg>
-        </button>
+        <div className="flex flex-col gap-2 self-end">
+          {/* Botón micrófono */}
+          <button
+            className={`px-3 py-2 rounded-xl border transition-colors ${
+              recording
+                ? 'bg-red-500 border-red-500 text-white animate-pulse'
+                : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'
+            }`}
+            onClick={recording ? stopRecording : startRecording}
+            disabled={busy}
+            title={recording ? 'Detener grabación' : 'Hablar'}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+            </svg>
+          </button>
+          {/* Botón enviar */}
+          <button
+            className="btn-primary px-3 py-2"
+            onClick={() => sendMessage(input)}
+            disabled={busy || !input.trim()}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   )
