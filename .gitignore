@@ -1,0 +1,20 @@
+node_modules
+dist
+.env
+*.local
+.DS_Store
+.vercel
+.claude
+
+# Scripts utilitarios (no van al repo)
+extract_data.js
+read_excel.js
+read_excel2.js
+seed_firebase.mjs
+clear_firebase.mjs
+import_notion.mjs
+initial_data.json
+
+# Firebase service account (NUNCA subir)
+*service-account*.json
+serviceAccount*.json
