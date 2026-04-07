@@ -1,0 +1,2672 @@
+{
+  "clients": [
+    {
+      "id": "oakzla0i4",
+      "name": "C.VITAL",
+      "contacts": [
+        {
+          "name": "MACARENA LÓPEZ",
+          "role": "JEFA DE ADQUISICIONES",
+          "email": "MLOPEZ@CVITAL.CL",
+          "phone": "56997877380"
+        },
+        {
+          "name": "SEBASTIÁN GARCÍA",
+          "role": "OFICINA TÉCNICA PAICAVÍ",
+          "email": "SGARCIA@CVITAL.CL",
+          "phone": "56953710007"
+        },
+        {
+          "name": "CLAUDIO PRADO",
+          "role": "GERENTE DE COMPRAS",
+          "email": "CPRADO@CVITAL.CL",
+          "phone": "56989228960"
+        },
+        {
+          "name": "EDWIN JOFRE",
+          "role": "JEFE OFICINA TÉCNICA CONNECT",
+          "email": "EJOFRE@CVITAL.CL",
+          "phone": "56983451908"
+        },
+        {
+          "name": "FELIPE SEPÚLVEDA",
+          "role": "COBRANZA PROVEEDORES",
+          "email": "PROVEEDORES@CVITAL.CL",
+          "phone": "56996380848"
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.518Z"
+    },
+    {
+      "id": "hdckp6osp",
+      "name": "INGEVEC",
+      "contacts": [
+        {
+          "name": "JOSÉ DOMINGO VIAL",
+          "role": "GERENTE DE CONSTRUCCIÓN",
+          "email": "JVIAL@INGEVEC.CL",
+          "phone": "56975875673"
+        },
+        {
+          "name": "LUCAS VARGAS",
+          "role": "TRAINEE INNOVACIÓN",
+          "email": "LVARGAS@INGEVEC.CL",
+          "phone": "56995918161"
+        },
+        {
+          "name": "OMER PARRA",
+          "role": "ADMINISTRADOR DE OBRA VICUÑA MACKENNA",
+          "email": "",
+          "phone": ""
+        },
+        {
+          "name": "F ESPINOZA",
+          "role": "ADMINISTRADOR DE OBRA LA CHIMBA",
+          "email": "",
+          "phone": ""
+        },
+        {
+          "name": "NICOLÁS URRUTIA",
+          "role": "OF TECNICA",
+          "email": "nurrutia@ingevec.cl",
+          "phone": ""
+        },
+        {
+          "name": "FELIPE SEPÚLVEDA",
+          "role": "",
+          "email": "",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.518Z"
+    },
+    {
+      "id": "ue13scx1p",
+      "name": "DANIEL SALINAS",
+      "contacts": [
+        {
+          "name": "MARIBEL FERNÁNDEZ",
+          "role": "JEFA DE ADQUISICIONES",
+          "email": "MFERNANDEZ@CONSTRUCTORASALINAS.CL",
+          "phone": "56962087722"
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.518Z"
+    },
+    {
+      "id": "tqmj93cg7",
+      "name": "ACONCAGUA",
+      "contacts": [
+        {
+          "name": "MACARENA LETELIER",
+          "role": "JEFA ARQUITECTURA EDIFICIOS",
+          "email": "MELETELIER@IACONCAGUA.COM",
+          "phone": ""
+        },
+        {
+          "name": "GERARDO SEPÚLVEDA",
+          "role": "GERENTE DE RENTAS INMOBILIARIAS",
+          "email": "GSEPULVEDA@IACONCAGUA.COM",
+          "phone": "56981989489"
+        },
+        {
+          "name": "CRISTIAN MACHUCA",
+          "role": "",
+          "email": "",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.518Z"
+    },
+    {
+      "id": "l7rkxwqc3",
+      "name": "NUEVOS AIRES",
+      "contacts": [
+        {
+          "name": "SEBASTIÁN HERNANDEZ",
+          "role": "JEFE DE ADQUISICIONES",
+          "email": "SHERNANDEZ@CNUEVOSAIRES.CL",
+          "phone": ""
+        },
+        {
+          "name": "PABLO PIZARRO",
+          "role": "JEFE DE ADQUISICIONES",
+          "email": "PPIZARRO@CNUEVOSAIRES.CL",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.518Z"
+    },
+    {
+      "id": "4ar72xwbk",
+      "name": "PLAENGE",
+      "contacts": [
+        {
+          "name": "CONSTANZA MARIN",
+          "role": "JEFA DESARROLLO DE PRODUCTOS",
+          "email": "C.MARIN@PLAENGE.CL",
+          "phone": "56988194429"
+        },
+        {
+          "name": "ISIDORA JAGER",
+          "role": "ARQUITECTA COORDINADORA",
+          "email": "",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.518Z"
+    },
+    {
+      "id": "k9upv6rw6",
+      "name": "ALTIUS",
+      "contacts": [
+        {
+          "name": "CESAR VARGAS",
+          "role": "ADMINISTRADOR DE OBRA",
+          "email": "CESAR.VARGAS@ALTIUS.CL",
+          "phone": "56974794206"
+        },
+        {
+          "name": "CRISTIÁN MARTINEZ",
+          "role": "SOCIO",
+          "email": "CMARTINEZ@ALTIUS.CL",
+          "phone": "56984091649"
+        },
+        {
+          "name": "SEBASTIÁN EGUIGUREN",
+          "role": "GERENTE INMOBILIARIO",
+          "email": "SEBASTIAN.EGUIGUREN@ALTIUS.CL",
+          "phone": "56998718411"
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.518Z"
+    },
+    {
+      "id": "wq9is5y4e",
+      "name": "MAESTRA",
+      "contacts": [
+        {
+          "name": "JOSE LUIS NAVARRO",
+          "role": "GERENTE DE ADQUISICIONES Y CALIDAD",
+          "email": "JLNAVARRO@MAESTRA.CL",
+          "phone": ""
+        },
+        {
+          "name": "MAURICIO TORRES",
+          "role": "SUBGERENTE DE COMPRAS",
+          "email": "MTORRES@MAESTRA.CL",
+          "phone": "56983383476"
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.518Z"
+    },
+    {
+      "id": "6b32swxa7",
+      "name": "COPAHUE",
+      "contacts": [
+        {
+          "name": "FERNANDO BECERRA",
+          "role": "GERENTE DE INMOBILIARIA",
+          "email": "FBECERRA@COPAHUE.CL",
+          "phone": "56942740084"
+        },
+        {
+          "name": "GOZALO ERRÁZURIZ",
+          "role": "GERENTE DE PROYECTOS INMOBILIARIOS",
+          "email": "GERRAZURIZ@COPAHUE.CL",
+          "phone": "56966559491"
+        },
+        {
+          "name": "CLAUDIO JOFRE",
+          "role": "GERETE DE PROYECTO",
+          "email": "",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "27gdi0vam",
+      "name": "ENACO",
+      "contacts": [
+        {
+          "name": "VICTOR RAMIREZ",
+          "role": "GERENTE DE ADQUISICIONES",
+          "email": "VICTOR.RAMIREZ@ENACO.CL",
+          "phone": "56222073800"
+        },
+        {
+          "name": "Carlos Vegas",
+          "role": "Jefe de proyecto en Reserva San Francisco",
+          "email": "Carlos.vega@enaco.cl",
+          "phone": ""
+        },
+        {
+          "name": "Carlos Gianelli",
+          "role": "Jefe de proyecto en Quillayes de la Dehesa",
+          "email": "Carlos.gianelli@enaco.cl",
+          "phone": ""
+        },
+        {
+          "name": "Carlos Torres",
+          "role": "Jefe de proyecto en Valle La Dehesa",
+          "email": "Carlos.torres@enaco.cl",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "honkousp9",
+      "name": "GRUPO PATIO",
+      "contacts": [
+        {
+          "name": "JAVIER VALDES",
+          "role": "JEFE DESARROLLO COMERCIAL",
+          "email": "",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "skxlrkrji",
+      "name": "70W",
+      "contacts": [
+        {
+          "name": "ROBERT FLEET",
+          "role": "GERENTE TÉCNICO",
+          "email": "RFLEET@70W.CL",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "7ecs1ggj6",
+      "name": "ECHEVERRÍA IZQUIERDO",
+      "contacts": [
+        {
+          "name": "Luis Alvarez",
+          "role": "Administrador de obra los militares",
+          "email": "lalvarez@ei.cl",
+          "phone": "56994897788"
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "6hc31c8h5",
+      "name": "BANMERCHANT",
+      "contacts": [
+        {
+          "name": "CARLOS CARVALLO",
+          "role": "",
+          "email": "",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "p4eaiid74",
+      "name": "MOLLER Y PC",
+      "contacts": [
+        {
+          "name": "EDUARDO SOLER",
+          "role": "SUBGERENTE DE ABASTECIMIENTO",
+          "email": "ES@MOLLER.CL",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "0wtkwaww6",
+      "name": "EBCO",
+      "contacts": [
+        {
+          "name": "JEAN PAUL BERNARD",
+          "role": "ADMINISTRADOR DE OBRA",
+          "email": "",
+          "phone": ""
+        },
+        {
+          "name": "CARLA GONZALEZ",
+          "role": "PROF. OF. TÉCNICA",
+          "email": "",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "rlejkp89a",
+      "name": "MENA Y OVALLE",
+      "contacts": [
+        {
+          "name": "VICTOR WOOD",
+          "role": "VISITADOR DE OBRAS",
+          "email": "",
+          "phone": ""
+        },
+        {
+          "name": "EUGENIO GARCÍA",
+          "role": "ADMINISTRADOR DE OBRA",
+          "email": "",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "2dcfpsh3f",
+      "name": "MADESUR",
+      "contacts": [
+        {
+          "name": "GATO VERGARA",
+          "role": "",
+          "email": "",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "bkcnhxknf",
+      "name": "ALMAGRO",
+      "contacts": [
+        {
+          "name": "EQUIPO:",
+          "role": "CARGO:",
+          "email": "CORREO",
+          "phone": "TELÉFONO"
+        },
+        {
+          "name": "ALVARO LABBE",
+          "role": "",
+          "email": "",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "ieam8u5oc",
+      "name": "NOLLAGAM",
+      "contacts": [
+        {
+          "name": "CLAUDIA LOYOLA",
+          "role": "",
+          "email": "",
+          "phone": ""
+        },
+        {
+          "name": "ALEJANDRO CASTAÑEDA",
+          "role": "",
+          "email": "",
+          "phone": ""
+        },
+        {
+          "name": "PATRICIO GONZALEZ",
+          "role": "",
+          "email": "",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "8cedopsgw",
+      "name": "SOCOVESA",
+      "contacts": [
+        {
+          "name": "Catherine Bosman",
+          "role": "",
+          "email": "",
+          "phone": ""
+        },
+        {
+          "name": "Pablo Larraín",
+          "role": "",
+          "email": "",
+          "phone": "+56228406791"
+        },
+        {
+          "name": "Sergio Martinez",
+          "role": "",
+          "email": "",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "6tlfwfun6",
+      "name": "IGNACIO HURTADO",
+      "contacts": [
+        {
+          "name": "TAINERY RIVERA",
+          "role": "",
+          "email": "",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "qzv1506io",
+      "name": "CRILLÓN",
+      "contacts": [
+        {
+          "name": "CARLOS BANDA",
+          "role": "",
+          "email": "",
+          "phone": ""
+        }
+      ],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.519Z"
+    },
+    {
+      "id": "0k2k029me",
+      "name": "ECHEVERRÍA IZQUIERDDO",
+      "contacts": [],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "ne4hye811",
+      "name": "MOLLER Y PÉREZ-COTAPOS",
+      "contacts": [],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "h3q7zevke",
+      "name": "BENMARCHANT",
+      "contacts": [],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "nr1qi59jt",
+      "name": "CRILLON",
+      "contacts": [],
+      "notes": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    }
+  ],
+  "projects": [
+    {
+      "id": "ulznofil3",
+      "clientId": "ue13scx1p",
+      "name": "SAN NICOLÁS",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "xefdd6j18",
+      "clientId": "oakzla0i4",
+      "name": "PAICAVÍ",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "g34jtnkvu",
+      "clientId": "hdckp6osp",
+      "name": "REVESTIMIENTO FLEXIBLE",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "85kzyz3yp",
+      "clientId": "tqmj93cg7",
+      "name": "NUEVOS PROYECTOS",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "j5oh5klce",
+      "clientId": "4ar72xwbk",
+      "name": "PRESENTACIÓN",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "8cat3b73b",
+      "clientId": "oakzla0i4",
+      "name": "LOS VILOS",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "ehcbcmqm9",
+      "clientId": "27gdi0vam",
+      "name": "TODOS",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "xws4u9aef",
+      "clientId": "hdckp6osp",
+      "name": "IMPORTACIÓN DIRECTA",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "oylq8dzb8",
+      "clientId": "l7rkxwqc3",
+      "name": "PRESENTACIÓN",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "d9skcoyn6",
+      "clientId": "4ar72xwbk",
+      "name": "EXPLORA",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "ruaz3wtrc",
+      "clientId": "wq9is5y4e",
+      "name": "JOSE LUIS NAVARRO",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "x6mvpmpon",
+      "clientId": "0k2k029me",
+      "name": "TODOS",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "vufo1fbaa",
+      "clientId": "honkousp9",
+      "name": "TODO",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "ble6z5yf2",
+      "clientId": "6b32swxa7",
+      "name": "HIPÓDROMO",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "sutbqt14r",
+      "clientId": "6b32swxa7",
+      "name": "MACUL",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "rq9zs8bpa",
+      "clientId": "skxlrkrji",
+      "name": "F2 Y F3",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "tm8z2g1if",
+      "clientId": "k9upv6rw6",
+      "name": "CASA VAISSE",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "nnx1ybwbh",
+      "clientId": "hdckp6osp",
+      "name": "VICUÑA MACKENNA",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "y3dgnlk9l",
+      "clientId": "6b32swxa7",
+      "name": "MACUL e hipódromo",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "rnwpji07z",
+      "clientId": "ne4hye811",
+      "name": "TODOS",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "7qirja366",
+      "clientId": "6b32swxa7",
+      "name": "hipódromo",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "v09dag4g4",
+      "clientId": "rlejkp89a",
+      "name": "RIESCO CHRISTIENSEN",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "iu00bdpnq",
+      "clientId": "h3q7zevke",
+      "name": "LIRCAY",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "0b37w32rw",
+      "clientId": "0wtkwaww6",
+      "name": "GRANADILLA",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "fr1xwmkjr",
+      "clientId": "rlejkp89a",
+      "name": "TODO",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "6k9nztipw",
+      "clientId": "hdckp6osp",
+      "name": "LA CHIMBA",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "ct66s4oup",
+      "clientId": "2dcfpsh3f",
+      "name": "CHILEMAT",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "tw901fwz7",
+      "clientId": "bkcnhxknf",
+      "name": "TODO",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "xhdiw52y0",
+      "clientId": "ieam8u5oc",
+      "name": "TODO",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "y0zi5ne5g",
+      "clientId": "8cedopsgw",
+      "name": "TODO",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "u3qtsvt2v",
+      "clientId": "nr1qi59jt",
+      "name": "MAGNOLIA",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "uqpdepwh8",
+      "clientId": "tqmj93cg7",
+      "name": "NOGALES",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "d214cxz86",
+      "clientId": "k9upv6rw6",
+      "name": "LOS CONQUISTADORES",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "r3joxherb",
+      "clientId": "ue13scx1p",
+      "name": "TODO",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    }
+  ],
+  "partidas": [
+    {
+      "id": "72kmkymb0",
+      "projectId": "ulznofil3",
+      "name": "KIT DE COCINA",
+      "category": "KIT DE COCINA",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "smo9m6z80",
+      "projectId": "xefdd6j18",
+      "name": "PUERTAS",
+      "category": "PUERTAS",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "o42hwkasm",
+      "projectId": "g34jtnkvu",
+      "name": "REVESTIMIENTOS",
+      "category": "REVESTIMIENTOS",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "ne6parcu2",
+      "projectId": "xefdd6j18",
+      "name": "MUEBLES",
+      "category": "MUEBLES",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "j4l7p7a2n",
+      "projectId": "xefdd6j18",
+      "name": "KIT DE COCINA",
+      "category": "KIT DE COCINA",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "l063yeyq7",
+      "projectId": "85kzyz3yp",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "1mlbva9kp",
+      "projectId": "j5oh5klce",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "310jou4ny",
+      "projectId": "8cat3b73b",
+      "name": "PUERTAS Y MUEBLES",
+      "category": "PUERTAS Y MUEBLES",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "or50yyzge",
+      "projectId": "ehcbcmqm9",
+      "name": "TODOS",
+      "category": "TODOS",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "zp13ijilk",
+      "projectId": "xws4u9aef",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "4qf9tc0e0",
+      "projectId": "oylq8dzb8",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "kk7b8qimj",
+      "projectId": "d9skcoyn6",
+      "name": "ARTEFACTOS",
+      "category": "ARTEFACTOS",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "cdd5rg5vy",
+      "projectId": "ruaz3wtrc",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "cdtw7xupg",
+      "projectId": "x6mvpmpon",
+      "name": "TODOS",
+      "category": "TODOS",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "gws6qnpwt",
+      "projectId": "vufo1fbaa",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "v40bj3yzb",
+      "projectId": "ble6z5yf2",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "5nd3s0924",
+      "projectId": "sutbqt14r",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "n4gq1ie0b",
+      "projectId": "rq9zs8bpa",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "02wg2bro0",
+      "projectId": "tm8z2g1if",
+      "name": "PUERTAS",
+      "category": "PUERTAS",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "j5c006ttc",
+      "projectId": "nnx1ybwbh",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "0c05lxntb",
+      "projectId": "y3dgnlk9l",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "xtdksewq9",
+      "projectId": "rnwpji07z",
+      "name": "TODOS",
+      "category": "TODOS",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "9z1q5rzng",
+      "projectId": "7qirja366",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "2qtwzj5th",
+      "projectId": "v09dag4g4",
+      "name": "REVESTIMIENTOS",
+      "category": "REVESTIMIENTOS",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "mfled0p8b",
+      "projectId": "iu00bdpnq",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "l5vvy2gdq",
+      "projectId": "0b37w32rw",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "ntbbl55xp",
+      "projectId": "fr1xwmkjr",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "4l2smlwbo",
+      "projectId": "6k9nztipw",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "91c76d3i9",
+      "projectId": "ct66s4oup",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "wi4htkbf7",
+      "projectId": "d9skcoyn6",
+      "name": "PUERTAS",
+      "category": "PUERTAS",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "4ayx411lx",
+      "projectId": "85kzyz3yp",
+      "name": "PUERTAS",
+      "category": "PUERTAS",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "8dktcr5qf",
+      "projectId": "tw901fwz7",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "eb5fnwt9y",
+      "projectId": "85kzyz3yp",
+      "name": "MUEBLES",
+      "category": "MUEBLES",
+      "providers": [],
+      "priority": "normal",
+      "status": "listo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "97au9xxbo",
+      "projectId": "xhdiw52y0",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "wierm0u75",
+      "projectId": "v09dag4g4",
+      "name": "MUEBLES DE COCINA Y CLOSET",
+      "category": "MUEBLES DE COCINA Y CLOSET",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "zyt3zksns",
+      "projectId": "y0zi5ne5g",
+      "name": "MUEBLES DE COCINA Y CLOSET",
+      "category": "MUEBLES DE COCINA Y CLOSET",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "dphwmq6od",
+      "projectId": "y0zi5ne5g",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "0qh9eho1o",
+      "projectId": "u3qtsvt2v",
+      "name": "PISO",
+      "category": "PISO",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "rs5m18dr7",
+      "projectId": "uqpdepwh8",
+      "name": "MUEBLES",
+      "category": "MUEBLES",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "l78glt9ey",
+      "projectId": "d214cxz86",
+      "name": "PUERTAS",
+      "category": "PUERTAS",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "nq7m2mh1q",
+      "projectId": "r3joxherb",
+      "name": "TODO",
+      "category": "TODO",
+      "providers": [],
+      "priority": "normal",
+      "status": "activo",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    }
+  ],
+  "activities": [
+    {
+      "id": "t8f268eun",
+      "partidaId": "02wg2bro0",
+      "date": "2025-10-22",
+      "responsible": "CESAR VARGAS",
+      "comment": "ME PIDE CONTACTO DE CLAUDIO CARDENAS Y LE OFREZCO OORDINAR VISITA. NO RESPONDE. NUEVO PLAN ES ESPERAR LA INSTALACIÓN DE LAS PUERAS DE CERRILLOS Y LLEVARLO PARA ALLA",
+      "nextAction": "OFRECER VISITA A PUERTAS DE CERRILLOS",
+      "nextActionDate": "2025-03-01",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "asyl2vk2u",
+      "partidaId": "0qh9eho1o",
+      "date": "2025-06-30",
+      "responsible": "CARLOS BANDA",
+      "comment": "Se envía a cotizar al chino.",
+      "nextAction": "Enviar cotización de SPC especial",
+      "nextActionDate": "2025-07-03",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "6no40g030",
+      "partidaId": "wierm0u75",
+      "date": "2025-06-30",
+      "responsible": "EUGENIO GARCÍA",
+      "comment": "Se cotiza instalación. Hay dos propuestas mas baratas.",
+      "nextAction": "Enviar cotización mas barata con instalación incluída",
+      "nextActionDate": "2025-07-04",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "hjmy3uey7",
+      "partidaId": "j5c006ttc",
+      "date": "2025-06-30",
+      "responsible": "Nicolás Urrutia",
+      "comment": "Se vuelven a pedir EE.TT y se propone llevar muestra de puerta tamaño real",
+      "nextAction": "Esperar respuesta o volver a insistir",
+      "nextActionDate": "2025-07-08",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "6odqr2myu",
+      "partidaId": "l78glt9ey",
+      "date": "2025-06-30",
+      "responsible": "CESAR VARGAS",
+      "comment": "Me envían ee.tt de puertas. Se envían a chinos",
+      "nextAction": "esperar cotizacion de chinos y Enviar cotización a cliente",
+      "nextActionDate": "2025-07-08",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "3elpc6heb",
+      "partidaId": "xtdksewq9",
+      "date": "2025-06-30",
+      "responsible": "EDUARDO SOLAR",
+      "comment": "Se conversa por teléfono y me enviará un correo con los requerimientos de muestras. Me comenta que estamos bien en precios",
+      "nextAction": "Pedir correo con muestras",
+      "nextActionDate": "2025-07-09",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "3v7u3o14z",
+      "partidaId": "rs5m18dr7",
+      "date": "2025-06-26",
+      "responsible": "MACARENA LETELIER",
+      "comment": "Tras la visita a terreno, les encantaron nuestros productos, por lo que quieren cotizar el proyecto NOGALES",
+      "nextAction": "Pedir ee.tt y planos y cotizar",
+      "nextActionDate": "2025-07-08",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "do4d0mh3r",
+      "partidaId": "wierm0u75",
+      "date": "2025-06-16",
+      "responsible": "EUGENIO GARCÍA",
+      "comment": "Se envía correo de seguimiento",
+      "nextAction": "Llamar (no mail) para hacer seguimiento",
+      "nextActionDate": "2025-06-24",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "nngqjs2fz",
+      "partidaId": "xtdksewq9",
+      "date": "2025-06-16",
+      "responsible": "EDUARDO SOLAR",
+      "comment": "Se envía correo de seguimiento",
+      "nextAction": "Esperar respuesa o insistir",
+      "nextActionDate": "2025-06-30",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "burpjsdpr",
+      "partidaId": "eb5fnwt9y",
+      "date": "2025-06-12",
+      "responsible": "MACARENA LETELIER",
+      "comment": "Tras reunión de Jueves 12-06, quedamos agendados para realizar visita a terreno el 26-06. Además se debe enviar cotización por instalación de muebles. Para esto, se envió correo pidiendo cantidades por tipo de departamento, y planos de closet",
+      "nextAction": "Enviar cotización y hacer visita",
+      "nextActionDate": "2025-06-26",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "relgamp0h",
+      "partidaId": "zyt3zksns",
+      "date": "2025-06-10",
+      "responsible": "Catherine Bosman",
+      "comment": "Dada la conversación por teléfono, me comenta que ella ve partidad de muebles. Se le envía presentación. Tambien me contacta con Sergio y Pablo, quienes ven el resto de las partidas.",
+      "nextAction": "Seguimiento a correo de presentación",
+      "nextActionDate": "2025-06-30",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "8ra1kpyzz",
+      "partidaId": "dphwmq6od",
+      "date": "2025-06-10",
+      "responsible": "Sergio",
+      "comment": "Dada la conversación con Sergio, me comenta que le tengo que enviar un correo y que lo revisará Pablo. En caso de interesarle me incluíra en la nómina de proveedores para futuros proyectos. Se envía correo",
+      "nextAction": "Hacer seguimiento a corrreo de presentación",
+      "nextActionDate": "2025-06-30",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "3x4u5xvd0",
+      "partidaId": "n4gq1ie0b",
+      "date": "2025-06-10",
+      "responsible": "JUAN PABLO MEYA",
+      "comment": "Retomar",
+      "nextAction": "Retomar",
+      "nextActionDate": "2025-07-12",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "lex8v9lyo",
+      "partidaId": "nq7m2mh1q",
+      "date": "2025-06-10",
+      "responsible": "MARIBEL FERNÁNDEZ",
+      "comment": "PREGUNTAR POR NUEVOS PROYECTOS",
+      "nextAction": "LLAMAR MARIBEL PARA VER SI TIENEN NUEVOS PROYECTPS",
+      "nextActionDate": "2025-07-15",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "eo49t4xxw",
+      "partidaId": "8dktcr5qf",
+      "date": "2025-06-09",
+      "responsible": "Felipe Daudet",
+      "comment": "Alvaro e da contacto de Felipe. Se envía correo. Son socovessa",
+      "nextAction": "Insistir",
+      "nextActionDate": "2025-07-01",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "g75k6j2c3",
+      "partidaId": "eb5fnwt9y",
+      "date": "2025-06-08",
+      "responsible": "MACARENA LETELIER",
+      "comment": "nos reuniremos el Jueves a ver temas de instalación",
+      "nextAction": "Esperar respuesta",
+      "nextActionDate": "2025-06-12",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "vdyqzymuo",
+      "partidaId": "l5vvy2gdq",
+      "date": "2025-06-07",
+      "responsible": "HERNAN BESOMI",
+      "comment": "AGENDAR REUNIÓN CON HERNAN",
+      "nextAction": "GANAR",
+      "nextActionDate": "2025-07-02",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "9ezowg8nm",
+      "partidaId": "wierm0u75",
+      "date": "2025-05-30",
+      "responsible": "EUGENIO GARCÍA",
+      "comment": "se envió cotización. Seguimiento",
+      "nextAction": "Seguimiento",
+      "nextActionDate": "2025-06-11",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "6urudbcet",
+      "partidaId": "97au9xxbo",
+      "date": "2025-05-20",
+      "responsible": "ALEJANDRO",
+      "comment": "Tras nueva conversación con Claudia, se envía correo de seguimiento a Patricio.",
+      "nextAction": "Hacer seguimiento",
+      "nextActionDate": "2025-07-02",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "bkisc75q4",
+      "partidaId": "9z1q5rzng",
+      "date": "2025-05-06",
+      "responsible": "Fernando Becerra",
+      "comment": "Se envía whatsapp pidiendo contacto de Claudio jofre",
+      "nextAction": "Seguimiento",
+      "nextActionDate": "2025-05-12",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "59rn4at4l",
+      "partidaId": "j5c006ttc",
+      "date": "2025-05-06",
+      "responsible": "Nicolás Urrutia",
+      "comment": "Se envía correo de seguimiento para que me envíe las cubicaciones. También se pide reunión en obra",
+      "nextAction": "Agendar reunión",
+      "nextActionDate": "2025-05-13",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "jmhaoh9jd",
+      "partidaId": "4l2smlwbo",
+      "date": "2025-05-06",
+      "responsible": "F. ESPINOZA",
+      "comment": "Se envía correo de seguimiento",
+      "nextAction": "Esperar respuesta o volver a insistir",
+      "nextActionDate": "2025-05-13",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "o4m4vsoua",
+      "partidaId": "72kmkymb0",
+      "date": "2025-05-06",
+      "responsible": "MARIBEL FERNÁNDEZ",
+      "comment": "Me comenta que cerraron con otro proveedor por condiciones comerciales. Se envía correo pidiendo cotizar partidas a medida y notificando que las condiciones comerciales pueden ser modificadas.",
+      "nextAction": "Esperar respuesta a partidas a medidas",
+      "nextActionDate": "2025-05-15",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "c081zlue5",
+      "partidaId": "97au9xxbo",
+      "date": "2025-05-06",
+      "responsible": "ALEJANDRO",
+      "comment": "SE ENVÍA PRIMER CORREO, TRAS HABLAR POR TELÉFONO CON CLAUDIA",
+      "nextAction": "CONSEGUIR REUNIÓN",
+      "nextActionDate": "2025-05-15",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "kztsobcdf",
+      "partidaId": "j5c006ttc",
+      "date": "2025-05-06",
+      "responsible": "Nicolás Urrutia",
+      "comment": "Me enviará EE.TT de algunas partidas. Yo debo llevarle muestra de puerta",
+      "nextAction": "llevar puerta",
+      "nextActionDate": "2025-06-30",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "atldybrjm",
+      "partidaId": "9z1q5rzng",
+      "date": "2025-05-06",
+      "responsible": "Claudio jofre",
+      "comment": "llamar e insistr",
+      "nextAction": "Seguimiento",
+      "nextActionDate": "2025-07-12",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "l0kafycqk",
+      "partidaId": "4ayx411lx",
+      "date": "2025-04-02",
+      "responsible": "MACARENA LETELIER",
+      "comment": "Macarena envía info de puertas",
+      "nextAction": "enviar cotización",
+      "nextActionDate": "2025-07-02",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "7og192lwv",
+      "partidaId": "xtdksewq9",
+      "date": "2025-04-01",
+      "responsible": "EDUARDO SOLAR",
+      "comment": "Se envía nuevo correo para que nos mande EE.TT de 3 proyectos actuales + un proyecto de sector medio bajo+  2 clínicas d ela constructora.",
+      "nextAction": "Esperar EE.TT o insistir",
+      "nextActionDate": "2025-04-07",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "uk3p8n2eh",
+      "partidaId": "4ayx411lx",
+      "date": "2025-04-01",
+      "responsible": "CRISTIAN MACHUCA",
+      "comment": "Se habla con teléfono con Cristian y me dice que intentará enviar la información esta semana",
+      "nextAction": "INSISTIR POR EE.TT",
+      "nextActionDate": "2025-04-09",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "nrxhszhs8",
+      "partidaId": "xtdksewq9",
+      "date": "2025-04-01",
+      "responsible": "EDUARDO SOLAR",
+      "comment": "Se envían cotizaciones",
+      "nextAction": "A la espera de respuesta. Insistir por teléfono",
+      "nextActionDate": "2025-06-13",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "o5d0gkab1",
+      "partidaId": "ntbbl55xp",
+      "date": "2025-03-26",
+      "responsible": "VICTOR WOOD",
+      "comment": "SE AGENDA REUNIÓN",
+      "nextAction": "IR A REUNIÓN",
+      "nextActionDate": "2025-03-28",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "3ntkvn2o5",
+      "partidaId": "8dktcr5qf",
+      "date": "2025-03-25",
+      "responsible": "ALVARO LABBE",
+      "comment": "SE CONTACTA POR LINKED IN Y ME COMENTA QUE LA PERSONA ENCARGADA DEJÓ D ETRABAJAR HACE UNA SEMANA. CONTACTARLO EN UN TIEMPO PARA QUE ME DE EL CONTACTO DE LA NUEVA PERSONA ENCARGADA DE ADQUISICIONES",
+      "nextAction": "PEDIR NUEVO CONTACTO DE ASQUISICIONES",
+      "nextActionDate": "2025-04-20",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "0c2kvilok",
+      "partidaId": "xtdksewq9",
+      "date": "2025-03-20",
+      "responsible": "EDUARDO SOLAR",
+      "comment": "Se tiene reunión con Eduardo. Queda en enviarnos EE.TT de 3 proyectos actuales + un proyecto de sector medio bajo+  2 clínicas d ela constructora.",
+      "nextAction": "Esperar EE.TT o insistir",
+      "nextActionDate": "2025-03-30",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "p3l0ixwkl",
+      "partidaId": "91c76d3i9",
+      "date": "2025-03-20",
+      "responsible": "GATO VERGARA",
+      "comment": "SE HABLA CON EL GATO Y ME CONTACTARÁ CONSU PRIMO QUE ES EL GERENTE DE ABASTECIMIENTO",
+      "nextAction": "VER AVANCES",
+      "nextActionDate": "2025-03-30",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "32eelo74v",
+      "partidaId": "91c76d3i9",
+      "date": "2025-03-20",
+      "responsible": "GATO VERGARA",
+      "comment": "agendar almuerzo",
+      "nextAction": "agendar almuerzo",
+      "nextActionDate": "2025-07-10",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "o5h2zhab4",
+      "partidaId": "l5vvy2gdq",
+      "date": "2025-03-18",
+      "responsible": "CARLA GONZALEZ",
+      "comment": "Se envían EE.TT. Se debe cotizar",
+      "nextAction": "Enviar cotización",
+      "nextActionDate": "2025-03-25",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "ubrfmxwso",
+      "partidaId": "xtdksewq9",
+      "date": "2025-03-17",
+      "responsible": "EDUARDO SOLAR",
+      "comment": "SE LLAMA A EDUARDO Y AGENDAMOS REUNIÓN PARA EL JUEVES 20-03",
+      "nextAction": "ENVIAR LO QUE PIDA EN REUNIÓN",
+      "nextActionDate": "2025-03-21",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "i1mcyi6e4",
+      "partidaId": "9z1q5rzng",
+      "date": "2025-03-17",
+      "responsible": "Claudio Jofré",
+      "comment": "Se en vía correo para ver si ha podido revisar nuestras cotizaciones",
+      "nextAction": "hacer seguimiento",
+      "nextActionDate": "2025-03-24",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "oey5upug6",
+      "partidaId": "2qtwzj5th",
+      "date": "2025-03-17",
+      "responsible": "EUGENIO GARCÍA",
+      "comment": "SE DEBE ENVIAR COTIZACIÓN",
+      "nextAction": "ENVIAR COTIZACIÓN",
+      "nextActionDate": "2025-03-24",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "zypvtsxwh",
+      "partidaId": "eb5fnwt9y",
+      "date": "2025-03-17",
+      "responsible": "MACARENA LETELIER",
+      "comment": "Cotización enviada",
+      "nextAction": "Esperar respuesta",
+      "nextActionDate": "2025-05-06",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "26vjey94p",
+      "partidaId": "l063yeyq7",
+      "date": "2025-03-11",
+      "responsible": "MACARENA LETELIER",
+      "comment": "se agenda reunión",
+      "nextAction": "ir a reunión",
+      "nextActionDate": "2025-03-11",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "kce02wg1d",
+      "partidaId": "l063yeyq7",
+      "date": "2025-03-11",
+      "responsible": "MACARENA LETELIER",
+      "comment": "Se tiene reunión y nos quedaron en enviar EETT de puertas y muebles",
+      "nextAction": "Se debe enviar presentación con proyectos y fotos de muebles y puertas",
+      "nextActionDate": "2025-03-13",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "r0921ikp6",
+      "partidaId": "4qf9tc0e0",
+      "date": "2025-03-11",
+      "responsible": "PABLO PIZARRO",
+      "comment": "Se envía mensaje por linked in",
+      "nextAction": "hacer seguimiento",
+      "nextActionDate": "2025-03-20",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "79uauimec",
+      "partidaId": "02wg2bro0",
+      "date": "2025-03-11",
+      "responsible": "CESAR VARGAS",
+      "comment": "Se envía correo notificando que ya tenemos instalaciones en curso de las puertas que ellos necesitan",
+      "nextAction": "Agendar visita a obra",
+      "nextActionDate": "2025-04-02",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "tibja6ub1",
+      "partidaId": "kk7b8qimj",
+      "date": "2025-03-11",
+      "responsible": "ISIDORA JAGER",
+      "comment": "Se envía correo de seguimiento.",
+      "nextAction": "Esperar respuesta o insistir",
+      "nextActionDate": "2025-05-08",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "kfsoh4egs",
+      "partidaId": "02wg2bro0",
+      "date": "2025-03-11",
+      "responsible": "CESAR VARGAS",
+      "comment": "llamar a cesar para realizar visita a obras",
+      "nextAction": "realizar visita",
+      "nextActionDate": "2025-06-22",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "h8iqql9yf",
+      "partidaId": "cdd5rg5vy",
+      "date": "2025-03-11",
+      "responsible": "JOSE LUIS NAVARRO",
+      "comment": "llamar e insistir",
+      "nextAction": "Agendar reunión",
+      "nextActionDate": "2025-07-02",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "8vt17a4n1",
+      "partidaId": "gws6qnpwt",
+      "date": "2025-03-10",
+      "responsible": "JAVIER VALDES",
+      "comment": "Se envía correo a Javier, quién derivará al área encargada",
+      "nextAction": "Hacer seguimiento",
+      "nextActionDate": "2025-04-05",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "ykwnwiygj",
+      "partidaId": "mfled0p8b",
+      "date": "2025-03-07",
+      "responsible": "CARLOS CARVALLO",
+      "comment": "se envía cotización",
+      "nextAction": "esperar respuesta",
+      "nextActionDate": "2025-03-25",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "bywspkbuw",
+      "partidaId": "mfled0p8b",
+      "date": "2025-03-07",
+      "responsible": "CARLOS CARVALLO",
+      "comment": "Retomar",
+      "nextAction": "Retomar",
+      "nextActionDate": "2025-07-14",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "8mnd00pm3",
+      "partidaId": "cdd5rg5vy",
+      "date": "2025-03-03",
+      "responsible": "JOSE LUIS NAVARRO",
+      "comment": "Se envía mail pidiendo reunión como el nos dijo",
+      "nextAction": "Agendar reunión",
+      "nextActionDate": "2025-03-10",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "bq72jhkut",
+      "partidaId": "wi4htkbf7",
+      "date": "2025-03-03",
+      "responsible": "ANDREA MONTOYA",
+      "comment": "Dado que las puertas cotizadas en distrito paulista no funcionaron, nos envían EE.TT de puertas de proyecto \"Explora\" el cual parte a fin del año 2025",
+      "nextAction": "enviar cotización",
+      "nextActionDate": "2025-03-31",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "ufyew7lzq",
+      "partidaId": "j5c006ttc",
+      "date": "2025-03-03",
+      "responsible": "OMER PARRA",
+      "comment": "Me envía correo de oficina técnica, Nicolas Urrutia, para ver tema de terminaciones. También me dice que nos juntemos la semana del 07-04-2025",
+      "nextAction": "Agendar reunión",
+      "nextActionDate": "2025-04-07",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "6p9ljlg3u",
+      "partidaId": "wi4htkbf7",
+      "date": "2025-03-03",
+      "responsible": "ANDREA MONTOYA",
+      "comment": "Se envía cotización y correo de seguimiento.",
+      "nextAction": "Insistir",
+      "nextActionDate": "2025-07-14",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "lrlxm3aa7",
+      "partidaId": "kk7b8qimj",
+      "date": "2025-02-20",
+      "responsible": "ISIDORA JAGER",
+      "comment": "Se envía correo de seguimiento.",
+      "nextAction": "Esperar respuesta o insistir",
+      "nextActionDate": "2025-03-03",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "qxjrkkuwz",
+      "partidaId": "v40bj3yzb",
+      "date": "2025-02-20",
+      "responsible": "GONZALO ERRÁZURIZ",
+      "comment": "Se envía correo pregntando si ya tienen fechas definidas para poder cotizar",
+      "nextAction": "hacer seguimiento",
+      "nextActionDate": "2025-03-03",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "o5h07ce0z",
+      "partidaId": "0c05lxntb",
+      "date": "2025-02-20",
+      "responsible": "GONZALO ERRÁZURIZ",
+      "comment": "Se envía correo preguntando si ya tienen fechas definidas para poder cotizar, y me contesta que ahora ha tomado la gerencia del proyecto don Claudio Jofre. Me contactará en el corto plazo para ver cotizaciones",
+      "nextAction": "hacer seguimiento",
+      "nextActionDate": "2025-03-03",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "0nifdjl7v",
+      "partidaId": "4l2smlwbo",
+      "date": "2025-02-20",
+      "responsible": "F. ESPINOZA",
+      "comment": "Se envía correo de presentación.",
+      "nextAction": "Esperar respuesta o volver a insistir",
+      "nextActionDate": "2025-03-30",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "yrxdizk8m",
+      "partidaId": "j4l7p7a2n",
+      "date": "2025-02-20",
+      "responsible": "SEBASTIÁN GARCÍA",
+      "comment": "cerrado el tema de la póliza (50% cada uno). Se debe emitir póliza y cobrar anticipo. También se deben cuadrar los plazos de entrega",
+      "nextAction": "gestionar póliza de garantía",
+      "nextActionDate": "2025-04-04",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "vj5amkl9z",
+      "partidaId": "j5c006ttc",
+      "date": "2025-02-18",
+      "responsible": "OMER PARRA",
+      "comment": "Se llama a Omer y me comenta que feliz de rteunirnos, pero la proimera semana de Marzo",
+      "nextAction": "Llamar para agendar reunión",
+      "nextActionDate": "2025-03-03",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "0kqvj7gyv",
+      "partidaId": "or50yyzge",
+      "date": "2025-02-18",
+      "responsible": "LOS TRES CARLOS",
+      "comment": "volver a llamar para ver nuevos proyectos",
+      "nextAction": "volver a llamar para ver nuevos proyectos",
+      "nextActionDate": "2025-07-12",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "70ddymtxa",
+      "partidaId": "n4gq1ie0b",
+      "date": "2025-02-17",
+      "responsible": "ROBERT FLEET",
+      "comment": "SE ENVÍAN EE.TT PARA COTIZAR",
+      "nextAction": "ENVIAR COTIZACIÓN",
+      "nextActionDate": "2025-02-20",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "yyioytwvn",
+      "partidaId": "n4gq1ie0b",
+      "date": "2025-02-17",
+      "responsible": "ROBERT FLEET",
+      "comment": "Se envían cotizaciones",
+      "nextAction": "a la espera de respuestas",
+      "nextActionDate": "2025-03-26",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "dp0xdu9q4",
+      "partidaId": "72kmkymb0",
+      "date": "2025-02-12",
+      "responsible": "MARIBEL FERNÁNDEZ",
+      "comment": "Se envía correo de seguimiento, dado que mecomentó que debería cerrar durante marzo",
+      "nextAction": "Hacer seguimioento",
+      "nextActionDate": "2025-04-04",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "sb77jdrj6",
+      "partidaId": "72kmkymb0",
+      "date": "2025-02-11",
+      "responsible": "MARIBEL FERNÁNDEZ",
+      "comment": "Se envía correo para preguntar por el inicio de su nueva obra, con lo que pretenden generar una compra global",
+      "nextAction": "Esperar respuesta o volver a insistir (llamar por teléfono)",
+      "nextActionDate": "2025-02-13",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "cz8oc4zvf",
+      "partidaId": "4qf9tc0e0",
+      "date": "2025-02-11",
+      "responsible": "PABLO PIZARRO",
+      "comment": "Se envía nuevo correo a pablo para pedir una reunión",
+      "nextAction": "Agendar reunión",
+      "nextActionDate": "2025-02-18",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "lsc5g2n67",
+      "partidaId": "cdtw7xupg",
+      "date": "2025-02-11",
+      "responsible": "LUIS ALVAREZ",
+      "comment": "Se vuelve a llamar a Luis, pero no había hecho nada. Estaba de vacaciones. Le reenvío el correo de presentación y el lo presentará a quienes corresponda. Volver a insistir en Marzo, porque hay muchos de vacaciones",
+      "nextAction": "Pedir contactos",
+      "nextActionDate": "2025-03-21",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "cbm61o1i4",
+      "partidaId": "cdtw7xupg",
+      "date": "2025-02-11",
+      "responsible": "LUIS ALVAREZ",
+      "comment": "Retomar",
+      "nextAction": "Retomar",
+      "nextActionDate": "2025-07-13",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "squrybphn",
+      "partidaId": "cdd5rg5vy",
+      "date": "2025-02-07",
+      "responsible": "JOSE LUIS NAVARRO",
+      "comment": "Me responde que hablemos a find e febrero",
+      "nextAction": "agendar reunión",
+      "nextActionDate": "2025-02-28",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "hb7rsz5o5",
+      "partidaId": "or50yyzge",
+      "date": "2025-02-06",
+      "responsible": "VICTOR RAMIREZ",
+      "comment": "Se llama por teléfono y se envía correo. Me dice que hoy enviara info de los administradores, dado que mañana sale de vacaciones",
+      "nextAction": "Esperar contactos y hablarles",
+      "nextActionDate": "2025-02-11",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "hgmu7s5l6",
+      "partidaId": "kk7b8qimj",
+      "date": "2025-02-06",
+      "responsible": "ISIDORA JAGER",
+      "comment": "Se envía cotización de artefactos y se pide planos de partidas a medidas",
+      "nextAction": "Esperar respuesta o insistir",
+      "nextActionDate": "2025-02-18",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "ehvsi9al5",
+      "partidaId": "or50yyzge",
+      "date": "2025-02-06",
+      "responsible": "LOS TRES CARLOS",
+      "comment": "Se envía correo de presentación",
+      "nextAction": "Esperar respuesta o volver a insistir",
+      "nextActionDate": "2025-02-18",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "0p9h7fbx5",
+      "partidaId": "ne6parcu2",
+      "date": "2025-02-05",
+      "responsible": "SEBASTIÁN GARCÍA",
+      "comment": "Me comentan que quieren cerrar con otros proveedores. Reunirnos con Rodrigo Lara (administrador) para que nos dejen participar",
+      "nextAction": "asistir a reunión",
+      "nextActionDate": "2025-04-03",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "n1a19w9rp",
+      "partidaId": "zp13ijilk",
+      "date": "2025-02-04",
+      "responsible": "LUCAS VARGAS",
+      "comment": "Se llama a Lucas y me comenta que hoy están viendo todas las compras, sean por importación directa o no, directamente en cada una de las obras. Me enviará contactos de los administradores para verlo directamente con cada uno de ellos",
+      "nextAction": "Llamar administradores de obras",
+      "nextActionDate": "2025-02-10",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "jvxup5hwg",
+      "partidaId": "4qf9tc0e0",
+      "date": "2025-01-30",
+      "responsible": "PABLO PIZARRO",
+      "comment": "Luego de 3 correos sin respuesta a sebastián, me comunico con su jefe Pablo por medio de un correo de presentación. A la espera de respuesta",
+      "nextAction": "Agendar reunión",
+      "nextActionDate": "2025-02-10",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "eu7q69dzr",
+      "partidaId": "or50yyzge",
+      "date": "2025-01-29",
+      "responsible": "VICTOR RAMIREZ",
+      "comment": "Se tiene reunión, se envía mail a Victor y me va a enviar las EE.TT de sus proyectos.",
+      "nextAction": "Esperar EE.TT o volver a insistir",
+      "nextActionDate": "2025-02-06",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "9grn4hk9u",
+      "partidaId": "kk7b8qimj",
+      "date": "2025-01-28",
+      "responsible": "ISIDORA JAGER",
+      "comment": "Nos envían EE.TT. Generar cotización",
+      "nextAction": "Generar cotización",
+      "nextActionDate": "2025-01-29",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "ng0coq0lm",
+      "partidaId": "j4l7p7a2n",
+      "date": "2025-01-28",
+      "responsible": "SEBASTIÁN GARCÍA",
+      "comment": "se envían correcciones para que las suba a su sistema",
+      "nextAction": "se debe preparar el pagaré a la vista",
+      "nextActionDate": "2025-01-30",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "p7zgu9lcl",
+      "partidaId": "cdd5rg5vy",
+      "date": "2025-01-28",
+      "responsible": "JOSE LUIS NAVARRO",
+      "comment": "Se envía mail para agendar reunión",
+      "nextAction": "agendar reunión",
+      "nextActionDate": "2025-02-03",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "1hyzu54ba",
+      "partidaId": "cdtw7xupg",
+      "date": "2025-01-28",
+      "responsible": "LUIS ALVAREZ",
+      "comment": "Se llama a Luis y me comentan que tienen todo cerrado pero me contactará con la gente encargada en la constructora e inmobiliaria.",
+      "nextAction": "Esperar reenvío de mail y preguntar por novedades.",
+      "nextActionDate": "2025-02-10",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "cl6xd071w",
+      "partidaId": "kk7b8qimj",
+      "date": "2025-01-27",
+      "responsible": "ISIDORA JAGER",
+      "comment": "Se tuvo reunión con Isidora. Quedo en enviar EE.TT",
+      "nextAction": "",
+      "nextActionDate": "2025-01-28",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "hnhcdueuc",
+      "partidaId": "j4l7p7a2n",
+      "date": "2025-01-24",
+      "responsible": "SEBASTIÁN GARCÍA",
+      "comment": "Se envía correo de seguimiento para la modificación del contrato",
+      "nextAction": "Esperar contrato final",
+      "nextActionDate": "2025-01-30",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "0rq5rhcxf",
+      "partidaId": "ne6parcu2",
+      "date": "2025-01-24",
+      "responsible": "SEBASTIÁN GARCÍA",
+      "comment": "Se envía correo de seguimiento por cotización de muebles",
+      "nextAction": "preguntar por novedaddes",
+      "nextActionDate": "2025-01-30",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "mfvmwnu3i",
+      "partidaId": "l063yeyq7",
+      "date": "2025-01-24",
+      "responsible": "MACARENA LETELIER",
+      "comment": "Me pide que se le envíen muetras de pavimentos",
+      "nextAction": "envisr muestras de pavimentos",
+      "nextActionDate": "2025-02-24",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "x5wqqhofd",
+      "partidaId": "1mlbva9kp",
+      "date": "2025-01-23",
+      "responsible": "CONSTANZA MARÍN",
+      "comment": "se coordinó reunión para el 27-01",
+      "nextAction": "ir a reunión",
+      "nextActionDate": "2025-01-27",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "jruvacm6t",
+      "partidaId": "310jou4ny",
+      "date": "2025-01-22",
+      "responsible": "MACARENA LOPEZ",
+      "comment": "Se envía coización",
+      "nextAction": "A la espera de respuestas",
+      "nextActionDate": "2025-06-30",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "bx7w0k49k",
+      "partidaId": "or50yyzge",
+      "date": "2025-01-20",
+      "responsible": "VICTOR RAMIREZ",
+      "comment": "Se llama a Victor y quedamos con la reunión presencial para el 29-01-2025",
+      "nextAction": "Reunirnos el 29-01-2025",
+      "nextActionDate": "2025-01-29",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "6l9ljq685",
+      "partidaId": "l063yeyq7",
+      "date": "2025-01-16",
+      "responsible": "MACARENA LETELIER",
+      "comment": "Me pide muestras de revestimientos, pero se le ofrece una ruta de visita a obras en santiago. A la espera de respuesta.",
+      "nextAction": "preguntar por visita en santiagoa obras",
+      "nextActionDate": "2025-01-22",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "7sjnkg6ha",
+      "partidaId": "1mlbva9kp",
+      "date": "2025-01-16",
+      "responsible": "CONSTANZA MARÍN",
+      "comment": "Se envía correo de seguimiento para agendar reunión. De no contestar, llamar el día del recordatorio",
+      "nextAction": "llamar para agendar reunión",
+      "nextActionDate": "2025-01-22",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "edy93np67",
+      "partidaId": "gws6qnpwt",
+      "date": "2025-01-16",
+      "responsible": "JAVIER VALDES",
+      "comment": "Javier entró hoy a grupo, por lo que le tengo que olver a preguntar en un mes mas para ver con quién poder hablar dentro de la empresa",
+      "nextAction": "llamar javier para edir el contacto de adquisiciones",
+      "nextActionDate": "2025-02-15",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "p9linwj0h",
+      "partidaId": "or50yyzge",
+      "date": "2025-01-14",
+      "responsible": "VICTOR RAMIREZ",
+      "comment": "SE LLAMA A VICTOR Y ME COMENTA QUE LE INTERESA REUNIRSE LA SEMANA DEL  20-01. ME PIDE QUE LE ENVÍE CORREO Y SE ENVIÓ.",
+      "nextAction": "PEDIRLE CITA PARA REUNION",
+      "nextActionDate": "2025-01-17",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "lj8pop5x5",
+      "partidaId": "ne6parcu2",
+      "date": "2025-01-14",
+      "responsible": "SEBASTIÁN GARCÍA",
+      "comment": "se envía detalle de peso porcentual de cubiertas sobre mueble total",
+      "nextAction": "preguntar por novedaddes",
+      "nextActionDate": "2025-01-28",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "aoimdalf7",
+      "partidaId": "smo9m6z80",
+      "date": "2025-01-14",
+      "responsible": "MACARENA LOPEZ",
+      "comment": "Me comenta que las puertas cambiarán. Se debe llevar muestra de puerta real con folio de PVC",
+      "nextAction": "Ver opción de bajar recio y hacer referencia a los precios de pinturas de puertas. Costo que se ahorrará con el filio de pvc.",
+      "nextActionDate": "2025-04-15",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "jqpw0ydx3",
+      "partidaId": "smo9m6z80",
+      "date": "2025-01-14",
+      "responsible": "MACARENA LOPEZ",
+      "comment": "Me comenta que las puertas cambiarán. Se debe llevar muestra de puerta real con folio de PVC",
+      "nextAction": "ver opcion de pintura sherwin williams",
+      "nextActionDate": "2025-06-13",
+      "status": "activo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.521Z"
+    },
+    {
+      "id": "6r2vmtqsv",
+      "partidaId": "ne6parcu2",
+      "date": "2025-01-13",
+      "responsible": "SEBASTIÁN GARCÍA",
+      "comment": "Hablamos por teléfono y me pide que le envíe detalle de peso porcentual de las cubiertas frente al mueble, y que le explique en que consiste que el mueble viene armado.",
+      "nextAction": "enviar mail con lo solicitado",
+      "nextActionDate": "2025-01-14",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "mbnq0rikb",
+      "partidaId": "j4l7p7a2n",
+      "date": "2025-01-13",
+      "responsible": "SEBASTIÁN GARCÍA",
+      "comment": "Se envían comentarios del contrato a sebastián.",
+      "nextAction": "Esperar contrato final",
+      "nextActionDate": "2025-01-14",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "gm7flyvvb",
+      "partidaId": "v40bj3yzb",
+      "date": "2025-01-13",
+      "responsible": "GONZALO ERRÁZURIZ",
+      "comment": "SE LLAMA A GONZALO Y ME COMENTAN QUE DEBERÍAN PARTIR EN UN MES MAS APROX. EL ME CONTACTARÁ EN ESE MOMENTO",
+      "nextAction": "PREGUNTAR COMO VAN CON LA PARTIDA DEL PROYECTO",
+      "nextActionDate": "2025-02-17",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "qnk7vygbd",
+      "partidaId": "5nd3s0924",
+      "date": "2025-01-13",
+      "responsible": "GONZALO ERRÁZURIZ",
+      "comment": "SE LLAMA A GONZALO Y ME COMENTAN QUE DEBERÍAN PARTIR EN UN MES MAS APROX. EL ME CONTACTARÁ EN ESE MOMENTO",
+      "nextAction": "PREGUNTAR COMO VAN CON LA PARTIDA DEL PROYECTO",
+      "nextActionDate": "2025-02-17",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "m0gdktbo7",
+      "partidaId": "1mlbva9kp",
+      "date": "2025-01-09",
+      "responsible": "CONSTANZA MARÍN",
+      "comment": "Se llama a Constanza y me dice que feliz de tener una reunión. Me pide que le envíe un correo para coordinar la fecha de la reunión",
+      "nextAction": "cerrar fecha de reunión",
+      "nextActionDate": "2025-01-15",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "3dnxy45za",
+      "partidaId": "4qf9tc0e0",
+      "date": "2025-01-09",
+      "responsible": "SEBASTIÁN HERNANDEZ",
+      "comment": "SE ENVÍA TERCER CORREO DE PRESENTACIÓN",
+      "nextAction": "EN CASO DE NO CONTESTAR, CONTACTAR A JAVIER AGUIRRE (QUIEN ME HA DADO EL CONTACTO DE SEBASTIÁN) POR LINKED IN PARA VER SI TIENE OTRO CONTACTO.",
+      "nextActionDate": "2025-01-27",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "0ummopjeu",
+      "partidaId": "cdd5rg5vy",
+      "date": "2025-01-09",
+      "responsible": "JOSE LUIS NAVARRO",
+      "comment": "SE ENVÍA MAIL PERO SALE DE VACACIONES. CONTACTAR LA ÚLTIMA SEMANA DE ENERO PARA REUNIRNOS",
+      "nextAction": "CONTACTAR Y CERRAR EUNIÓN",
+      "nextActionDate": "2025-01-28",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "vgjpoznb7",
+      "partidaId": "72kmkymb0",
+      "date": "2025-01-07",
+      "responsible": "MARIBEL FERNÁNDEZ",
+      "comment": "Me responde que este presupuesto lo revisará en febrero, cuando tenga la certeza de otro proyecto para cerrar una compra global (puede ser bueno que consoliden varios proyectos)",
+      "nextAction": "Preguntar que le pareció la cotización",
+      "nextActionDate": "2025-02-10",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "gvtzdnox0",
+      "partidaId": "72kmkymb0",
+      "date": "2025-01-06",
+      "responsible": "MARIBEL FERNÁNDEZ",
+      "comment": "se envía correo de seguimiento",
+      "nextAction": "Preguntar que le pareció la cotización",
+      "nextActionDate": "2025-01-13",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "v7eto840j",
+      "partidaId": "l063yeyq7",
+      "date": "2025-01-06",
+      "responsible": "MACARENA LETELIER",
+      "comment": "se envía correo preguntando si tienen fecha definida para ver el proyecto de viña",
+      "nextAction": "insistir con agendamiento de visita",
+      "nextActionDate": "2025-01-13",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "2f3fx053v",
+      "partidaId": "o42hwkasm",
+      "date": "2025-01-06",
+      "responsible": "LUCAS VARGAS",
+      "comment": "se envía cotización actualizada con wpc, pvc y spc",
+      "nextAction": "Preguntar novedades sobre cotización",
+      "nextActionDate": "2025-01-27",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "eccr8qt82",
+      "partidaId": "smo9m6z80",
+      "date": "2025-01-04",
+      "responsible": "MACARENA LOPEZ",
+      "comment": "Me comenta que las puertas están caras como en 60 mm",
+      "nextAction": "Ver opción de bajar recio y hacer referencia a los precios de pinturas de puertas. Costo que se ahorrará con el filio de pvc.",
+      "nextActionDate": "2025-01-10",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "lfl88gtgy",
+      "partidaId": "j4l7p7a2n",
+      "date": "2024-12-26",
+      "responsible": "SEBASTIÁN GARCÍA",
+      "comment": "Me contactó Sebastián y me pido información para la emisión de los contratos",
+      "nextAction": "A la espera de contratos de suministro",
+      "nextActionDate": "2025-01-06",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "f2rwiwhn1",
+      "partidaId": "72kmkymb0",
+      "date": "2024-12-24",
+      "responsible": "MARIBEL FERNÁNDEZ",
+      "comment": "Se envía cotización y queda de revisar",
+      "nextAction": "Preguntar que le pareció la cotización",
+      "nextActionDate": "2025-01-07",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "eiolqbpqn",
+      "partidaId": "72kmkymb0",
+      "date": "2024-12-19",
+      "responsible": "MARIBEL FERNÁNDEZ",
+      "comment": "Se envía correo a Maribel y me comenta que justo les dieron luz verde con el proyecto. Se debe enviar cotización actualizada con precios finales. Me debe responder dodne es el proyecto para ver temas logísticos",
+      "nextAction": "Preguntar ubicación del proyecto. Llamar",
+      "nextActionDate": "2024-12-20",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "atizi0ho1",
+      "partidaId": "o42hwkasm",
+      "date": "2024-12-18",
+      "responsible": "LUCAS VARGAS",
+      "comment": "Se llama a Lucas y se envía cotización por SPc y PVC. El enviará mas detalle del WPC que necesitan.",
+      "nextAction": "Preguntar novedades sobre cotización y sobre info de WPC",
+      "nextActionDate": "2024-12-26",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "gtdy7i85c",
+      "partidaId": "zp13ijilk",
+      "date": "2024-12-18",
+      "responsible": "LUCAS VARGAS",
+      "comment": "Se llama a Lucas y me comenta que estan evaluando ya que además de nosotros, tienen la idea de importar todo diretamente ellos. Me comentará cualquier novedad",
+      "nextAction": "Preguntar novedades",
+      "nextActionDate": "2025-01-22",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "rlr7dll29",
+      "partidaId": "smo9m6z80",
+      "date": "2024-12-17",
+      "responsible": "MACARENA LOPEZ",
+      "comment": "Me comenta que como llegó esta semana de vacaciones, no ha revisado las puertas. Las verá y me comentará.",
+      "nextAction": "Preguntar como le fue con la cotización de puertas.",
+      "nextActionDate": "2024-12-26",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "bpkff0h4f",
+      "partidaId": "l063yeyq7",
+      "date": "2024-12-17",
+      "responsible": "MACARENA LETELIER",
+      "comment": "Nos comentan por correo que están interesados en ver nuestros productos. Para esto se ofrece llevarlos a viña. Coordinará con equipo interno para ver cuando podrán ir (probablemente la primera o segunda semana de enero) y me avisará",
+      "nextAction": "Preguntar si pudo coordinar con su equipo para agendar visita",
+      "nextActionDate": "2025-01-06",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "ys3rgkdgn",
+      "partidaId": "ne6parcu2",
+      "date": "2024-12-16",
+      "responsible": "SEBASTIÁN GARCÍA",
+      "comment": "SE LLAMA A SEBASTIÁN GARCÍA Y ME COMENTA QUE RECIBIÓ LAS FOTOS DE LAS HOMOLOGACIONES. ME COMENTA QUE A MAS TARDAR A FIN DE AÑO DEBERÍA TENER DOS OPCIONES MAS PARA ARMAR UN CUADRO COMPARATIVO",
+      "nextAction": "INSISTIR Y PREGUNTAR COMO VA CON EL CUADRO COMPARATIVO",
+      "nextActionDate": "2025-01-05",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    },
+    {
+      "id": "044w2xl8y",
+      "partidaId": "310jou4ny",
+      "date": "2024-12-10",
+      "responsible": "MACARENA LOPEZ",
+      "comment": "Se envían antecedentes. A la espera de chinos",
+      "nextAction": "cotizar puertas y muebles",
+      "nextActionDate": "2025-01-16",
+      "status": "listo",
+      "pelota": "-",
+      "observations": "",
+      "createdAt": "2026-04-06T21:32:50.520Z"
+    }
+  ],
+  "providers": []
+}

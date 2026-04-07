@@ -13,7 +13,6 @@ read_excel2.js
 seed_firebase.mjs
 clear_firebase.mjs
 import_notion.mjs
-initial_data.json
 
 # Firebase service account (NUNCA subir)
 *service-account*.json
