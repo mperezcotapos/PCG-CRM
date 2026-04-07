@@ -5,7 +5,7 @@ import StatusBadge from '../components/StatusBadge'
 import Modal from '../components/Modal'
 import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { updateActivity, deleteActivity } from '../lib/db'
+import { updateActivity, deleteActivity, updatePartida } from '../lib/db'
 
 export default function History() {
   const { clients, projects, partidas, activities, getClient, getProject, getPartida } = useApp()
@@ -42,12 +42,29 @@ export default function History() {
         if (!hay.includes(q)) return false
       }
       return true
+    }).sort((a, b) => {
+      const dateDiff = new Date(b.date) - new Date(a.date)
+      if (dateDiff !== 0) return dateDiff
+      const toMs = (ts) => ts == null ? Infinity : (ts.toMillis?.() ?? ts.seconds * 1000)
+      return toMs(b.createdAt) - toMs(a.createdAt)
     })
   }, [activities, filterCliente, filterProyecto, filterPartida, filterEstado, filterFrom, filterTo, search])
 
   const handleDelete = async (id) => {
     if (!confirm('¿Eliminar este registro?')) return
+    const act = activities.find(a => a.id === id)
     await deleteActivity(id)
+    // Restaurar el estado de la partida al de la actividad anterior
+    if (act?.partidaId) {
+      const toMs = (ts) => ts == null ? Infinity : (ts.toMillis?.() ?? ts.seconds * 1000)
+      const prev = activities
+        .filter(a => a.id !== id && a.partidaId === act.partidaId)
+        .sort((a, b) => {
+          const d = new Date(b.date) - new Date(a.date)
+          return d !== 0 ? d : toMs(b.createdAt) - toMs(a.createdAt)
+        })[0]
+      await updatePartida(act.partidaId, { status: prev?.status || 'cotizando' })
+    }
   }
 
   return (

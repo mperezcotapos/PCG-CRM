@@ -48,7 +48,13 @@ export function AppProvider({ children }) {
   const getPartidaActivities = (partidaId) =>
     activities
       .filter(a => a.partidaId === partidaId)
-      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .sort((a, b) => {
+        const dateDiff = new Date(b.date) - new Date(a.date)
+        if (dateDiff !== 0) return dateDiff
+        // Tiebreaker por createdAt; null = pendiente de confirmación → tratar como más reciente
+        const toMs = (ts) => ts == null ? Infinity : (ts.toMillis?.() ?? ts.seconds * 1000)
+        return toMs(b.createdAt) - toMs(a.createdAt)
+      })
 
   const getLatestActivity = (partidaId) =>
     getPartidaActivities(partidaId)[0] || null

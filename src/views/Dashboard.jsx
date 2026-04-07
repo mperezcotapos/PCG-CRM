@@ -4,8 +4,9 @@ import { getPelota, ESTADOS, PELOTA } from '../lib/constants'
 import StatusBadge from '../components/StatusBadge'
 import Modal from '../components/Modal'
 import ActivityForm from '../components/ActivityForm'
-import { differenceInDays, format, parseISO, isAfter } from 'date-fns'
+import { differenceInDays, format, parseISO, isAfter, startOfToday } from 'date-fns'
 import { es } from 'date-fns/locale'
+import { updatePartida, updateProject, updateActivity, deletePartida, deleteActivity } from '../lib/db'
 
 // ── Column definitions ────────────────────────────────────────────
 const COL_DEFS = [
@@ -65,7 +66,7 @@ function NextActionChip({ date }) {
   if (!date) return <span className="text-gray-400 text-xs">—</span>
   try {
     const d    = parseISO(date)
-    const days = differenceInDays(d, new Date())
+    const days = differenceInDays(d, startOfToday())
     const lbl  = format(d, 'd MMM', { locale: es })
     if (days < 0)   return <span className="badge bg-red-100 text-red-700">Vencido · {lbl}</span>
     if (days === 0) return <span className="badge bg-orange-100 text-orange-700">Hoy · {lbl}</span>
@@ -189,7 +190,7 @@ function ColFilterInput({ colKey, value, onChange, options }) {
 
 // ── Dashboard ─────────────────────────────────────────────────────
 export default function Dashboard() {
-  const { getDashboardRows, clients, loading } = useApp()
+  const { getDashboardRows, clients, projects, loading } = useApp()
 
   // Global filters (top bar + mobile)
   const [filterCliente, setFilterCliente] = useState('')
@@ -202,8 +203,9 @@ export default function Dashboard() {
   const hasColFilters = Object.values(colFilters).some(v => v)
   const clearColFilters = () => setColFilters({})
 
-  // Modal
+  // Modals
   const [selectedRow, setSelectedRow] = useState(null)
+  const [editRow,     setEditRow]     = useState(null)
 
   // Column config (persisted)
   const [colOrder, setColOrder] = useState(() =>
@@ -218,6 +220,7 @@ export default function Dashboard() {
 
   // Drag & drop
   const dragSrc    = useRef(null)
+  const dragTarget = useRef(null)
   const [dragOver, setDragOver] = useState(null)
 
   // Persist column prefs
@@ -321,23 +324,32 @@ export default function Dashboard() {
   }
 
   // Drag & drop handlers
-  const onDragStart = (e, key) => { dragSrc.current = key; e.dataTransfer.effectAllowed = 'move' }
-  const onDragOver  = (e, key) => { e.preventDefault(); setDragOver(key) }
+  const onDragStart = (e, key) => { dragSrc.current = key; dragTarget.current = null; e.dataTransfer.effectAllowed = 'move' }
+  const onDragOver  = (e, key) => { e.preventDefault(); dragTarget.current = key; setDragOver(key) }
   const onDrop      = (e, targetKey) => {
-    e.preventDefault(); setDragOver(null)
-    if (!dragSrc.current || dragSrc.current === targetKey) return
+    e.preventDefault()
+    applyReorder(targetKey)
+  }
+  const onDragEnd = () => {
+    // Fallback: aplica el reorden si onDrop no se disparó
+    applyReorder(dragTarget.current)
+  }
+  const applyReorder = (targetKey) => {
+    setDragOver(null)
+    const src = dragSrc.current
+    dragSrc.current = null
+    dragTarget.current = null
+    if (!src || !targetKey || src === targetKey) return
     setColOrder(order => {
       const arr = [...order]
-      const fi  = arr.indexOf(dragSrc.current)
+      const fi  = arr.indexOf(src)
       const ti  = arr.indexOf(targetKey)
       if (fi < 0 || ti < 0) return arr
       arr.splice(fi, 1)
-      arr.splice(ti, 0, dragSrc.current)
+      arr.splice(ti, 0, src)
       return arr
     })
-    dragSrc.current = null
   }
-  const onDragEnd = () => setDragOver(null)
 
   const activeCols = colOrder.filter(k => visibleCols.has(k))
 
@@ -506,12 +518,16 @@ export default function Dashboard() {
                         <Cell colKey={key} row={row} />
                       </td>
                     ))}
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3 text-right whitespace-nowrap">
                       <button
-                        className="btn-ghost px-2 py-1 text-xs text-navy-600 hover:text-navy-700 whitespace-nowrap"
-                        onClick={e => { e.stopPropagation(); setSelectedRow(row) }}
+                        className="btn-ghost px-2 py-1 text-gray-400 hover:text-gray-600"
+                        title="Editar partida"
+                        onClick={e => { e.stopPropagation(); setEditRow(row) }}
                       >
-                        + Registro
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
                       </button>
                     </td>
                   </tr>
@@ -541,6 +557,11 @@ export default function Dashboard() {
       {selectedRow === 'new' && (
         <Modal title="Nuevo registro rápido" onClose={() => setSelectedRow(null)} size="lg">
           <QuickEntryInline onSave={() => setSelectedRow(null)} onCancel={() => setSelectedRow(null)} />
+        </Modal>
+      )}
+      {editRow && (
+        <Modal title={`Editar · ${editRow.partida?.name}`} onClose={() => setEditRow(null)} size="lg">
+          <EditRowForm row={editRow} clients={clients} projects={projects} onClose={() => setEditRow(null)} />
         </Modal>
       )}
     </div>
@@ -717,5 +738,146 @@ function QuickEntryInline({ onSave, onCancel }) {
         <ActivityForm partida={partida} project={project} client={client} onSave={onSave} onCancel={onCancel} />
       )}
     </div>
+  )
+}
+
+// ── Edit row form ─────────────────────────────────────────────────
+function EditRowForm({ row, clients, projects, onClose }) {
+  const { partida, project, latest } = row
+  const { activities } = useApp()
+
+  const [clientId,    setClientId]    = useState(project?.clientId   || '')
+  const [projectId,   setProjectId]   = useState(partida.projectId   || '')
+  const [name,        setName]        = useState(partida.name        || '')
+  const [status,      setStatus]      = useState(partida.status      || 'cotizando')
+  const [pelota,      setPelota]      = useState(latest?.pelota      || '-')
+  const [responsible, setResponsible] = useState(latest?.responsible || '')
+  const [provider,    setProvider]    = useState(partida.provider    || '')
+  const [saving,      setSaving]      = useState(false)
+
+  const clientProjects = projects.filter(p => p.clientId === clientId)
+
+  const handleClientChange = (val) => {
+    setClientId(val)
+    const stillValid = projects.find(p => p.id === projectId && p.clientId === val)
+    if (!stillValid) setProjectId('')
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setSaving(true)
+    try {
+      const partidaUp = {}
+      if (name      !== partida.name)              partidaUp.name      = name
+      if (status    !== partida.status)            partidaUp.status    = status
+      if (provider  !== (partida.provider || ''))  partidaUp.provider  = provider
+      if (projectId !== partida.projectId)         partidaUp.projectId = projectId
+      if (Object.keys(partidaUp).length > 0)
+        await updatePartida(partida.id, partidaUp)
+
+      if (clientId !== project?.clientId)
+        await updateProject(project.id, { clientId })
+
+      if (latest) {
+        const actUp = {}
+        if (pelota      !== (latest.pelota      || '-')) actUp.pelota      = pelota
+        if (responsible !== (latest.responsible || ''))  actUp.responsible = responsible
+        if (status      !== partida.status)              actUp.status      = status
+        if (Object.keys(actUp).length > 0)
+          await updateActivity(latest.id, actUp)
+      }
+
+      onClose()
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!confirm(`¿Eliminar la partida "${partida.name}" y todos sus registros? Esta acción no se puede deshacer.`)) return
+    setSaving(true)
+    try {
+      const acts = activities.filter(a => a.partidaId === partida.id)
+      await Promise.all(acts.map(a => deleteActivity(a.id)))
+      await deletePartida(partida.id)
+      onClose()
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label className="label">Cliente</label>
+          <select className="select" value={clientId} onChange={e => handleClientChange(e.target.value)}>
+            <option value="">Seleccionar…</option>
+            {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="label">Proyecto</label>
+          <select className="select" value={projectId} disabled={!clientId}
+            onChange={e => setProjectId(e.target.value)}>
+            <option value="">Seleccionar…</option>
+            {clientProjects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label className="label">Nombre partida</label>
+        <input type="text" className="input" value={name} onChange={e => setName(e.target.value)} required />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label className="label">Estado</label>
+          <select className="select" value={status} onChange={e => setStatus(e.target.value)}>
+            {ESTADOS.map(e => <option key={e.value} value={e.value}>{e.label}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="label">La pelota está en</label>
+          <select className="select" value={pelota} onChange={e => setPelota(e.target.value)}
+            disabled={!latest} title={!latest ? 'Sin actividad registrada' : ''}>
+            {PELOTA.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label className="label">Responsable</label>
+          <input type="text" className="input" placeholder="Nombre del responsable"
+            value={responsible} onChange={e => setResponsible(e.target.value)}
+            disabled={!latest} title={!latest ? 'Sin actividad registrada' : ''} />
+        </div>
+        <div>
+          <label className="label">Proveedor</label>
+          <input type="text" className="input" placeholder="Nombre del proveedor"
+            value={provider} onChange={e => setProvider(e.target.value)} />
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between pt-2 border-t border-gray-100 mt-2">
+        <button type="button" disabled={saving}
+          className="btn-ghost text-xs text-red-500 hover:text-red-700 hover:bg-red-50 flex items-center gap-1.5"
+          onClick={handleDelete}>
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          Eliminar partida
+        </button>
+        <div className="flex gap-2">
+          <button type="button" className="btn-secondary" onClick={onClose}>Cancelar</button>
+          <button type="submit" className="btn-primary" disabled={saving}>
+            {saving ? 'Guardando…' : 'Guardar cambios'}
+          </button>
+        </div>
+      </div>
+    </form>
   )
 }
