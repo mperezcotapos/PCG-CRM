@@ -59,7 +59,11 @@ export function AppProvider({ children }) {
       const project = getProject(partida.projectId)
       const client  = project ? getClient(project.clientId) : null
       const acts    = getPartidaActivities(partida.id)
-      const latest  = acts[0] || null
+      const rawLatest = acts[0] || null
+      // Siempre usar partida.status como fuente de verdad del estado
+      const latest  = rawLatest
+        ? { ...rawLatest, status: partida.status || rawLatest.status }
+        : null
       const daysSince = latest
         ? Math.floor((new Date() - new Date(latest.date)) / 86400000)
         : null
