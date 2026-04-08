@@ -105,7 +105,7 @@ export default function Projects() {
                 </div>
               </div>
 
-              {/* Partidas */}
+              {/* Partidas + Recordatorios */}
               {isExpanded && (
                 <div className="border-t border-gray-100">
                   {projPartidas.length === 0 ? (
