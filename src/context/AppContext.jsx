@@ -6,6 +6,15 @@ import {
 
 const AppContext = createContext(null)
 
+// Timestamp efectivo de una actividad: createdAt si existe, sino date, sino 0
+// null = escritura pendiente en Firestore → se trata como la más reciente
+export const getActivityMs = (act) => {
+  const ts = act.createdAt
+  if (ts === null) return Date.now() + 1e9
+  if (ts == null)  return new Date(act.date || 0).getTime()
+  return ts.toMillis?.() ?? ts.seconds * 1000
+}
+
 export const useApp = () => {
   const ctx = useContext(AppContext)
   if (!ctx) throw new Error('useApp must be used inside AppProvider')
