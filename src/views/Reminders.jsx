@@ -5,9 +5,8 @@ import { format, parseISO, isPast, isToday, differenceInDays } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { addReminder, updateReminder, deleteReminder } from '../lib/db'
 
-// Chip de fecha límite con color según urgencia
 function DueDateChip({ fecha }) {
-  if (!fecha) return <span className="text-gray-400 text-xs">Sin fecha</span>
+  if (!fecha) return null
   const date = parseISO(fecha)
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -23,31 +22,25 @@ function DueDateChip({ fecha }) {
 }
 
 export default function Reminders() {
-  const { reminders, projects, clients, getClient } = useApp()
+  const { reminders } = useApp()
   const [filterEstado, setFilterEstado] = useState('pendiente')
-  const [filterProject, setFilterProject] = useState('')
   const [creating, setCreating] = useState(false)
   const [editing, setEditing] = useState(null)
 
   const filtered = useMemo(() => {
     return reminders
-      .filter(r => {
-        if (filterEstado && r.estado !== filterEstado && filterEstado !== 'todos') return false
-        if (filterProject && r.projectId !== filterProject) return false
-        return true
-      })
+      .filter(r => filterEstado === 'todos' || r.estado === filterEstado)
       .sort((a, b) => {
         if (a.estado !== b.estado) return a.estado === 'pendiente' ? -1 : 1
         if (a.fechaLimite && b.fechaLimite) return a.fechaLimite.localeCompare(b.fechaLimite)
         return 0
       })
-  }, [reminders, filterEstado, filterProject])
+  }, [reminders, filterEstado])
 
   const pendingCount = reminders.filter(r => r.estado === 'pendiente').length
   const overdueCount = reminders.filter(r => {
     if (r.estado !== 'pendiente' || !r.fechaLimite) return false
     const d = parseISO(r.fechaLimite)
-    const today = new Date(); today.setHours(0, 0, 0, 0)
     return isPast(d) && !isToday(d)
   }).length
 
@@ -73,7 +66,7 @@ export default function Reminders() {
         <button className="btn-primary" onClick={() => setCreating(true)}>+ Nuevo</button>
       </div>
 
-      {/* Filters */}
+      {/* Filtro de estado */}
       <div className="card px-4 py-3 flex gap-3 flex-wrap items-center">
         <div className="flex rounded-lg border border-gray-200 overflow-hidden text-sm">
           {[['pendiente', 'Pendientes'], ['completado', 'Completados'], ['todos', 'Todos']].map(([val, label]) => (
@@ -88,20 +81,10 @@ export default function Reminders() {
             </button>
           ))}
         </div>
-        <select className="select w-48" value={filterProject} onChange={e => setFilterProject(e.target.value)}>
-          <option value="">Todos los proyectos</option>
-          {projects.map(p => {
-            const c = getClient(p.clientId)
-            return <option key={p.id} value={p.id}>{c ? `${c.name} · ` : ''}{p.name}</option>
-          })}
-        </select>
-        {filterProject && (
-          <button className="btn-ghost text-xs" onClick={() => setFilterProject('')}>Limpiar</button>
-        )}
         <span className="ml-auto text-xs text-gray-400">{filtered.length} registros</span>
       </div>
 
-      {/* List */}
+      {/* Lista */}
       <div className="space-y-2">
         {filtered.length === 0 && (
           <div className="card py-12 text-center text-gray-400 text-sm">
@@ -109,10 +92,7 @@ export default function Reminders() {
           </div>
         )}
         {filtered.map(r => {
-          const project = projects.find(p => p.id === r.projectId)
-          const client  = project ? getClient(project.clientId) : null
-          const done    = r.estado === 'completado'
-
+          const done = r.estado === 'completado'
           return (
             <div key={r.id} className={`card px-5 py-4 transition-opacity ${done ? 'opacity-60' : ''}`}>
               <div className="flex items-start gap-4">
@@ -130,33 +110,23 @@ export default function Reminders() {
                   )}
                 </button>
 
-                {/* Content */}
+                {/* Contenido */}
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2 mb-1">
                     <span className={`font-semibold text-sm ${done ? 'line-through text-gray-400' : 'text-gray-900'}`}>
                       {r.tema}
                     </span>
-                    <DueDateChip fecha={done ? null : r.fechaLimite} />
+                    {!done && <DueDateChip fecha={r.fechaLimite} />}
                   </div>
-
-                  {/* Project path */}
-                  {project && (
-                    <div className="text-xs text-gray-400 mb-1.5">
-                      {client?.name && <><span className="text-gray-500">{client.name}</span><span className="mx-1">›</span></>}
-                      <span className="text-gray-500">{project.name}</span>
-                    </div>
-                  )}
-
                   {r.descripcion && (
                     <p className="text-sm text-gray-600 leading-relaxed">{r.descripcion}</p>
                   )}
-
                   {r.responsable && (
                     <div className="mt-1.5 text-xs text-gray-400">👤 {r.responsable}</div>
                   )}
                 </div>
 
-                {/* Actions */}
+                {/* Acciones */}
                 <div className="flex gap-1 flex-shrink-0">
                   <button className="btn-ghost p-1.5" title="Editar" onClick={() => setEditing(r)}>
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -177,25 +147,19 @@ export default function Reminders() {
         })}
       </div>
 
-      {/* Create modal */}
       {creating && (
         <Modal title="Nuevo recordatorio" onClose={() => setCreating(false)} size="lg">
           <ReminderForm
-            projects={projects}
-            clients={clients}
             onSave={async (data) => { await addReminder(data); setCreating(false) }}
             onCancel={() => setCreating(false)}
           />
         </Modal>
       )}
 
-      {/* Edit modal */}
       {editing && (
         <Modal title="Editar recordatorio" onClose={() => setEditing(null)} size="lg">
           <ReminderForm
             initial={editing}
-            projects={projects}
-            clients={clients}
             onSave={async (data) => { await updateReminder(editing.id, data); setEditing(null) }}
             onCancel={() => setEditing(null)}
           />
@@ -205,9 +169,8 @@ export default function Reminders() {
   )
 }
 
-function ReminderForm({ initial, projects, clients, onSave, onCancel, defaultProjectId }) {
+function ReminderForm({ initial, onSave, onCancel }) {
   const [form, setForm] = useState({
-    projectId:   initial?.projectId   || defaultProjectId || '',
     tema:        initial?.tema        || '',
     descripcion: initial?.descripcion || '',
     responsable: initial?.responsable || '',
@@ -223,29 +186,16 @@ function ReminderForm({ initial, projects, clients, onSave, onCancel, defaultPro
     try { await onSave(form) } finally { setSaving(false) }
   }
 
-  // Agrupar proyectos por cliente para el select
-  const clientMap = Object.fromEntries(clients.map(c => [c.id, c]))
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="label">Proyecto <span className="text-red-500">*</span></label>
-        <select className="select" value={form.projectId} onChange={e => set('projectId', e.target.value)} required>
-          <option value="">Seleccionar proyecto…</option>
-          {projects.map(p => {
-            const c = clientMap[p.clientId]
-            return <option key={p.id} value={p.id}>{c ? `${c.name} · ` : ''}{p.name}</option>
-          })}
-        </select>
-      </div>
-      <div>
         <label className="label">Tema <span className="text-red-500">*</span></label>
-        <input className="input" placeholder="Ej: Confirmar entrega de muestras"
+        <input className="input" placeholder="Ej: Llamar al proveedor de cortinas"
           value={form.tema} onChange={e => set('tema', e.target.value)} required />
       </div>
       <div>
         <label className="label">Descripción</label>
-        <textarea className="textarea" rows={3} placeholder="Detalles del recordatorio…"
+        <textarea className="textarea" rows={3} placeholder="Detalles…"
           value={form.descripcion} onChange={e => set('descripcion', e.target.value)} />
       </div>
       <div className="grid grid-cols-2 gap-3">
@@ -278,5 +228,3 @@ function ReminderForm({ initial, projects, clients, onSave, onCancel, defaultPro
     </form>
   )
 }
-
-export { ReminderForm }
