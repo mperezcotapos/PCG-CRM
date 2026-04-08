@@ -255,8 +255,8 @@ export default function Dashboard() {
     new Set(loadLS(LS_VIS, [...DEFAULT_VISIBLE])))
   const [showColPicker, setShowColPicker] = useState(false)
 
-  // Sorting
-  const [sortKey, setSortKey] = useState(null)
+  // Sorting — default: próxima acción ascendente
+  const [sortKey, setSortKey] = useState('proxima')
   const [sortDir, setSortDir] = useState('asc')
 
   // Drag & drop
