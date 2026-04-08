@@ -78,7 +78,7 @@ const NAV = [
 ]
 
 export default function Sidebar() {
-  const { partidas, activities } = useApp()
+  const { partidas, activities, reminders } = useApp()
 
   // Count retrasados
   const retrasados = partidas.filter(p => {
