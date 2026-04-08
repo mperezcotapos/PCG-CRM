@@ -79,9 +79,14 @@ export default function History() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Historial</h1>
-        <p className="text-sm text-gray-500 mt-0.5">Todos los registros de actividad en orden cronológico</p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Historial</h1>
+          <p className="text-sm text-gray-500 mt-0.5">Todos los registros de actividad en orden cronológico</p>
+        </div>
+        <button className="btn-secondary text-xs whitespace-nowrap" onClick={handleSync} disabled={syncing}>
+          {syncing ? 'Sincronizando…' : 'Sincronizar estados'}
+        </button>
       </div>
 
       {/* Filters */}
