@@ -64,6 +64,20 @@ export const updateActivity = (id, data) =>
 export const deleteActivity = (id) =>
   deleteDoc(ref('activities', id))
 
+// ---- Reminders ----
+export const subscribeReminders = (cb) =>
+  onSnapshot(query(col('reminders'), orderBy('createdAt', 'desc')), snap =>
+    cb(snap.docs.map(d => ({ id: d.id, ...d.data() }))))
+
+export const addReminder = (data) =>
+  addDoc(col('reminders'), { ...data, createdAt: serverTimestamp() })
+
+export const updateReminder = (id, data) =>
+  updateDoc(ref('reminders', id), data)
+
+export const deleteReminder = (id) =>
+  deleteDoc(ref('reminders', id))
+
 // ---- Providers ----
 export const subscribeProviders = (cb) =>
   onSnapshot(query(col('providers'), orderBy('name')), snap =>
