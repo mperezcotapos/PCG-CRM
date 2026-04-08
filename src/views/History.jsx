@@ -1,11 +1,11 @@
 import { useState, useMemo } from 'react'
-import { useApp } from '../context/AppContext'
+import { useApp, getActivityMs } from '../context/AppContext'
 import { getEstado, getPelota, ESTADOS } from '../lib/constants'
 import StatusBadge from '../components/StatusBadge'
 import Modal from '../components/Modal'
 import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { updateActivity, deleteActivity, updatePartida } from '../lib/db'
+import { updateActivity, deleteActivity, updatePartida, syncAllPartidaStatuses } from '../lib/db'
 
 export default function History() {
   const { clients, projects, partidas, activities, getClient, getProject, getPartida } = useApp()
