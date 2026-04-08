@@ -1,9 +1,47 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { useApp } from '../context/AppContext'
 import Modal from '../components/Modal'
 import { format, parseISO, isPast, isToday, differenceInDays } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { addReminder, updateReminder, deleteReminder } from '../lib/db'
+
+function MultiSelect({ placeholder, options, values, onChange }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+  useEffect(() => {
+    if (!open) return
+    const h = e => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', h)
+    return () => document.removeEventListener('mousedown', h)
+  }, [open])
+  const toggle = val => { const n = new Set(values); n.has(val) ? n.delete(val) : n.add(val); onChange(n) }
+  const display = values.size ? `${values.size} seleccionado${values.size > 1 ? 's' : ''}` : placeholder
+  return (
+    <div className="relative" ref={ref}>
+      <button type="button"
+        className={`select text-left flex items-center justify-between min-w-44 ${values.size ? 'ring-2 ring-navy-400 border-navy-400' : ''}`}
+        onClick={() => setOpen(v => !v)}>
+        <span className={`text-sm ${values.size ? 'text-navy-700 font-medium' : 'text-gray-500'}`}>{display}</span>
+        <svg className="w-3 h-3 ml-2 text-gray-400 flex-shrink-0" viewBox="0 0 10 6" fill="currentColor"><path d="M5 6L0 0h10z"/></svg>
+      </button>
+      {open && (
+        <div className="absolute z-50 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg p-2 min-w-full max-h-56 overflow-y-auto">
+          {values.size > 0 && (
+            <button type="button" className="w-full text-left text-xs text-navy-600 hover:underline px-2 pb-2" onClick={() => onChange(new Set())}>
+              Limpiar selección
+            </button>
+          )}
+          {options.map(o => (
+            <label key={o} className="flex items-center gap-2 px-2 py-1.5 cursor-pointer hover:bg-gray-50 rounded">
+              <input type="checkbox" checked={values.has(o)} onChange={() => toggle(o)} className="accent-navy-600" />
+              <span className="text-sm text-gray-700">{o}</span>
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 function DueDateChip({ fecha }) {
   if (!fecha) return null
@@ -24,27 +62,39 @@ function DueDateChip({ fecha }) {
 export default function Reminders() {
   const { reminders } = useApp()
   const [filterEstado,      setFilterEstado]      = useState('pendiente')
-  const [filterResponsable, setFilterResponsable] = useState('')
+  const [filterResponsable, setFilterResponsable] = useState(new Set())
   const [filterFechaDesde,  setFilterFechaDesde]  = useState('')
   const [filterFechaHasta,  setFilterFechaHasta]  = useState('')
+  const [sortKey, setSortKey] = useState('fecha')
+  const [sortDir, setSortDir] = useState('asc')
   const [creating, setCreating] = useState(false)
   const [editing, setEditing] = useState(null)
+
+  const responsableOptions = useMemo(() =>
+    [...new Set(reminders.map(r => r.responsable).filter(Boolean))].sort()
+  , [reminders])
 
   const filtered = useMemo(() => {
     return reminders
       .filter(r => {
         if (filterEstado !== 'todos' && r.estado !== filterEstado) return false
-        if (filterResponsable && !(r.responsable || '').toLowerCase().includes(filterResponsable.toLowerCase())) return false
+        if (filterResponsable.size && !filterResponsable.has(r.responsable)) return false
         if (filterFechaDesde && r.fechaLimite && r.fechaLimite < filterFechaDesde) return false
         if (filterFechaHasta && r.fechaLimite && r.fechaLimite > filterFechaHasta) return false
         return true
       })
       .sort((a, b) => {
-        if (a.estado !== b.estado) return a.estado === 'pendiente' ? -1 : 1
-        if (a.fechaLimite && b.fechaLimite) return a.fechaLimite.localeCompare(b.fechaLimite)
-        return 0
+        let cmp = 0
+        if (sortKey === 'fecha') {
+          const fa = a.fechaLimite || 'zzzz'
+          const fb = b.fechaLimite || 'zzzz'
+          cmp = fa.localeCompare(fb)
+        } else if (sortKey === 'responsable') {
+          cmp = (a.responsable || '').localeCompare(b.responsable || '', 'es')
+        }
+        return sortDir === 'asc' ? cmp : -cmp
       })
-  }, [reminders, filterEstado, filterResponsable, filterFechaDesde, filterFechaHasta])
+  }, [reminders, filterEstado, filterResponsable, filterFechaDesde, filterFechaHasta, sortKey, sortDir])
 
   const pendingCount = reminders.filter(r => r.estado === 'pendiente').length
   const overdueCount = reminders.filter(r => {
@@ -79,21 +129,13 @@ export default function Reminders() {
       <div className="card px-4 py-3 flex gap-3 flex-wrap items-center">
         <div className="flex rounded-lg border border-gray-200 overflow-hidden text-sm">
           {[['pendiente', 'Pendientes'], ['completado', 'Completados'], ['todos', 'Todos']].map(([val, label]) => (
-            <button
-              key={val}
-              onClick={() => setFilterEstado(val)}
-              className={`px-3 py-1.5 font-medium transition-colors ${
-                filterEstado === val ? 'bg-navy-600 text-white' : 'text-gray-600 hover:bg-gray-50'
-              }`}
-            >
+            <button key={val} onClick={() => setFilterEstado(val)}
+              className={`px-3 py-1.5 font-medium transition-colors ${filterEstado === val ? 'bg-navy-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}>
               {label}
             </button>
           ))}
         </div>
-        <input
-          className="input w-40" placeholder="Responsable…"
-          value={filterResponsable} onChange={e => setFilterResponsable(e.target.value)}
-        />
+        <MultiSelect placeholder="Responsable" options={responsableOptions} values={filterResponsable} onChange={setFilterResponsable} />
         <div className="flex items-center gap-1.5 text-xs text-gray-500">
           <span>Desde</span>
           <input type="date" className="input w-36" value={filterFechaDesde} onChange={e => setFilterFechaDesde(e.target.value)} />
@@ -102,8 +144,19 @@ export default function Reminders() {
           <span>Hasta</span>
           <input type="date" className="input w-36" value={filterFechaHasta} onChange={e => setFilterFechaHasta(e.target.value)} />
         </div>
-        {(filterResponsable || filterFechaDesde || filterFechaHasta) && (
-          <button className="btn-ghost text-xs" onClick={() => { setFilterResponsable(''); setFilterFechaDesde(''); setFilterFechaHasta('') }}>
+        <div className="flex items-center gap-1.5 text-xs text-gray-500 border-l border-gray-200 pl-3 ml-1">
+          <span className="font-medium">Ordenar:</span>
+          <select className="select text-xs py-1 h-auto" value={sortKey} onChange={e => setSortKey(e.target.value)}>
+            <option value="fecha">Fecha</option>
+            <option value="responsable">Responsable</option>
+          </select>
+          <button onClick={() => setSortDir(d => d === 'asc' ? 'desc' : 'asc')}
+            className="btn-ghost px-1.5 py-1 text-xs flex items-center gap-0.5 font-mono">
+            {sortDir === 'asc' ? '↑ Asc' : '↓ Desc'}
+          </button>
+        </div>
+        {(filterResponsable.size || filterFechaDesde || filterFechaHasta) && (
+          <button className="btn-ghost text-xs" onClick={() => { setFilterResponsable(new Set()); setFilterFechaDesde(''); setFilterFechaHasta('') }}>
             Limpiar
           </button>
         )}
