@@ -18,6 +18,18 @@ export default function History() {
   const [filterTo,      setFilterTo]      = useState('')
   const [search,        setSearch]        = useState('')
   const [editing,       setEditing]       = useState(null)
+  const [syncing,       setSyncing]       = useState(false)
+
+  const handleSync = async () => {
+    if (!confirm('¿Sincronizar el estado de todas las partidas con su última actividad?')) return
+    setSyncing(true)
+    try {
+      const count = await syncAllPartidaStatuses()
+      alert(`Listo. Se sincronizaron ${count} partidas.`)
+    } finally {
+      setSyncing(false)
+    }
+  }
 
   // Filter cascades
   const filteredProjects = projects.filter(p => !filterCliente || p.clientId === filterCliente)
