@@ -78,6 +78,39 @@ export const updateProvider = (id, data) =>
 export const deleteProvider = (id) =>
   deleteDoc(ref('providers', id))
 
+// ---- Sync: repara el status de todas las partidas según su actividad más reciente ----
+export const syncAllPartidaStatuses = async () => {
+  const getMs = (act) => {
+    const ts = act.createdAt
+    if (ts === null) return Date.now() + 1e9
+    if (ts == null)  return new Date(act.date || 0).getTime()
+    return ts.toMillis?.() ?? ts.seconds * 1000
+  }
+
+  const snap = await getDocs(col('activities'))
+  const activities = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+
+  // La actividad más reciente por partida (por createdAt)
+  const latestByPartida = {}
+  activities.forEach(act => {
+    const prev = latestByPartida[act.partidaId]
+    if (!prev || getMs(act) > getMs(prev)) {
+      latestByPartida[act.partidaId] = act
+    }
+  })
+
+  const entries = Object.entries(latestByPartida).filter(([, act]) => act.status)
+  const CHUNK = 400
+  for (let i = 0; i < entries.length; i += CHUNK) {
+    const batch = writeBatch(db)
+    entries.slice(i, i + CHUNK).forEach(([partidaId, act]) => {
+      batch.update(ref('partidas', partidaId), { status: act.status })
+    })
+    await batch.commit()
+  }
+  return entries.length
+}
+
 // ---- Bulk import (used once to seed data from Excel) ----
 export const bulkImport = async (data) => {
   const CHUNK = 400
