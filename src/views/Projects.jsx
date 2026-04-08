@@ -1,13 +1,12 @@
 import { useState } from 'react'
 import { useApp } from '../context/AppContext'
-import { addProject, updateProject, deleteProject, addPartida, updatePartida, deletePartida, addReminder, updateReminder, deleteReminder } from '../lib/db'
+import { addProject, updateProject, deleteProject, addPartida, updatePartida, deletePartida } from '../lib/db'
 import Modal from '../components/Modal'
 import StatusBadge from '../components/StatusBadge'
 import { ESTADOS, CATEGORIAS, getPelota } from '../lib/constants'
-import { format, parseISO, isPast, isToday, differenceInDays } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
 import ActivityForm from '../components/ActivityForm'
-import { ReminderForm } from './Reminders'
 
 export default function Projects() {
   const { clients, projects, partidas, activities, getClient, getProject, getPartidaActivities, getProjectReminders } = useApp()
