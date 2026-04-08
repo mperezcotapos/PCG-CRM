@@ -777,14 +777,23 @@ function EditRowForm({ row, clients, projects, onClose }) {
   const { partida, project, latest } = row
   const { activities } = useApp()
 
+  // Campos de partida
   const [clientId,    setClientId]    = useState(project?.clientId   || '')
   const [projectId,   setProjectId]   = useState(partida.projectId   || '')
   const [name,        setName]        = useState(partida.name        || '')
-  const [status,      setStatus]      = useState(partida.status      || 'cotizando')
-  const [pelota,      setPelota]      = useState(latest?.pelota      || '-')
-  const [responsible, setResponsible] = useState(latest?.responsible || '')
   const [provider,    setProvider]    = useState(partida.provider    || '')
-  const [saving,      setSaving]      = useState(false)
+
+  // Campos de la última actividad
+  const [date,           setDate]           = useState(latest?.date           || '')
+  const [status,         setStatus]         = useState(partida.status         || 'cotizando')
+  const [pelota,         setPelota]         = useState(latest?.pelota         || '-')
+  const [responsible,    setResponsible]    = useState(latest?.responsible    || '')
+  const [comment,        setComment]        = useState(latest?.comment        || '')
+  const [nextAction,     setNextAction]     = useState(latest?.nextAction     || '')
+  const [nextActionDate, setNextActionDate] = useState(latest?.nextActionDate || '')
+  const [observations,   setObservations]   = useState(latest?.observations   || '')
+
+  const [saving, setSaving] = useState(false)
 
   const clientProjects = projects.filter(p => p.clientId === clientId)
 
@@ -798,19 +807,24 @@ function EditRowForm({ row, clients, projects, onClose }) {
     e.preventDefault()
     setSaving(true)
     try {
+      // Actualizar partida
       const partidaUp = {}
-      if (name      !== partida.name)              partidaUp.name      = name
-      if (status    !== partida.status)            partidaUp.status    = status
-      if (provider  !== (partida.provider || ''))  partidaUp.provider  = provider
-      if (projectId !== partida.projectId)         partidaUp.projectId = projectId
+      if (name      !== partida.name)             partidaUp.name      = name
+      if (status    !== partida.status)           partidaUp.status    = status
+      if (provider  !== (partida.provider || '')) partidaUp.provider  = provider
+      if (projectId !== partida.projectId)        partidaUp.projectId = projectId
       if (Object.keys(partidaUp).length > 0)
         await updatePartida(partida.id, partidaUp)
 
       if (clientId !== project?.clientId)
         await updateProject(project.id, { clientId })
 
+      // Actualizar última actividad
       if (latest) {
-        await updateActivity(latest.id, { pelota, responsible, status })
+        await updateActivity(latest.id, {
+          date, status, pelota, responsible,
+          comment, nextAction, nextActionDate, observations,
+        })
       }
 
       onClose()
@@ -834,6 +848,9 @@ function EditRowForm({ row, clients, projects, onClose }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+
+      {/* ── Sección: Partida ── */}
+      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Partida</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label className="label">Cliente</label>
@@ -851,40 +868,69 @@ function EditRowForm({ row, clients, projects, onClose }) {
           </select>
         </div>
       </div>
-
-      <div>
-        <label className="label">Nombre partida</label>
-        <input type="text" className="input" value={name} onChange={e => setName(e.target.value)} required />
-      </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label className="label">Estado</label>
-          <select className="select" value={status} onChange={e => setStatus(e.target.value)}>
-            {ESTADOS.map(e => <option key={e.value} value={e.value}>{e.label}</option>)}
-          </select>
-        </div>
-        <div>
-          <label className="label">La pelota está en</label>
-          <select className="select" value={pelota} onChange={e => setPelota(e.target.value)}
-            disabled={!latest} title={!latest ? 'Sin actividad registrada' : ''}>
-            {PELOTA.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
-          </select>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div>
-          <label className="label">Responsable</label>
-          <input type="text" className="input" placeholder="Nombre del responsable"
-            value={responsible} onChange={e => setResponsible(e.target.value)}
-            disabled={!latest} title={!latest ? 'Sin actividad registrada' : ''} />
+          <label className="label">Nombre partida</label>
+          <input type="text" className="input" value={name} onChange={e => setName(e.target.value)} required />
         </div>
         <div>
           <label className="label">Proveedor</label>
           <input type="text" className="input" placeholder="Nombre del proveedor"
             value={provider} onChange={e => setProvider(e.target.value)} />
         </div>
+      </div>
+
+      {/* ── Sección: Último registro ── */}
+      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide pt-2 border-t border-gray-100">
+        Último registro {!latest && <span className="text-gray-300 normal-case font-normal">(sin actividad)</span>}
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label className="label">Fecha</label>
+          <input type="date" className="input" value={date}
+            onChange={e => setDate(e.target.value)} disabled={!latest} />
+        </div>
+        <div>
+          <label className="label">Estado</label>
+          <select className="select" value={status} onChange={e => setStatus(e.target.value)}>
+            {ESTADOS.map(e => <option key={e.value} value={e.value}>{e.label}</option>)}
+          </select>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label className="label">Responsable</label>
+          <input type="text" className="input" placeholder="Nombre del responsable"
+            value={responsible} onChange={e => setResponsible(e.target.value)} disabled={!latest} />
+        </div>
+        <div>
+          <label className="label">La pelota está en</label>
+          <select className="select" value={pelota} onChange={e => setPelota(e.target.value)} disabled={!latest}>
+            {PELOTA.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+          </select>
+        </div>
+      </div>
+      <div>
+        <label className="label">Comentario</label>
+        <textarea className="textarea" rows={3} value={comment}
+          onChange={e => setComment(e.target.value)} disabled={!latest} />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label className="label">Próxima acción</label>
+          <input type="text" className="input" placeholder="¿Qué sigue?"
+            value={nextAction} onChange={e => setNextAction(e.target.value)} disabled={!latest} />
+        </div>
+        <div>
+          <label className="label">Fecha recordatorio</label>
+          <input type="date" className="input" value={nextActionDate}
+            onChange={e => setNextActionDate(e.target.value)} disabled={!latest} />
+        </div>
+      </div>
+      <div>
+        <label className="label">Observaciones internas</label>
+        <textarea className="textarea" rows={2} value={observations}
+          onChange={e => setObservations(e.target.value)} disabled={!latest} />
       </div>
 
       <div className="flex items-center justify-between pt-2 border-t border-gray-100 mt-2">
