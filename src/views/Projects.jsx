@@ -252,8 +252,12 @@ export default function Projects() {
   )
 }
 
-function ProjectForm({ clients, onSave, onCancel }) {
-  const [form, setForm] = useState({ clientId: '', name: '', status: 'activo' })
+function ProjectForm({ clients, initial, onSave, onCancel }) {
+  const [form, setForm] = useState({
+    clientId: initial?.clientId || '',
+    name:     initial?.name     || '',
+    status:   initial?.status   || 'activo',
+  })
   const [saving, setSaving] = useState(false)
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
