@@ -131,6 +131,11 @@ export default function Sidebar() {
                 {retrasados}
               </span>
             )}
+            {item.label === 'Recordatorios' && remindersBadge > 0 && (
+              <span className="bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                {remindersBadge}
+              </span>
+            )}
           </NavLink>
         ))}
       </nav>
