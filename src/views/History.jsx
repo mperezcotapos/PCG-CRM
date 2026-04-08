@@ -45,7 +45,10 @@ export default function History() {
     }).sort((a, b) => {
       const dateDiff = new Date(b.date) - new Date(a.date)
       if (dateDiff !== 0) return dateDiff
-      const toMs = (ts) => ts == null ? Infinity : (ts.toMillis?.() ?? ts.seconds * 1000)
+      const toMs = (ts) =>
+        ts === null ? Infinity :
+        ts == null  ? 0 :
+        (ts.toMillis?.() ?? ts.seconds * 1000)
       return toMs(b.createdAt) - toMs(a.createdAt)
     })
   }, [activities, filterCliente, filterProyecto, filterPartida, filterEstado, filterFrom, filterTo, search])
@@ -56,7 +59,10 @@ export default function History() {
     await deleteActivity(id)
     // Restaurar el estado de la partida al de la actividad anterior
     if (act?.partidaId) {
-      const toMs = (ts) => ts == null ? Infinity : (ts.toMillis?.() ?? ts.seconds * 1000)
+      const toMs = (ts) =>
+        ts === null ? Infinity :
+        ts == null  ? 0 :
+        (ts.toMillis?.() ?? ts.seconds * 1000)
       const prev = activities
         .filter(a => a.id !== id && a.partidaId === act.partidaId)
         .sort((a, b) => {
