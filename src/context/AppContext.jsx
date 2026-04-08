@@ -87,7 +87,6 @@ export function AppProvider({ children }) {
       getClient, getProject, getPartida,
       getProjectPartidas, getClientProjects,
       getPartidaActivities, getLatestActivity,
-      getProjectReminders,
       getDashboardRows,
     }}>
       {children}
