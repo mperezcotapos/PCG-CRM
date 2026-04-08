@@ -241,6 +241,7 @@ export default function History() {
 }
 
 function EditActivityForm({ act, onSave, onCancel }) {
+  const { activities } = useApp()
   const [form, setForm] = useState({ ...act })
   const [saving, setSaving] = useState(false)
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
@@ -250,6 +251,27 @@ function EditActivityForm({ act, onSave, onCancel }) {
     setSaving(true)
     const { id, createdAt, ...data } = form
     await updateActivity(act.id, data)
+
+    // Actualizar el status de la partida según la actividad más reciente
+    const getMs = a => {
+      const ts = a.createdAt
+      if (ts === null) return Date.now() + 1e9
+      if (ts == null)  return new Date(a.date || 0).getTime()
+      return ts.toMillis?.() ?? ts.seconds * 1000
+    }
+    const updatedAct = { ...act, ...data }
+    const latest = activities
+      .filter(a => a.partidaId === act.partidaId)
+      .map(a => a.id === act.id ? updatedAct : a)
+      .sort((a, b) => {
+        const dateDiff = new Date(b.date) - new Date(a.date)
+        if (dateDiff !== 0) return dateDiff
+        return getMs(b) - getMs(a)
+      })[0]
+    if (latest?.status) {
+      await updatePartida(act.partidaId, { status: latest.status })
+    }
+
     onSave()
   }
 
