@@ -15,6 +15,7 @@ export default function Projects() {
   const [creating, setCreating] = useState(false)
   const [expandedProject, setExpandedProject] = useState(null)
   const [creatingPartida, setCreatingPartida] = useState(null)
+  const [editingProject, setEditingProject] = useState(null) // project object
   const [registeringActivity, setRegisteringActivity] = useState(null)
   const [viewingPartida, setViewingPartida] = useState(null) // { partida, project, client }
 
