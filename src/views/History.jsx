@@ -69,17 +69,10 @@ export default function History() {
     if (!confirm('¿Eliminar este registro?')) return
     const act = activities.find(a => a.id === id)
     await deleteActivity(id)
-    // Restaurar el estado de la partida al de la actividad anterior
     if (act?.partidaId) {
-      const getMs = a => {
-        const ts = a.createdAt
-        if (ts === null) return Date.now() + 1e9
-        if (ts == null)  return new Date(a.date || 0).getTime()
-        return ts.toMillis?.() ?? ts.seconds * 1000
-      }
       const prev = activities
         .filter(a => a.id !== id && a.partidaId === act.partidaId)
-        .sort((a, b) => getMs(b) - getMs(a))[0]
+        .sort((a, b) => getActivityMs(b) - getActivityMs(a))[0]
       await updatePartida(act.partidaId, { status: prev?.status || 'cotizando' })
     }
   }
