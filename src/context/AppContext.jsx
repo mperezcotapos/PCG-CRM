@@ -93,10 +93,11 @@ export function AppProvider({ children }) {
 
   return (
     <AppContext.Provider value={{
-      clients, projects, partidas, activities, providers, loading,
+      clients, projects, partidas, activities, providers, reminders, loading,
       getClient, getProject, getPartida,
       getProjectPartidas, getClientProjects,
       getPartidaActivities, getLatestActivity,
+      getProjectReminders,
       getDashboardRows,
     }}>
       {children}
