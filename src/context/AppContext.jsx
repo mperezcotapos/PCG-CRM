@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import {
   subscribeClients, subscribeProjects, subscribePartidas,
-  subscribeActivities, subscribeProviders
+  subscribeActivities, subscribeProviders, subscribeReminders
 } from '../lib/db'
 
 const AppContext = createContext(null)
