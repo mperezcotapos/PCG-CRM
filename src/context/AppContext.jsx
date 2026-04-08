@@ -64,16 +64,6 @@ export function AppProvider({ children }) {
   const getLatestActivity = (partidaId) =>
     getPartidaActivities(partidaId)[0] || null
 
-  const getProjectReminders = (projectId) =>
-    reminders
-      .filter(r => r.projectId === projectId)
-      .sort((a, b) => {
-        // pendiente primero, luego por fecha límite ascendente
-        if (a.estado !== b.estado) return a.estado === 'pendiente' ? -1 : 1
-        if (a.fechaLimite && b.fechaLimite) return a.fechaLimite.localeCompare(b.fechaLimite)
-        return 0
-      })
-
   // Dashboard rows: one per partida, enriched
   const getDashboardRows = () =>
     partidas.map(partida => {
