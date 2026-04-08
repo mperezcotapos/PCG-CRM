@@ -10,7 +10,7 @@ import ActivityForm from '../components/ActivityForm'
 import { ReminderForm } from './Reminders'
 
 export default function Projects() {
-  const { clients, projects, partidas, activities, getClient, getProject, getPartidaActivities } = useApp()
+  const { clients, projects, partidas, activities, getClient, getProject, getPartidaActivities, getProjectReminders } = useApp()
   const [filterClient, setFilterClient] = useState('')
   const [search, setSearch] = useState('')
   const [creating, setCreating] = useState(false)
@@ -18,6 +18,7 @@ export default function Projects() {
   const [creatingPartida, setCreatingPartida] = useState(null)
   const [registeringActivity, setRegisteringActivity] = useState(null)
   const [viewingPartida, setViewingPartida] = useState(null) // { partida, project, client }
+  const [creatingReminder, setCreatingReminder] = useState(null) // projectId
 
   const filtered = projects.filter(proj => {
     const client = getClient(proj.clientId)
