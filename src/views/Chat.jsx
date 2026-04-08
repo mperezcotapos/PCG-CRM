@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Anthropic from '@anthropic-ai/sdk'
 import { useApp } from '../context/AppContext'
-import { addActivity, updatePartida, addClient, addProject, addPartida } from '../lib/db'
+import { addActivity, updatePartida, addClient, addProject, addPartida, addReminder } from '../lib/db'
 import StatusBadge from '../components/StatusBadge'
 import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -78,6 +78,20 @@ const TOOLS = [
       required: ['nombre'],
     },
   },
+  {
+    name: 'crear_recordatorio',
+    description: 'Crea un recordatorio o tarea pendiente. Úsalo cuando el usuario mencione algo que tiene que hacer, una llamada que tiene pendiente, un seguimiento, etc.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        tema:        { type: 'string',  description: 'Título breve del recordatorio' },
+        descripcion: { type: 'string',  description: 'Detalle opcional' },
+        responsable: { type: 'string',  description: 'Persona responsable (por defecto Martín)' },
+        fecha_limite:{ type: 'string',  description: 'Fecha límite YYYY-MM-DD (opcional)' },
+      },
+      required: ['tema'],
+    },
+  },
 ]
 
 const ESTADO_LABELS = {
@@ -112,6 +126,7 @@ function ToolCard({ action }) {
     crear_partida:       '➕ Partida creada',
     crear_proyecto:      '➕ Proyecto creado',
     crear_cliente:       '➕ Cliente creado',
+    crear_recordatorio:  '🔔 Recordatorio creado',
   }
   return (
     <div className="flex items-start gap-2 bg-teal-50 border border-teal-100 rounded-xl px-3 py-2.5 text-xs text-teal-800 my-1">
@@ -244,6 +259,16 @@ export default function Chat() {
             notes: '',
           })
           return { ok: true, mensaje: `Cliente "${inp.nombre}" creado` }
+        }
+        case 'crear_recordatorio': {
+          await addReminder({
+            tema:        inp.tema,
+            descripcion: inp.descripcion || '',
+            responsable: inp.responsable || 'Martín',
+            fechaLimite: inp.fecha_limite || '',
+            estado:      'pendiente',
+          })
+          return { ok: true, mensaje: `Recordatorio "${inp.tema}" creado` }
         }
         default:
           return { ok: false, mensaje: `Herramienta ${name} no conocida` }

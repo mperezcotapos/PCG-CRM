@@ -79,7 +79,6 @@ export default function Projects() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
                     <span className="font-semibold text-gray-900">{proj.name}</span>
-                    <StatusBadge value={proj.status} />
                   </div>
                   <div className="text-xs text-gray-500">
                     {client?.name} · {projPartidas.length} partida(s)
@@ -288,16 +287,47 @@ function ProjectForm({ clients, initial, onSave, onCancel }) {
   )
 }
 
+function gen2(str) {
+  return (str || '').replace(/\s/g, '').toUpperCase().slice(0, 2).padEnd(2, 'X')
+}
+
+function buildPcgId(clientName, projectName, partidaName, providerName) {
+  return gen2(clientName) + gen2(projectName) + gen2(partidaName) + gen2(providerName)
+}
+
 function PartidaForm({ projectId, onSave, onCancel }) {
-  const [form, setForm] = useState({ projectId, name: '', category: '', status: 'activo', priority: 'normal', providers: [] })
+  const { clients, projects, partidas } = useApp()
+  const project  = projects.find(p => p.id === projectId)
+  const client   = clients.find(c => c.id === project?.clientId)
+
+  const [form, setForm]   = useState({ projectId, name: '', category: '', provider: '', priority: 'normal' })
   const [saving, setSaving] = useState(false)
+  const [idError, setIdError] = useState('')
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
+  const previewId = buildPcgId(client?.name, project?.name, form.name, form.provider)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const pcgId = buildPcgId(client?.name, project?.name, form.name, form.provider)
+    const duplicate = partidas.find(p => p.pcgId === pcgId)
+    if (duplicate) {
+      setIdError(`El ID "${pcgId}" ya existe en la partida "${duplicate.name}". Cambia el nombre o el proveedor para diferenciarlo.`)
+      return
+    }
+    setSaving(true)
+    try { await onSave({ ...form, pcgId }) } finally { setSaving(false) }
+  }
+
   return (
-    <form onSubmit={async e => { e.preventDefault(); setSaving(true); await onSave(form) }} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="label">Nombre de la partida <span className="text-red-500">*</span></label>
-        <input className="input" value={form.name} onChange={e => set('name', e.target.value)} required />
+        <input className="input" value={form.name} onChange={e => { set('name', e.target.value); setIdError('') }} required />
+      </div>
+      <div>
+        <label className="label">Proveedor</label>
+        <input className="input" placeholder="Nombre del proveedor…" value={form.provider} onChange={e => { set('provider', e.target.value); setIdError('') }} />
       </div>
       <div>
         <label className="label">Categoría</label>
@@ -306,6 +336,14 @@ function PartidaForm({ projectId, onSave, onCancel }) {
           {CATEGORIAS.map(c => <option key={c}>{c}</option>)}
         </select>
       </div>
+      <div className="bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-600">
+        ID generado: <span className="font-mono font-bold text-gray-900">{previewId}</span>
+      </div>
+      {idError && (
+        <div className="bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-sm text-red-700">
+          ⚠️ {idError}
+        </div>
+      )}
       <div className="flex gap-2 justify-end pt-2">
         <button type="button" className="btn-secondary" onClick={onCancel}>Cancelar</button>
         <button type="submit" className="btn-primary" disabled={saving}>{saving ? 'Guardando…' : 'Crear partida'}</button>

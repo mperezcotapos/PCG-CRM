@@ -23,19 +23,28 @@ function DueDateChip({ fecha }) {
 
 export default function Reminders() {
   const { reminders } = useApp()
-  const [filterEstado, setFilterEstado] = useState('pendiente')
+  const [filterEstado,      setFilterEstado]      = useState('pendiente')
+  const [filterResponsable, setFilterResponsable] = useState('')
+  const [filterFechaDesde,  setFilterFechaDesde]  = useState('')
+  const [filterFechaHasta,  setFilterFechaHasta]  = useState('')
   const [creating, setCreating] = useState(false)
   const [editing, setEditing] = useState(null)
 
   const filtered = useMemo(() => {
     return reminders
-      .filter(r => filterEstado === 'todos' || r.estado === filterEstado)
+      .filter(r => {
+        if (filterEstado !== 'todos' && r.estado !== filterEstado) return false
+        if (filterResponsable && !(r.responsable || '').toLowerCase().includes(filterResponsable.toLowerCase())) return false
+        if (filterFechaDesde && r.fechaLimite && r.fechaLimite < filterFechaDesde) return false
+        if (filterFechaHasta && r.fechaLimite && r.fechaLimite > filterFechaHasta) return false
+        return true
+      })
       .sort((a, b) => {
         if (a.estado !== b.estado) return a.estado === 'pendiente' ? -1 : 1
         if (a.fechaLimite && b.fechaLimite) return a.fechaLimite.localeCompare(b.fechaLimite)
         return 0
       })
-  }, [reminders, filterEstado])
+  }, [reminders, filterEstado, filterResponsable, filterFechaDesde, filterFechaHasta])
 
   const pendingCount = reminders.filter(r => r.estado === 'pendiente').length
   const overdueCount = reminders.filter(r => {
@@ -66,7 +75,7 @@ export default function Reminders() {
         <button className="btn-primary" onClick={() => setCreating(true)}>+ Nuevo</button>
       </div>
 
-      {/* Filtro de estado */}
+      {/* Filtros */}
       <div className="card px-4 py-3 flex gap-3 flex-wrap items-center">
         <div className="flex rounded-lg border border-gray-200 overflow-hidden text-sm">
           {[['pendiente', 'Pendientes'], ['completado', 'Completados'], ['todos', 'Todos']].map(([val, label]) => (
@@ -81,6 +90,23 @@ export default function Reminders() {
             </button>
           ))}
         </div>
+        <input
+          className="input w-40" placeholder="Responsable…"
+          value={filterResponsable} onChange={e => setFilterResponsable(e.target.value)}
+        />
+        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+          <span>Desde</span>
+          <input type="date" className="input w-36" value={filterFechaDesde} onChange={e => setFilterFechaDesde(e.target.value)} />
+        </div>
+        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+          <span>Hasta</span>
+          <input type="date" className="input w-36" value={filterFechaHasta} onChange={e => setFilterFechaHasta(e.target.value)} />
+        </div>
+        {(filterResponsable || filterFechaDesde || filterFechaHasta) && (
+          <button className="btn-ghost text-xs" onClick={() => { setFilterResponsable(''); setFilterFechaDesde(''); setFilterFechaHasta('') }}>
+            Limpiar
+          </button>
+        )}
         <span className="ml-auto text-xs text-gray-400">{filtered.length} registros</span>
       </div>
 
