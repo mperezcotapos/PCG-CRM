@@ -43,13 +43,13 @@ export default function History() {
       }
       return true
     }).sort((a, b) => {
-      const dateDiff = new Date(b.date) - new Date(a.date)
-      if (dateDiff !== 0) return dateDiff
-      const toMs = (ts) =>
-        ts === null ? Infinity :
-        ts == null  ? 0 :
-        (ts.toMillis?.() ?? ts.seconds * 1000)
-      return toMs(b.createdAt) - toMs(a.createdAt)
+      const getMs = act => {
+        const ts = act.createdAt
+        if (ts === null) return Date.now() + 1e9
+        if (ts == null)  return new Date(act.date || 0).getTime()
+        return ts.toMillis?.() ?? ts.seconds * 1000
+      }
+      return getMs(b) - getMs(a)
     })
   }, [activities, filterCliente, filterProyecto, filterPartida, filterEstado, filterFrom, filterTo, search])
 
@@ -59,16 +59,15 @@ export default function History() {
     await deleteActivity(id)
     // Restaurar el estado de la partida al de la actividad anterior
     if (act?.partidaId) {
-      const toMs = (ts) =>
-        ts === null ? Infinity :
-        ts == null  ? 0 :
-        (ts.toMillis?.() ?? ts.seconds * 1000)
+      const getMs = a => {
+        const ts = a.createdAt
+        if (ts === null) return Date.now() + 1e9
+        if (ts == null)  return new Date(a.date || 0).getTime()
+        return ts.toMillis?.() ?? ts.seconds * 1000
+      }
       const prev = activities
         .filter(a => a.id !== id && a.partidaId === act.partidaId)
-        .sort((a, b) => {
-          const d = new Date(b.date) - new Date(a.date)
-          return d !== 0 ? d : toMs(b.createdAt) - toMs(a.createdAt)
-        })[0]
+        .sort((a, b) => getMs(b) - getMs(a))[0]
       await updatePartida(act.partidaId, { status: prev?.status || 'cotizando' })
     }
   }
@@ -169,6 +168,9 @@ export default function History() {
                     <span className="text-gray-600 text-sm">{project?.name || '—'}</span>
                     <span className="text-gray-300">›</span>
                     <span className="text-gray-600 text-sm">{partida?.name || '—'}</span>
+                    {partida?.provider && (
+                      <span className="text-xs text-gray-400 bg-gray-100 rounded px-1.5 py-0.5">{partida.provider}</span>
+                    )}
                     <StatusBadge value={act.status} />
                     {act.pelota && act.pelota !== '-' && (
                       <span className={`badge ${pelota.color}`}>{pelota.label}</span>

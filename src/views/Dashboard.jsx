@@ -146,6 +146,47 @@ function Cell({ colKey, row }) {
   }
 }
 
+// ── Multi-select dropdown ─────────────────────────────────────────
+function MultiSelect({ placeholder, options, values, onChange }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+  useEffect(() => {
+    if (!open) return
+    const h = e => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', h)
+    return () => document.removeEventListener('mousedown', h)
+  }, [open])
+  const toggle = val => {
+    const n = new Set(values); n.has(val) ? n.delete(val) : n.add(val); onChange(n)
+  }
+  const display = values.size ? `${values.size} seleccionado${values.size > 1 ? 's' : ''}` : placeholder
+  return (
+    <div className="relative" ref={ref}>
+      <button type="button"
+        className={`select text-left flex items-center justify-between min-w-44 ${values.size ? 'ring-2 ring-navy-400 border-navy-400' : ''}`}
+        onClick={() => setOpen(v => !v)}>
+        <span className={`text-sm ${values.size ? 'text-navy-700 font-medium' : 'text-gray-500'}`}>{display}</span>
+        <svg className="w-3 h-3 ml-2 text-gray-400 flex-shrink-0" viewBox="0 0 10 6" fill="currentColor"><path d="M5 6L0 0h10z"/></svg>
+      </button>
+      {open && (
+        <div className="absolute z-50 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg p-2 min-w-full max-h-64 overflow-y-auto">
+          {values.size > 0 && (
+            <button type="button" className="w-full text-left text-xs text-navy-600 hover:underline px-2 pb-2" onClick={() => onChange(new Set())}>
+              Limpiar selección
+            </button>
+          )}
+          {options.map(o => (
+            <label key={o.value} className="flex items-center gap-2 px-2 py-1.5 cursor-pointer hover:bg-gray-50 rounded">
+              <input type="checkbox" checked={values.has(o.value)} onChange={() => toggle(o.value)} className="accent-navy-600" />
+              <span className="text-sm text-gray-700">{o.label}</span>
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Column picker ─────────────────────────────────────────────────
 function ColPicker({ colOrder, visibleCols, onToggle, onReset, onClose }) {
   return (
@@ -193,8 +234,8 @@ export default function Dashboard() {
   const { getDashboardRows, clients, projects, loading } = useApp()
 
   // Global filters (top bar + mobile)
-  const [filterCliente, setFilterCliente] = useState('')
-  const [filterEstado,  setFilterEstado]  = useState('')
+  const [filterClientes, setFilterClientes] = useState(new Set())
+  const [filterEstados,  setFilterEstados]  = useState(new Set())
   const [filterSearch,  setFilterSearch]  = useState('')
 
   // Per-column filters (desktop filter row)
@@ -241,8 +282,8 @@ export default function Dashboard() {
   // Filter — global bar + per-column
   const filtered = useMemo(() => rows.filter(({ partida, project, client, latest, daysSince }) => {
     // global bar
-    if (filterCliente && client?.id !== filterCliente) return false
-    if (filterEstado  && latest?.status !== filterEstado) return false
+    if (filterClientes.size && !filterClientes.has(client?.id)) return false
+    if (filterEstados.size  && !filterEstados.has(latest?.status)) return false
     if (filterSearch) {
       const q = filterSearch.toLowerCase()
       const hay = [client?.name, project?.name, partida.name, latest?.comment, latest?.responsible, partida.pcgId]
@@ -266,7 +307,7 @@ export default function Dashboard() {
       }
     }
     return true
-  }), [rows, filterCliente, filterEstado, filterSearch, colFilters])
+  }), [rows, filterClientes, filterEstados, filterSearch, colFilters])
 
   // Sort
   const sorted = useMemo(() => {
@@ -399,8 +440,8 @@ export default function Dashboard() {
       {/* Filters — desktop inline, mobile collapsible */}
       <MobileFilters
         filterSearch={filterSearch} setFilterSearch={setFilterSearch}
-        filterCliente={filterCliente} setFilterCliente={setFilterCliente}
-        filterEstado={filterEstado} setFilterEstado={setFilterEstado}
+        filterClientes={filterClientes} setFilterClientes={setFilterClientes}
+        filterEstados={filterEstados} setFilterEstados={setFilterEstados}
         clients={clients} count={sorted.length}
       />
 
@@ -569,11 +610,13 @@ export default function Dashboard() {
 }
 
 // ── Mobile filters ────────────────────────────────────────────────
-function MobileFilters({ filterSearch, setFilterSearch, filterCliente, setFilterCliente,
-                         filterEstado, setFilterEstado, clients, count }) {
+function MobileFilters({ filterSearch, setFilterSearch, filterClientes, setFilterClientes,
+                         filterEstados, setFilterEstados, clients, count }) {
   const [open, setOpen] = useState(false)
-  const hasFilters = filterSearch || filterCliente || filterEstado
-  const clear = () => { setFilterSearch(''); setFilterCliente(''); setFilterEstado('') }
+  const hasFilters = filterSearch || filterClientes.size || filterEstados.size
+  const clear = () => { setFilterSearch(''); setFilterClientes(new Set()); setFilterEstados(new Set()) }
+  const clientOptions = clients.map(c => ({ value: c.id, label: c.name }))
+  const estadoOptions = ESTADOS.map(e => ({ value: e.value, label: e.label }))
 
   return (
     <>
@@ -581,14 +624,8 @@ function MobileFilters({ filterSearch, setFilterSearch, filterCliente, setFilter
       <div className="hidden md:flex card px-4 py-3 flex-wrap gap-3 items-center">
         <input type="text" className="input w-48" placeholder="Buscar…"
           value={filterSearch} onChange={e => setFilterSearch(e.target.value)} />
-        <select className="select w-44" value={filterCliente} onChange={e => setFilterCliente(e.target.value)}>
-          <option value="">Todos los clientes</option>
-          {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-        </select>
-        <select className="select w-44" value={filterEstado} onChange={e => setFilterEstado(e.target.value)}>
-          <option value="">Todos los estados</option>
-          {ESTADOS.map(e => <option key={e.value} value={e.value}>{e.label}</option>)}
-        </select>
+        <MultiSelect placeholder="Todos los clientes" options={clientOptions} values={filterClientes} onChange={setFilterClientes} />
+        <MultiSelect placeholder="Todos los estados"  options={estadoOptions}  values={filterEstados}  onChange={setFilterEstados} />
         {hasFilters && <button className="btn-ghost text-xs" onClick={clear}>Limpiar</button>}
         <span className="ml-auto text-xs text-gray-400">{count} registros</span>
       </div>
@@ -616,20 +653,14 @@ function MobileFilters({ filterSearch, setFilterSearch, filterCliente, setFilter
           <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white rounded-t-2xl shadow-2xl px-4 pt-3 pb-8">
             <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-5" />
             <p className="font-semibold text-gray-900 mb-4">Filtrar partidas</p>
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div>
                 <label className="label">Cliente</label>
-                <select className="select" value={filterCliente} onChange={e => setFilterCliente(e.target.value)}>
-                  <option value="">Todos los clientes</option>
-                  {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                </select>
+                <MultiSelect placeholder="Todos los clientes" options={clientOptions} values={filterClientes} onChange={setFilterClientes} />
               </div>
               <div>
                 <label className="label">Estado</label>
-                <select className="select" value={filterEstado} onChange={e => setFilterEstado(e.target.value)}>
-                  <option value="">Todos los estados</option>
-                  {ESTADOS.map(e => <option key={e.value} value={e.value}>{e.label}</option>)}
-                </select>
+                <MultiSelect placeholder="Todos los estados" options={estadoOptions} values={filterEstados} onChange={setFilterEstados} />
               </div>
             </div>
             <div className="flex gap-2 mt-5">
@@ -779,12 +810,7 @@ function EditRowForm({ row, clients, projects, onClose }) {
         await updateProject(project.id, { clientId })
 
       if (latest) {
-        const actUp = {}
-        if (pelota      !== (latest.pelota      || '-')) actUp.pelota      = pelota
-        if (responsible !== (latest.responsible || ''))  actUp.responsible = responsible
-        if (status      !== partida.status)              actUp.status      = status
-        if (Object.keys(actUp).length > 0)
-          await updateActivity(latest.id, actUp)
+        await updateActivity(latest.id, { pelota, responsible, status })
       }
 
       onClose()

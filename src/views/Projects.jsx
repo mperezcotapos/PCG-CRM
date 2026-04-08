@@ -122,8 +122,11 @@ export default function Projects() {
                         return (
                           <div key={partida.id} className="px-5 py-3 flex items-center gap-4 hover:bg-gray-50/60">
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-2 flex-wrap">
                                 <span className="font-medium text-gray-800 text-sm">{partida.name}</span>
+                                {partida.provider && (
+                                  <span className="text-xs text-gray-400">· {partida.provider}</span>
+                                )}
                                 <StatusBadge value={latest?.status || 'activo'} />
                               </div>
                               {latest && (
