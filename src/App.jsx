@@ -29,7 +29,8 @@ export default function App() {
               <Route path="/proyectos"   element={<Projects />} />
               <Route path="/proveedores" element={<Providers />} />
               <Route path="/importar"    element={<Import />} />
-              <Route path="/chat"        element={<Chat />} />
+              <Route path="/chat"           element={<Chat />} />
+              <Route path="/recordatorios" element={<Reminders />} />
               <Route path="*"            element={<Navigate to="/" />} />
             </Routes>
           </main>
