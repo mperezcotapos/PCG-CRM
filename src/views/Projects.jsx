@@ -288,7 +288,9 @@ function ProjectForm({ clients, initial, onSave, onCancel }) {
 }
 
 function gen2(str) {
-  return (str || '').replace(/\s/g, '').toUpperCase().slice(0, 2).padEnd(2, 'X')
+  // Tomar los primeros 2 caracteres del nombre, sin quitar espacios intermedios
+  const s = (str || '').trim().toUpperCase()
+  return (s.slice(0, 2)).padEnd(2, 'X')
 }
 
 function buildPcgId(clientName, projectName, partidaName, providerName) {
