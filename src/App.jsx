@@ -10,6 +10,7 @@ import Projects   from './views/Projects'
 import Providers  from './views/Providers'
 import Import     from './views/Import'
 import Chat       from './views/Chat'
+import Reminders  from './views/Reminders'
 
 export default function App() {
   return (
