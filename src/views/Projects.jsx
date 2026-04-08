@@ -190,6 +190,18 @@ export default function Projects() {
         </Modal>
       )}
 
+      {/* Edit project modal */}
+      {editingProject && (
+        <Modal title="Editar proyecto" onClose={() => setEditingProject(null)}>
+          <ProjectForm
+            clients={clients}
+            initial={editingProject}
+            onSave={async (data) => { await updateProject(editingProject.id, data); setEditingProject(null) }}
+            onCancel={() => setEditingProject(null)}
+          />
+        </Modal>
+      )}
+
       {/* Create partida modal */}
       {creatingPartida && (
         <Modal title="Nueva partida" onClose={() => setCreatingPartida(null)}>
