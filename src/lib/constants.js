@@ -40,3 +40,8 @@ export const getEstado = (value) =>
 
 export const getPelota = (value) =>
   PELOTA.find(p => p.value === value) || PELOTA[0]
+
+const gen2 = (str) => (str || '').trim().toUpperCase().slice(0, 2).padEnd(2, 'X')
+
+export const buildPcgId = (clientName, projectName, partidaName, providerName) =>
+  gen2(clientName) + gen2(projectName) + gen2(partidaName) + gen2(providerName)

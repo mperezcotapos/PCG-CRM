@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { useApp } from '../context/AppContext'
-import { getPelota, ESTADOS, PELOTA } from '../lib/constants'
+import { getPelota, ESTADOS, PELOTA, buildPcgId } from '../lib/constants'
 import StatusBadge from '../components/StatusBadge'
 import Modal from '../components/Modal'
 import ActivityForm from '../components/ActivityForm'
@@ -43,7 +43,7 @@ function sortVal(colKey, row) {
     case 'pelota':     return latest?.pelota  || ''
     case 'proveedor':  return (partida.provider || '').toLowerCase()
     case 'prioridad':  return ({ alta: 0, media: 1, normal: 2, baja: 3 })[partida.priority] ?? 9
-    case 'pcgId':      return partida.pcgId   || ''
+    case 'pcgId':      return buildPcgId(client?.name, project?.name, partida.name, partida.provider)
     case 'responsable': return (latest?.responsible || '').toLowerCase()
     case 'comentario': return (latest?.comment || '').toLowerCase()
     case 'proxima':    return latest?.nextActionDate || 'zzzz'
@@ -119,7 +119,7 @@ function Cell({ colKey, row }) {
       return <span className={`text-xs ${colors[p] || 'text-gray-400'}`}>{labels[p] || p}</span>
     }
     case 'pcgId':
-      return <span className="text-xs text-gray-400 font-mono">{partida.pcgId || '—'}</span>
+      return <span className="text-xs text-gray-400 font-mono">{buildPcgId(client?.name, project?.name, partida.name, partida.provider)}</span>
     case 'comentario':
       return (
         <div className="max-w-xs">
@@ -302,7 +302,7 @@ export default function Dashboard() {
         case 'responsable': if ((latest?.responsible || '') !== val) return false; break
         case 'proveedor':   if ((partida.provider    || '') !== val) return false; break
         case 'prioridad':   if ((partida.priority    || '') !== val) return false; break
-        case 'pcgId':       if ((partida.pcgId       || '') !== val) return false; break
+        case 'pcgId':       if (buildPcgId(client?.name, project?.name, partida.name, partida.provider) !== val) return false; break
         default: break
       }
     }

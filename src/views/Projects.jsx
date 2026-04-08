@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext'
 import { addProject, updateProject, deleteProject, addPartida, updatePartida, deletePartida } from '../lib/db'
 import Modal from '../components/Modal'
 import StatusBadge from '../components/StatusBadge'
-import { ESTADOS, CATEGORIAS, getPelota } from '../lib/constants'
+import { ESTADOS, CATEGORIAS, getPelota, buildPcgId } from '../lib/constants'
 import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
 import ActivityForm from '../components/ActivityForm'
@@ -287,15 +287,7 @@ function ProjectForm({ clients, initial, onSave, onCancel }) {
   )
 }
 
-function gen2(str) {
-  // Tomar los primeros 2 caracteres del nombre, sin quitar espacios intermedios
-  const s = (str || '').trim().toUpperCase()
-  return (s.slice(0, 2)).padEnd(2, 'X')
-}
 
-function buildPcgId(clientName, projectName, partidaName, providerName) {
-  return gen2(clientName) + gen2(projectName) + gen2(partidaName) + gen2(providerName)
-}
 
 function PartidaForm({ projectId, onSave, onCancel }) {
   const { clients, projects, partidas } = useApp()
