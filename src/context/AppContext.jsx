@@ -27,11 +27,12 @@ export function AppProvider({ children }) {
   const [partidas,   setPartidas]   = useState([])
   const [activities, setActivities] = useState([])
   const [providers,  setProviders]  = useState([])
+  const [reminders,  setReminders]  = useState([])
   const [loading,    setLoading]    = useState(true)
 
   useEffect(() => {
     let loaded = 0
-    const check = () => { loaded++; if (loaded >= 5) setLoading(false) }
+    const check = () => { loaded++; if (loaded >= 6) setLoading(false) }
 
     const unsubs = [
       subscribeClients(d    => { setClients(d);    check() }),
@@ -39,6 +40,7 @@ export function AppProvider({ children }) {
       subscribePartidas(d   => { setPartidas(d);   check() }),
       subscribeActivities(d => { setActivities(d); check() }),
       subscribeProviders(d  => { setProviders(d);  check() }),
+      subscribeReminders(d  => { setReminders(d);  check() }),
     ]
     return () => unsubs.forEach(u => u())
   }, [])
