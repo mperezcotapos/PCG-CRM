@@ -48,16 +48,7 @@ export function AppProvider({ children }) {
   const getPartidaActivities = (partidaId) =>
     activities
       .filter(a => a.partidaId === partidaId)
-      .sort((a, b) => {
-        const dateDiff = new Date(b.date) - new Date(a.date)
-        if (dateDiff !== 0) return dateDiff
-        // null = write pendiente → más reciente; undefined = campo ausente → más antiguo
-        const toMs = (ts) =>
-          ts === null ? Infinity :
-          ts == null  ? 0 :
-          (ts.toMillis?.() ?? ts.seconds * 1000)
-        return toMs(b.createdAt) - toMs(a.createdAt)
-      })
+      .sort((a, b) => getActivityMs(b) - getActivityMs(a))
 
   const getLatestActivity = (partidaId) =>
     getPartidaActivities(partidaId)[0] || null
