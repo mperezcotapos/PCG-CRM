@@ -88,6 +88,13 @@ export default function Sidebar() {
     return latest.status === 'retrasado'
   }).length
 
+  // Count recordatorios vencidos o de hoy pendientes
+  const remindersBadge = reminders.filter(r => {
+    if (r.estado !== 'pendiente' || !r.fechaLimite) return false
+    const d = parseISO(r.fechaLimite)
+    return isPast(d) || isToday(d)
+  }).length
+
   const linkClass = ({ isActive }) =>
     `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
       isActive
