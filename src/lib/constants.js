@@ -1,5 +1,6 @@
 export const ESTADOS = [
   { value: 'esp_antecedentes', label: 'Esperando Antecedentes', color: 'bg-amber-100 text-amber-700', dot: 'bg-amber-500' },
+  { value: 'ant_recibidos',    label: 'Antecedentes Recibidos', color: 'bg-teal-100 text-teal-700',   dot: 'bg-teal-500'  },
   { value: 'cotizando',    label: 'Cotizando a China',    color: 'bg-sky-100 text-sky-700',      dot: 'bg-sky-500'     },
   { value: 'cot_recibida', label: 'Cotización recibida',  color: 'bg-indigo-100 text-indigo-700', dot: 'bg-indigo-500'  },
   { value: 'cot_enviada',  label: 'Cotización enviada',   color: 'bg-violet-100 text-violet-700', dot: 'bg-violet-500'  },
