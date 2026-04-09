@@ -16,7 +16,7 @@ const TOOLS = [
       properties: {
         partida_id:       { type: 'string',  description: 'ID exacto de la partida (del contexto CRM)' },
         comentario:       { type: 'string',  description: 'Descripción clara de lo que ocurrió' },
-        estado:           { type: 'string',  enum: ['cotizando','cot_recibida','cot_enviada','negociacion','ganado','perdido','pausado'], description: 'Nuevo estado (solo si cambió)' },
+        estado:           { type: 'string',  enum: ['esp_antecedentes','cotizando','cot_recibida','cot_enviada','negociacion','ganado','perdido','pausado'], description: 'Nuevo estado (solo si cambió)' },
         pelota:           { type: 'string',  enum: ['-','nosotros','cliente','proveedor'], description: '¿Quién tiene la iniciativa ahora?' },
         accion_pendiente: { type: 'string',  description: 'Próxima acción concreta a tomar' },
         fecha_accion:     { type: 'string',  description: 'Fecha recordatorio YYYY-MM-DD' },
@@ -32,7 +32,7 @@ const TOOLS = [
       type: 'object',
       properties: {
         partida_id: { type: 'string' },
-        estado:     { type: 'string', enum: ['cotizando','cot_recibida','cot_enviada','negociacion','ganado','perdido','pausado'] },
+        estado:     { type: 'string', enum: ['esp_antecedentes','cotizando','cot_recibida','cot_enviada','negociacion','ganado','perdido','pausado'] },
       },
       required: ['partida_id', 'estado'],
     },
@@ -95,6 +95,7 @@ const TOOLS = [
 ]
 
 const ESTADO_LABELS = {
+  esp_antecedentes: 'Esperando Antecedentes',
   cotizando: 'Cotizando a China', cot_recibida: 'Cotización recibida',
   cot_enviada: 'Cotización enviada', negociacion: 'Negociación',
   ganado: 'Ganado', perdido: 'Perdido', pausado: 'Pausado',
