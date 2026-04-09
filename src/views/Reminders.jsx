@@ -86,8 +86,8 @@ export default function Reminders() {
       .sort((a, b) => {
         let cmp = 0
         if (sortKey === 'fecha') {
-          const fa = a.fechaLimite || 'zzzz'
-          const fb = b.fechaLimite || 'zzzz'
+          const fa = (a.fechaLimite || 'zzzz') + 'T' + (a.horaLimite || '99:99')
+          const fb = (b.fechaLimite || 'zzzz') + 'T' + (b.horaLimite || '99:99')
           cmp = fa.localeCompare(fb)
         } else if (sortKey === 'responsable') {
           cmp = (a.responsable || '').localeCompare(b.responsable || '', 'es')
@@ -196,6 +196,9 @@ export default function Reminders() {
                       {r.tema}
                     </span>
                     {!done && <DueDateChip fecha={r.fechaLimite} />}
+                    {!done && r.horaLimite && (
+                      <span className="text-xs text-gray-500 font-medium">🕐 {r.horaLimite}</span>
+                    )}
                   </div>
                   {r.descripcion && (
                     <p className="text-sm text-gray-600 leading-relaxed">{r.descripcion}</p>
@@ -254,6 +257,7 @@ function ReminderForm({ initial, onSave, onCancel }) {
     descripcion: initial?.descripcion || '',
     responsable: initial?.responsable || '',
     fechaLimite: initial?.fechaLimite || '',
+    horaLimite:  initial?.horaLimite  || '',
     estado:      initial?.estado      || 'pendiente',
   })
   const [saving, setSaving] = useState(false)
@@ -277,7 +281,7 @@ function ReminderForm({ initial, onSave, onCancel }) {
         <textarea className="textarea" rows={3} placeholder="Detalles…"
           value={form.descripcion} onChange={e => set('descripcion', e.target.value)} />
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         <div>
           <label className="label">Responsable</label>
           <input className="input" placeholder="Nombre…"
@@ -287,6 +291,11 @@ function ReminderForm({ initial, onSave, onCancel }) {
           <label className="label">Fecha límite</label>
           <input type="date" className="input"
             value={form.fechaLimite} onChange={e => set('fechaLimite', e.target.value)} />
+        </div>
+        <div>
+          <label className="label">Hora</label>
+          <input type="time" className="input"
+            value={form.horaLimite} onChange={e => set('horaLimite', e.target.value)} />
         </div>
       </div>
       {initial && (
