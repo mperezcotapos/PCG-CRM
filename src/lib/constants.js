@@ -31,11 +31,10 @@ export const CATEGORIAS = [
   'Otro',
 ]
 
-export const PRIORIDADES = [
-  { value: 'alta',   label: 'Alta',   color: 'text-red-600'    },
-  { value: 'normal', label: 'Normal', color: 'text-gray-600'   },
-  { value: 'baja',   label: 'Baja',   color: 'text-green-600'  },
-]
+// Prioridad numérica: 1 (más urgente) → 30 (menos urgente)
+export const PRIORIDAD_DEFAULT = 15
+export const PRIORIDAD_MIN = 1
+export const PRIORIDAD_MAX = 30
 
 export const getEstado = (value) =>
   ESTADOS.find(e => e.value === value) || ESTADOS[0]
