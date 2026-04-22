@@ -42,7 +42,7 @@ function sortVal(colKey, row) {
     case 'estado':     return latest?.status  || ''
     case 'pelota':     return latest?.pelota  || ''
     case 'proveedor':  return (partida.provider || '').toLowerCase()
-    case 'prioridad':  return ({ alta: 0, media: 1, normal: 2, baja: 3 })[partida.priority] ?? 9
+    case 'prioridad':  return Number(partida.priority) || 99
     case 'pcgId':      return buildPcgId(client?.name, project?.name, partida.name, partida.provider)
     case 'responsable': return (latest?.responsible || '').toLowerCase()
     case 'comentario': return (latest?.comment || '').toLowerCase()
