@@ -245,7 +245,7 @@ export default function Chat() {
             projectId: inp.proyecto_id,
             category:  inp.categoria || 'Otro',
             provider:  inp.proveedor || '',
-            priority:  inp.prioridad || 'media',
+            priority:  inp.prioridad || 15,
             status:    'cotizando',
           })
           return { ok: true, mensaje: `Partida "${inp.nombre}" creada` }
