@@ -917,7 +917,7 @@ function EditRowForm({ row, clients, projects, onClose }) {
           </select>
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
           <label className="label">Nombre partida</label>
           <input type="text" className="input" value={name} onChange={e => setName(e.target.value)} required />
@@ -926,6 +926,11 @@ function EditRowForm({ row, clients, projects, onClose }) {
           <label className="label">Proveedor</label>
           <input type="text" className="input" placeholder="Nombre del proveedor"
             value={provider} onChange={e => setProvider(e.target.value)} />
+        </div>
+        <div>
+          <label className="label">Prioridad (1 urgente · 30 baja)</label>
+          <input type="number" className="input" min="1" max="30" step="1"
+            value={priority} onChange={e => setPriority(Math.min(30, Math.max(1, Number(e.target.value) || 15)))} />
         </div>
       </div>
 
