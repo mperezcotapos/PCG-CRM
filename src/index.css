@@ -32,12 +32,34 @@
     color: #0D1F33;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
+    /* Evita rebote en iOS al hacer scroll en el body */
+    overscroll-behavior: none;
   }
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background-color: #E8E4DF; }
   ::-webkit-scrollbar-thumb { background-color: #abbfda; border-radius: 9999px; }
-  /* Safe area for iPhone notch */
-  .safe-bottom { padding-bottom: max(0px, env(safe-area-inset-bottom)); }
+
+  /* Safe area para iPhone con notch/Dynamic Island */
+  .safe-bottom { padding-bottom: max(env(safe-area-inset-bottom), 8px); }
+
+  /* Evita que iOS haga zoom al enfocar un input (el zoom ocurre cuando font-size < 16px) */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+  /* En desktop restauramos el tamaño normal */
+  @media (min-width: 768px) {
+    input, select, textarea {
+      font-size: 0.875rem !important;
+    }
+  }
+
+  /* Tamaño mínimo de área táctil para botones (44px recomendado por Apple/Google) */
+  @media (max-width: 767px) {
+    button, a, [role="button"] {
+      min-height: 44px;
+    }
+  }
+
   /* Line clamp */
   .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 }
