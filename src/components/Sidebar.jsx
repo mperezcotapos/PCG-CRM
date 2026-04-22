@@ -142,23 +142,35 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* Stats footer */}
-      <div className="px-4 py-4 border-t border-gray-100 space-y-1">
-        <div className="flex justify-between text-xs text-gray-500">
-          <span>Partidas activas</span>
-          <span className="font-semibold text-gray-700">
-            {partidas.filter(p => {
-              const acts = activities.filter(a => a.partidaId === p.id)
-              if (!acts.length) return true
-              const lat = acts.sort((a,b)=>new Date(b.date)-new Date(a.date))[0]
-              return lat.status !== 'listo' && lat.status !== 'cancelado'
-            }).length}
-          </span>
+      {/* Stats + logout footer */}
+      <div className="px-4 py-4 border-t border-gray-100 space-y-3">
+        <div className="space-y-1">
+          <div className="flex justify-between text-xs text-gray-500">
+            <span>Partidas activas</span>
+            <span className="font-semibold text-gray-700">
+              {partidas.filter(p => {
+                const acts = activities.filter(a => a.partidaId === p.id)
+                if (!acts.length) return true
+                const lat = acts.sort((a,b)=>new Date(b.date)-new Date(a.date))[0]
+                return lat.status !== 'listo' && lat.status !== 'cancelado'
+              }).length}
+            </span>
+          </div>
+          <div className="flex justify-between text-xs text-gray-500">
+            <span>Retrasados</span>
+            <span className="font-semibold text-red-600">{retrasados}</span>
+          </div>
         </div>
-        <div className="flex justify-between text-xs text-gray-500">
-          <span>Retrasados</span>
-          <span className="font-semibold text-red-600">{retrasados}</span>
-        </div>
+        <button
+          onClick={() => signOut(auth)}
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Cerrar sesión
+        </button>
       </div>
     </aside>
   )
