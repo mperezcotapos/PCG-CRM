@@ -1,5 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import { useState } from 'react'
+import { signOut } from 'firebase/auth'
+import { auth } from '../lib/firebase'
 import { useApp } from '../context/AppContext'
 
 const MAIN_NAV = [
