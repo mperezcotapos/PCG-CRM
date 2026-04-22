@@ -857,10 +857,11 @@ function EditRowForm({ row, clients, projects, onClose }) {
     try {
       // Actualizar partida
       const partidaUp = {}
-      if (name      !== partida.name)             partidaUp.name      = name
-      if (status    !== partida.status)           partidaUp.status    = status
-      if (provider  !== (partida.provider || '')) partidaUp.provider  = provider
-      if (projectId !== partida.projectId)        partidaUp.projectId = projectId
+      if (name      !== partida.name)                    partidaUp.name      = name
+      if (status    !== partida.status)                  partidaUp.status    = status
+      if (provider  !== (partida.provider || ''))        partidaUp.provider  = provider
+      if (projectId !== partida.projectId)               partidaUp.projectId = projectId
+      if (priority  !== (Number(partida.priority) || 15)) partidaUp.priority  = priority
       if (Object.keys(partidaUp).length > 0)
         await updatePartida(partida.id, partidaUp)
 
