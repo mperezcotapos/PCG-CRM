@@ -829,6 +829,7 @@ function EditRowForm({ row, clients, projects, onClose }) {
   const [projectId,   setProjectId]   = useState(partida.projectId   || '')
   const [name,        setName]        = useState(partida.name        || '')
   const [provider,    setProvider]    = useState(partida.provider    || '')
+  const [priority,    setPriority]    = useState(Number(partida.priority) || 15)
 
   // Campos de la última actividad
   const [date,           setDate]           = useState(latest?.date           || '')
