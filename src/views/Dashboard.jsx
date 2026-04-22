@@ -113,12 +113,15 @@ function Cell({ colKey, row }) {
     case 'proveedor':
       return <span className="text-gray-600 whitespace-nowrap text-xs">{partida.provider || '—'}</span>
     case 'prioridad': {
-      const nums   = { alta: 1, media: 2, normal: 3, baja: 4 }
-      const colors = { alta: 'bg-red-100 text-red-700 font-bold', media: 'bg-orange-100 text-orange-700 font-semibold', normal: 'bg-gray-100 text-gray-500', baja: 'bg-gray-50 text-gray-300' }
-      const p = partida.priority || 'normal'
+      const n = Number(partida.priority) || 15
+      let cls
+      if (n <= 5)       cls = 'bg-red-100 text-red-700 font-bold'
+      else if (n <= 10) cls = 'bg-orange-100 text-orange-700 font-semibold'
+      else if (n <= 20) cls = 'bg-gray-100 text-gray-600'
+      else              cls = 'bg-gray-50 text-gray-300'
       return (
-        <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs ${colors[p] || 'bg-gray-100 text-gray-400'}`}>
-          {nums[p] ?? '—'}
+        <span className={`inline-flex items-center justify-center w-7 h-6 rounded-full text-xs ${cls}`}>
+          {n}
         </span>
       )
     }
