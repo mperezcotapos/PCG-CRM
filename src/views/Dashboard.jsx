@@ -23,9 +23,9 @@ const COL_DEFS = [
   { key: 'proxima',      label: 'Próxima acción'    },
   { key: 'sinAct',       label: 'Sin act.'          },
 ]
-const DEFAULT_VISIBLE = new Set(['cliente','proyecto','partida','estado','pelota','responsable','proveedor','comentario','proxima','sinAct'])
-const LS_ORDER = 'crm_col_order_v3'
-const LS_VIS   = 'crm_col_vis_v3'
+const DEFAULT_VISIBLE = new Set(['cliente','proyecto','partida','estado','pelota','responsable','proveedor','prioridad','comentario','proxima','sinAct'])
+const LS_ORDER = 'crm_col_order_v4'
+const LS_VIS   = 'crm_col_vis_v4'
 
 function loadLS(key, fallback) {
   try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback }
