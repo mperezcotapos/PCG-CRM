@@ -47,7 +47,7 @@ const TOOLS = [
         proyecto_id:{ type: 'string',  description: 'ID del proyecto' },
         categoria:  { type: 'string',  enum: ['Puertas','Ventanas','Muebles de Cocina','Closets','Muebles de Baño','Otro'] },
         proveedor:  { type: 'string',  description: 'Proveedor chino' },
-        prioridad:  { type: 'string',  enum: ['alta','media','baja'] },
+        prioridad:  { type: 'integer', minimum: 1, maximum: 30, description: 'Prioridad numérica: 1 = más urgente, 30 = menos urgente. Por defecto 15.' },
       },
       required: ['nombre', 'proyecto_id'],
     },
