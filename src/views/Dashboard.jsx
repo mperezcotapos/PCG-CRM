@@ -398,6 +398,38 @@ export default function Dashboard() {
 
   const activeCols = colOrder.filter(k => visibleCols.has(k))
 
+  // ── Export CSV ────────────────────────────────────────────────────
+  const exportCSV = () => {
+    const headers = ['Cliente','Proyecto','Partida','Estado','Pelota','Responsable','Proveedor','Prioridad','ID PCG','Último comentario','Fecha comentario','Próxima acción','Fecha próxima acción','Días sin actividad']
+    const priNum = { alta: '1', media: '2', normal: '3', baja: '4' }
+    const rows = sorted.map(({ partida, project, client, latest, daysSince }) => [
+      client?.name   || '',
+      project?.name  || '',
+      partida.name   || '',
+      ESTADOS.find(e => e.value === latest?.status)?.label || latest?.status || '',
+      PELOTA.find(p => p.value === latest?.pelota)?.label || '',
+      latest?.responsible || '',
+      partida.provider || '',
+      priNum[partida.priority] || '3',
+      buildPcgId(client?.name, project?.name, partida.name, partida.provider),
+      latest?.comment || '',
+      latest?.date || '',
+      latest?.nextAction || '',
+      latest?.nextActionDate || '',
+      daysSince != null ? String(daysSince) : '',
+    ])
+    const csv = [headers, ...rows]
+      .map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n')
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' })
+    const url  = URL.createObjectURL(blob)
+    const a    = document.createElement('a')
+    a.href     = url
+    a.download = `PCG_CRM_${format(new Date(), 'yyyy-MM-dd')}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   if (loading) return (
     <div className="flex items-center justify-center h-64">
       <div className="flex flex-col items-center gap-3 text-gray-400">
