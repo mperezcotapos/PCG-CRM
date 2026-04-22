@@ -413,7 +413,7 @@ export default function Dashboard() {
       PELOTA.find(p => p.value === latest?.pelota)?.label || '',
       latest?.responsible || '',
       partida.provider || '',
-      priNum[partida.priority] || '3',
+      String(Number(partida.priority) || 15),
       buildPcgId(client?.name, project?.name, partida.name, partida.provider),
       latest?.comment || '',
       latest?.date || '',
