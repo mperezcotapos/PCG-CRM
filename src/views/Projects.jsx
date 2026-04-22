@@ -323,12 +323,20 @@ function PartidaForm({ projectId, onSave, onCancel }) {
         <label className="label">Proveedor</label>
         <input className="input" placeholder="Nombre del proveedor…" value={form.provider} onChange={e => { set('provider', e.target.value); setIdError('') }} />
       </div>
-      <div>
-        <label className="label">Categoría</label>
-        <select className="select" value={form.category} onChange={e => set('category', e.target.value)}>
-          <option value="">Seleccionar…</option>
-          {CATEGORIAS.map(c => <option key={c}>{c}</option>)}
-        </select>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="label">Categoría</label>
+          <select className="select" value={form.category} onChange={e => set('category', e.target.value)}>
+            <option value="">Seleccionar…</option>
+            {CATEGORIAS.map(c => <option key={c}>{c}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="label">Prioridad (1 urgente · 30 baja)</label>
+          <input type="number" className="input" min="1" max="30" step="1"
+            value={form.priority}
+            onChange={e => set('priority', Math.min(30, Math.max(1, Number(e.target.value) || 15)))} />
+        </div>
       </div>
       <div className="bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-600">
         ID generado: <span className="font-mono font-bold text-gray-900">{previewId}</span>
