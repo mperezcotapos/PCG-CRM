@@ -294,7 +294,7 @@ function PartidaForm({ projectId, onSave, onCancel }) {
   const project  = projects.find(p => p.id === projectId)
   const client   = clients.find(c => c.id === project?.clientId)
 
-  const [form, setForm]   = useState({ projectId, name: '', category: '', provider: '', priority: 'normal' })
+  const [form, setForm]   = useState({ projectId, name: '', category: '', provider: '', priority: 15 })
   const [saving, setSaving] = useState(false)
   const [idError, setIdError] = useState('')
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
