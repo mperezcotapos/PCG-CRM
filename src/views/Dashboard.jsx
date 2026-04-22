@@ -341,7 +341,7 @@ export default function Dashboard() {
       pelota:      PELOTA.filter(p => p.value !== '-').map(p => ({ value: p.value, label: p.label })),
       responsable: opts(rows.map(r => r.latest?.responsible)),
       proveedor:   opts(rows.map(r => r.partida?.provider)),
-      prioridad:   [{ value: 'alta', label: 'Alta' }, { value: 'normal', label: 'Normal' }, { value: 'baja', label: 'Baja' }],
+      prioridad:   [], // filtro numérico no aplica como dropdown
       pcgId:       opts(rows.map(r => r.partida?.pcgId)),
     }
   }, [rows])
