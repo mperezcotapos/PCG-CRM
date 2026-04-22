@@ -184,7 +184,7 @@ function InlineNewPartida({ projectId, onDone, onCancel }) {
   const save = async () => {
     if (!name.trim()) return
     setSaving(true)
-    const ref = await addPartida({ projectId, name: name.trim(), category: category || name, status: 'activo', providers: [], priority: 'normal' })
+    const ref = await addPartida({ projectId, name: name.trim(), category: category || name, status: 'activo', providers: [], priority: 15 })
     onDone(ref.id)
   }
   return (
