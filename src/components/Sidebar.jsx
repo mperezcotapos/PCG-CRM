@@ -1,4 +1,6 @@
 import { NavLink } from 'react-router-dom'
+import { signOut } from 'firebase/auth'
+import { auth } from '../lib/firebase'
 import { useApp } from '../context/AppContext'
 import { isPast, isToday, parseISO } from 'date-fns'
 
