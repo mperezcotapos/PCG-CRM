@@ -113,10 +113,14 @@ function Cell({ colKey, row }) {
     case 'proveedor':
       return <span className="text-gray-600 whitespace-nowrap text-xs">{partida.provider || '—'}</span>
     case 'prioridad': {
-      const colors = { alta: 'text-red-600 font-semibold', media: 'text-yellow-600', normal: 'text-gray-500', baja: 'text-gray-400' }
-      const labels = { alta: 'Alta', media: 'Media', normal: 'Normal', baja: 'Baja' }
+      const nums   = { alta: 1, media: 2, normal: 3, baja: 4 }
+      const colors = { alta: 'bg-red-100 text-red-700 font-bold', media: 'bg-orange-100 text-orange-700 font-semibold', normal: 'bg-gray-100 text-gray-500', baja: 'bg-gray-50 text-gray-300' }
       const p = partida.priority || 'normal'
-      return <span className={`text-xs ${colors[p] || 'text-gray-400'}`}>{labels[p] || p}</span>
+      return (
+        <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs ${colors[p] || 'bg-gray-100 text-gray-400'}`}>
+          {nums[p] ?? '—'}
+        </span>
+      )
     }
     case 'pcgId':
       return <span className="text-xs text-gray-400 font-mono">{buildPcgId(client?.name, project?.name, partida.name, partida.provider)}</span>
