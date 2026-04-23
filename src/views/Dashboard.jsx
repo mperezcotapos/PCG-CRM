@@ -830,7 +830,7 @@ export default function Dashboard() {
                   <tr
                     key={partida.id}
                     className={`hover:bg-gray-50 cursor-pointer transition-colors ${isOverdue ? 'bg-red-50/40' : ''}`}
-                    onClick={() => setHistoryRow(row)}
+                    onClick={e => { if (!e.target.closest('[data-priority-cell]')) setHistoryRow(row) }}
                   >
                     {activeCols.map(key => (
                       <td key={key} className="px-4 py-3"
