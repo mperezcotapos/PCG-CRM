@@ -805,6 +805,7 @@ function MobileFilters({
         <input type="text" className="input w-40" placeholder="Buscar…"
           value={filterSearch} onChange={e => setFilterSearch(e.target.value)} />
         <MultiSelect placeholder="Clientes"     options={clientOptions}      values={filterClientes}    onChange={setFilterClientes} />
+        <MultiSelect placeholder="Proyectos"    options={proyectoOptions}    values={filterProyectos}   onChange={setFilterProyectos} />
         <MultiSelect placeholder="Estados"      options={estadoOptions}      values={filterEstados}     onChange={setFilterEstados} />
         <MultiSelect placeholder="Pelota"       options={pelotaOptions}      values={filterPelota}      onChange={setFilterPelota} />
         <MultiSelect placeholder="Responsable"  options={responsableOptions} values={filterResponsable} onChange={setFilterResponsable} />
