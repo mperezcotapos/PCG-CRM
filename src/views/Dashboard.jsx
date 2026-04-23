@@ -326,7 +326,7 @@ export default function Dashboard() {
       }
     }
     return true
-  }), [rows, filterClientes, filterEstados, filterPelota, filterResponsable, filterProveedor, filterPrioridad, filterSearch, colFilters])
+  }), [rows, filterClientes, filterProyectos, filterEstados, filterPelota, filterResponsable, filterProveedor, filterPrioridad, filterSearch, colFilters])
 
   // Sort
   const sorted = useMemo(() => {
