@@ -169,19 +169,8 @@ function Cell({ colKey, row }) {
       return <span className="text-gray-600 whitespace-nowrap text-sm">{latest?.responsible || '—'}</span>
     case 'proveedor':
       return <span className="text-gray-600 whitespace-nowrap text-xs">{partida.provider || '—'}</span>
-    case 'prioridad': {
-      const n = Number(partida.priority) || 15
-      let cls
-      if (n <= 5)       cls = 'bg-red-100 text-red-700 font-bold'
-      else if (n <= 10) cls = 'bg-orange-100 text-orange-700 font-semibold'
-      else if (n <= 20) cls = 'bg-gray-100 text-gray-600'
-      else              cls = 'bg-gray-50 text-gray-300'
-      return (
-        <span className={`inline-flex items-center justify-center w-7 h-6 rounded-full text-xs ${cls}`}>
-          {n}
-        </span>
-      )
-    }
+    case 'prioridad':
+      return <PriorityCell partida={partida} />
     case 'pcgId':
       return <span className="text-xs text-gray-400 font-mono">{buildPcgId(client?.name, project?.name, partida.name, partida.provider)}</span>
     case 'comentario':
