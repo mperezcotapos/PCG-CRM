@@ -92,6 +92,62 @@ function SortIcon({ active, dir }) {
   )
 }
 
+// ── Inline priority editor ────────────────────────────────────────
+function PriorityCell({ partida }) {
+  const [editing, setEditing] = useState(false)
+  const [draft, setDraft] = useState(String(Number(partida.priority) || 15))
+  const inputRef = useRef(null)
+
+  const n = Number(partida.priority) || 15
+  let cls
+  if (n <= 5)       cls = 'bg-red-100 text-red-700 font-bold'
+  else if (n <= 10) cls = 'bg-orange-100 text-orange-700 font-semibold'
+  else if (n <= 20) cls = 'bg-gray-100 text-gray-600'
+  else              cls = 'bg-gray-50 text-gray-300'
+
+  const startEdit = () => {
+    setDraft(String(n))
+    setEditing(true)
+    setTimeout(() => inputRef.current?.select(), 0)
+  }
+
+  const commit = async () => {
+    const val = Math.min(30, Math.max(1, Number(draft) || n))
+    setEditing(false)
+    if (val !== n) await updatePartida(partida.id, { priority: val })
+  }
+
+  const onKeyDown = (e) => {
+    if (e.key === 'Enter')  { e.preventDefault(); commit() }
+    if (e.key === 'Escape') { setEditing(false) }
+  }
+
+  if (editing) {
+    return (
+      <input
+        ref={inputRef}
+        type="number"
+        min="1" max="30" step="1"
+        value={draft}
+        onChange={e => setDraft(e.target.value)}
+        onBlur={commit}
+        onKeyDown={onKeyDown}
+        className="w-12 h-6 text-center text-xs border border-navy-400 rounded-full outline-none focus:ring-1 focus:ring-navy-500 bg-white"
+      />
+    )
+  }
+
+  return (
+    <span
+      title="Click para editar prioridad"
+      onClick={startEdit}
+      className={`inline-flex items-center justify-center w-7 h-6 rounded-full text-xs cursor-pointer hover:opacity-70 transition-opacity ${cls}`}
+    >
+      {n}
+    </span>
+  )
+}
+
 // ── Cell renderer ─────────────────────────────────────────────────
 function Cell({ colKey, row }) {
   const { partida, project, client, latest, daysSince } = row
