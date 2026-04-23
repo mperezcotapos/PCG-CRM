@@ -849,6 +849,10 @@ function MobileFilters({
                 <MultiSelect placeholder="Todos los clientes" options={clientOptions} values={filterClientes} onChange={setFilterClientes} />
               </div>
               <div>
+                <label className="label">Proyecto</label>
+                <MultiSelect placeholder="Todos los proyectos" options={proyectoOptions} values={filterProyectos} onChange={setFilterProyectos} />
+              </div>
+              <div>
                 <label className="label">Estado</label>
                 <MultiSelect placeholder="Todos los estados" options={estadoOptions} values={filterEstados} onChange={setFilterEstados} />
               </div>
