@@ -670,6 +670,13 @@ export default function Dashboard() {
           <EditRowForm row={editRow} clients={clients} projects={projects} onClose={() => setEditRow(null)} />
         </Modal>
       )}
+      {historyRow && (
+        <PartidaHistoryModal
+          row={historyRow}
+          onClose={() => setHistoryRow(null)}
+          onNew={() => { setHistoryRow(null); setSelectedRow(historyRow) }}
+        />
+      )}
     </div>
   )
 }
