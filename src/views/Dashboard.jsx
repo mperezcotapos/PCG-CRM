@@ -833,7 +833,9 @@ export default function Dashboard() {
                     onClick={() => setHistoryRow(row)}
                   >
                     {activeCols.map(key => (
-                      <td key={key} className="px-4 py-3">
+                      <td key={key} className="px-4 py-3"
+                        onClick={key === 'prioridad' ? e => e.stopPropagation() : undefined}
+                      >
                         <Cell colKey={key} row={row} />
                       </td>
                     ))}
