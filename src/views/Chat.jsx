@@ -153,6 +153,17 @@ export default function Chat() {
   const bottomRef = useRef(null)
   const textareaRef = useRef(null)
   const recognitionRef = useRef(null)
+  const micStreamRef = useRef(null)
+
+  // Solicitar permiso de micrófono al cargar el chat, así no interrumpe al tocar el botón
+  useEffect(() => {
+    if (navigator.mediaDevices?.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => { micStreamRef.current = stream })
+        .catch(() => {})
+    }
+    return () => { micStreamRef.current?.getTracks().forEach(t => t.stop()) }
+  }, [])
 
   const startRecording = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
