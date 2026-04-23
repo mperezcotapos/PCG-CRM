@@ -133,6 +133,7 @@ function PriorityCell({ partida }) {
         onChange={e => setDraft(e.target.value)}
         onBlur={commit}
         onKeyDown={onKeyDown}
+        onClick={e => e.stopPropagation()}
         className="w-12 h-6 text-center text-xs border border-navy-400 rounded-full outline-none focus:ring-1 focus:ring-navy-500 bg-white"
       />
     )
