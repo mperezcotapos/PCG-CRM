@@ -510,7 +510,10 @@ export default function Dashboard() {
           <div className="card px-4 py-12 text-center text-gray-400 text-sm">No hay partidas</div>
         )}
         {sorted.map(row => (
-          <MobileCard key={row.partida.id} row={row} onClick={() => setSelectedRow(row)} />
+          <MobileCard key={row.partida.id} row={row}
+            onClick={() => setSelectedRow(row)}
+            onEdit={() => setEditRow(row)}
+          />
         ))}
       </div>
 
