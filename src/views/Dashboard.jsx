@@ -140,10 +140,9 @@ function PriorityCell({ partida }) {
 
   return (
     <span
-      data-priority-cell
       title="Click para editar prioridad"
       onClick={startEdit}
-      className={`inline-flex items-center justify-center w-7 h-6 rounded-full text-xs cursor-pointer hover:opacity-70 transition-opacity ${cls}`}
+      className={`priority-edit-cell inline-flex items-center justify-center w-7 h-6 rounded-full text-xs cursor-pointer hover:opacity-70 transition-opacity ${cls}`}
     >
       {n}
     </span>
