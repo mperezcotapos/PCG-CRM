@@ -127,14 +127,13 @@ function PriorityCell({ partida }) {
     return (
       <input
         ref={inputRef}
-        data-priority-cell
         type="number"
         min="1" max="30" step="1"
         value={draft}
         onChange={e => setDraft(e.target.value)}
         onBlur={commit}
         onKeyDown={onKeyDown}
-        className="w-12 h-6 text-center text-xs border border-navy-400 rounded-full outline-none focus:ring-1 focus:ring-navy-500 bg-white"
+        className="priority-edit-cell w-12 h-6 text-center text-xs border border-navy-400 rounded-full outline-none focus:ring-1 focus:ring-navy-500 bg-white"
       />
     )
   }
