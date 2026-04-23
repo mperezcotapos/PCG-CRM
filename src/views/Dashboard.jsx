@@ -259,6 +259,7 @@ export default function Dashboard() {
   // Modals
   const [selectedRow, setSelectedRow] = useState(null)
   const [editRow,     setEditRow]     = useState(null)
+  const [historyRow,  setHistoryRow]  = useState(null)
 
   // Column config (persisted)
   const [colOrder, setColOrder] = useState(() =>
