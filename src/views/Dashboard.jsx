@@ -297,6 +297,7 @@ export default function Dashboard() {
   const filtered = useMemo(() => rows.filter(({ partida, project, client, latest, daysSince }) => {
     // global bar
     if (filterClientes.size    && !filterClientes.has(client?.id))                      return false
+    if (filterProyectos.size   && !filterProyectos.has(project?.id))                   return false
     if (filterEstados.size     && !filterEstados.has(latest?.status))                   return false
     if (filterPelota.size      && !filterPelota.has(latest?.pelota || '-'))             return false
     if (filterResponsable.size && !filterResponsable.has(latest?.responsible || ''))   return false
