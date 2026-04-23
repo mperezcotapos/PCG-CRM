@@ -445,7 +445,18 @@ export default function Dashboard() {
       if (n <= 15) return '🟡 Medium'
       return '⬇ Low'
     }
-    const statusLabel = (s) => ESTADOS.find(e => e.value === s)?.label || s || ''
+    const STATUS_EN = {
+      esp_antecedentes: 'Awaiting Specs',
+      ant_recibidos:    'Specs Received',
+      cotizando:        'Quoting to China',
+      cot_recibida:     'Quote Received',
+      cot_enviada:      'Quote Sent',
+      negociacion:      'Negotiation',
+      ganado:           'Won',
+      perdido:          'Lost',
+      pausado:          'On Hold',
+    }
+    const statusLabel = (s) => STATUS_EN[s] || s || ''
 
     // Navy-ish fill and font helpers
     const navy    = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1B3A5C' } }
