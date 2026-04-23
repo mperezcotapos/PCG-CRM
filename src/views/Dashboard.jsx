@@ -127,13 +127,13 @@ function PriorityCell({ partida }) {
     return (
       <input
         ref={inputRef}
+        data-priority-cell
         type="number"
         min="1" max="30" step="1"
         value={draft}
         onChange={e => setDraft(e.target.value)}
         onBlur={commit}
         onKeyDown={onKeyDown}
-        onClick={e => e.stopPropagation()}
         className="w-12 h-6 text-center text-xs border border-navy-400 rounded-full outline-none focus:ring-1 focus:ring-navy-500 bg-white"
       />
     )
@@ -141,6 +141,7 @@ function PriorityCell({ partida }) {
 
   return (
     <span
+      data-priority-cell
       title="Click para editar prioridad"
       onClick={startEdit}
       className={`inline-flex items-center justify-center w-7 h-6 rounded-full text-xs cursor-pointer hover:opacity-70 transition-opacity ${cls}`}
