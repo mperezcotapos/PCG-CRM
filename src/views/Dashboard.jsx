@@ -843,7 +843,7 @@ function MobileCard({ row, onClick, onNew, onEdit }) {
 
       {/* Barra de acciones */}
       <div className="flex border-t border-gray-100">
-        <button onClick={onClick}
+        <button onClick={onNew}
           className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs text-navy-600 font-medium active:bg-gray-50">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
