@@ -771,21 +771,26 @@ function MobileFilters({
   filterPelota, setFilterPelota,
   filterResponsable, setFilterResponsable,
   filterProveedor, setFilterProveedor,
+  filterProyectos, setFilterProyectos,
   filterPrioridad, setFilterPrioridad,
-  clients, rows, count,
+  clients, projects, rows, count,
 }) {
   const [open, setOpen] = useState(false)
 
-  const hasFilters = filterSearch || filterClientes.size || filterEstados.size ||
+  const hasFilters = filterSearch || filterClientes.size || filterProyectos.size || filterEstados.size ||
     filterPelota.size || filterResponsable.size || filterProveedor.size || filterPrioridad
 
   const clear = () => {
-    setFilterSearch(''); setFilterClientes(new Set()); setFilterEstados(new Set())
-    setFilterPelota(new Set()); setFilterResponsable(new Set())
+    setFilterSearch(''); setFilterClientes(new Set()); setFilterProyectos(new Set())
+    setFilterEstados(new Set()); setFilterPelota(new Set()); setFilterResponsable(new Set())
     setFilterProveedor(new Set()); setFilterPrioridad('')
   }
 
   const clientOptions     = clients.map(c => ({ value: c.id, label: c.name }))
+  // Proyectos filtrados por cliente seleccionado (si hay alguno)
+  const proyectoOptions   = projects
+    .filter(p => !filterClientes.size || filterClientes.has(p.clientId))
+    .map(p => ({ value: p.id, label: p.name }))
   const estadoOptions     = ESTADOS.map(e => ({ value: e.value, label: e.label }))
   const pelotaOptions     = PELOTA.filter(p => p.value !== '-').map(p => ({ value: p.value, label: p.label }))
   const responsableOptions = [...new Set(rows.map(r => r.latest?.responsible).filter(Boolean))].sort()
