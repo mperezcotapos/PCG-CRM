@@ -250,7 +250,7 @@ export default function History() {
   )
 }
 
-function EditActivityForm({ act, onSave, onCancel }) {
+export function EditActivityForm({ act, onSave, onCancel }) {
   const { activities } = useApp()
   const [form, setForm] = useState({ ...act })
   const [saving, setSaving] = useState(false)
