@@ -241,9 +241,13 @@ export default function Dashboard() {
   const { getDashboardRows, clients, projects, loading } = useApp()
 
   // Global filters (top bar + mobile)
-  const [filterClientes, setFilterClientes] = useState(new Set())
-  const [filterEstados,  setFilterEstados]  = useState(new Set())
-  const [filterSearch,  setFilterSearch]  = useState('')
+  const [filterClientes,    setFilterClientes]    = useState(new Set())
+  const [filterEstados,     setFilterEstados]      = useState(new Set())
+  const [filterPelota,      setFilterPelota]       = useState(new Set())
+  const [filterResponsable, setFilterResponsable]  = useState(new Set())
+  const [filterProveedor,   setFilterProveedor]    = useState(new Set())
+  const [filterPrioridad,   setFilterPrioridad]    = useState('')
+  const [filterSearch,      setFilterSearch]       = useState('')
 
   // Per-column filters (desktop filter row)
   const [colFilters, setColFilters] = useState({})
