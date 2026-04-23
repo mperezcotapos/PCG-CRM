@@ -155,12 +155,24 @@ export default function Chat() {
   const recognitionRef = useRef(null)
   const micStreamRef = useRef(null) // stream activo = permiso ya concedido esta sesión
 
-  const startRecording = () => {
+  const startRecording = async () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
     if (!SpeechRecognition) {
-      alert('Tu navegador no soporta reconocimiento de voz. Usá Chrome.')
+      alert('Tu navegador no soporta reconocimiento de voz.')
       return
     }
+
+    // Si no tenemos permiso concedido esta sesión, pedirlo ahora
+    if (!micStreamRef.current) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+        micStreamRef.current = stream // guardamos: ya no preguntará de nuevo esta sesión
+      } catch {
+        // Usuario negó — no guardamos nada, así la próxima vez que toque el botón preguntará de nuevo
+        return
+      }
+    }
+
     const recognition = new SpeechRecognition()
     recognition.lang = 'es-CL'
     recognition.interimResults = false
