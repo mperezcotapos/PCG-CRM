@@ -22,7 +22,14 @@ export default function App() {
   const [user, setUser] = useState(undefined) // undefined = cargando
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, u => setUser(u ?? null))
+    const unsub = onAuthStateChanged(auth, async u => {
+      if (u && !ALLOWED_EMAILS.includes(u.email)) {
+        await signOut(auth)
+        setUser(null)
+      } else {
+        setUser(u ?? null)
+      }
+    })
     return unsub
   }, [])
 
