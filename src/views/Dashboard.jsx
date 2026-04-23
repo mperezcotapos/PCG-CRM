@@ -672,22 +672,52 @@ export default function Dashboard() {
 }
 
 // ── Mobile filters ────────────────────────────────────────────────
-function MobileFilters({ filterSearch, setFilterSearch, filterClientes, setFilterClientes,
-                         filterEstados, setFilterEstados, clients, count }) {
+function MobileFilters({
+  filterSearch, setFilterSearch,
+  filterClientes, setFilterClientes,
+  filterEstados, setFilterEstados,
+  filterPelota, setFilterPelota,
+  filterResponsable, setFilterResponsable,
+  filterProveedor, setFilterProveedor,
+  filterPrioridad, setFilterPrioridad,
+  clients, rows, count,
+}) {
   const [open, setOpen] = useState(false)
-  const hasFilters = filterSearch || filterClientes.size || filterEstados.size
-  const clear = () => { setFilterSearch(''); setFilterClientes(new Set()); setFilterEstados(new Set()) }
-  const clientOptions = clients.map(c => ({ value: c.id, label: c.name }))
-  const estadoOptions = ESTADOS.map(e => ({ value: e.value, label: e.label }))
+
+  const hasFilters = filterSearch || filterClientes.size || filterEstados.size ||
+    filterPelota.size || filterResponsable.size || filterProveedor.size || filterPrioridad
+
+  const clear = () => {
+    setFilterSearch(''); setFilterClientes(new Set()); setFilterEstados(new Set())
+    setFilterPelota(new Set()); setFilterResponsable(new Set())
+    setFilterProveedor(new Set()); setFilterPrioridad('')
+  }
+
+  const clientOptions     = clients.map(c => ({ value: c.id, label: c.name }))
+  const estadoOptions     = ESTADOS.map(e => ({ value: e.value, label: e.label }))
+  const pelotaOptions     = PELOTA.filter(p => p.value !== '-').map(p => ({ value: p.value, label: p.label }))
+  const responsableOptions = [...new Set(rows.map(r => r.latest?.responsible).filter(Boolean))].sort()
+    .map(v => ({ value: v, label: v }))
+  const proveedorOptions  = [...new Set(rows.map(r => r.partida?.provider).filter(Boolean))].sort()
+    .map(v => ({ value: v, label: v }))
 
   return (
     <>
       {/* Desktop filters */}
       <div className="hidden md:flex card px-4 py-3 flex-wrap gap-3 items-center">
-        <input type="text" className="input w-48" placeholder="Buscar…"
+        <input type="text" className="input w-40" placeholder="Buscar…"
           value={filterSearch} onChange={e => setFilterSearch(e.target.value)} />
-        <MultiSelect placeholder="Todos los clientes" options={clientOptions} values={filterClientes} onChange={setFilterClientes} />
-        <MultiSelect placeholder="Todos los estados"  options={estadoOptions}  values={filterEstados}  onChange={setFilterEstados} />
+        <MultiSelect placeholder="Clientes"     options={clientOptions}      values={filterClientes}    onChange={setFilterClientes} />
+        <MultiSelect placeholder="Estados"      options={estadoOptions}      values={filterEstados}     onChange={setFilterEstados} />
+        <MultiSelect placeholder="Pelota"       options={pelotaOptions}      values={filterPelota}      onChange={setFilterPelota} />
+        <MultiSelect placeholder="Responsable"  options={responsableOptions} values={filterResponsable} onChange={setFilterResponsable} />
+        <MultiSelect placeholder="Proveedor"    options={proveedorOptions}   values={filterProveedor}   onChange={setFilterProveedor} />
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs text-gray-500 whitespace-nowrap">Prioridad hasta</span>
+          <input type="number" min="1" max="30" className="input w-16 text-center"
+            placeholder="30" value={filterPrioridad}
+            onChange={e => setFilterPrioridad(e.target.value)} />
+        </div>
         {hasFilters && <button className="btn-ghost text-xs" onClick={clear}>Limpiar</button>}
         <span className="ml-auto text-xs text-gray-400">{count} registros</span>
       </div>
@@ -712,7 +742,7 @@ function MobileFilters({ filterSearch, setFilterSearch, filterClientes, setFilte
       {open && (
         <>
           <div className="fixed inset-0 bg-black/40 z-40 md:hidden" onClick={() => setOpen(false)} />
-          <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white rounded-t-2xl shadow-2xl px-4 pt-3 pb-8">
+          <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white rounded-t-2xl shadow-2xl px-4 pt-3 pb-8 overflow-y-auto max-h-[85vh]">
             <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-5" />
             <p className="font-semibold text-gray-900 mb-4">Filtrar partidas</p>
             <div className="space-y-4">
@@ -723,6 +753,24 @@ function MobileFilters({ filterSearch, setFilterSearch, filterClientes, setFilte
               <div>
                 <label className="label">Estado</label>
                 <MultiSelect placeholder="Todos los estados" options={estadoOptions} values={filterEstados} onChange={setFilterEstados} />
+              </div>
+              <div>
+                <label className="label">Pelota</label>
+                <MultiSelect placeholder="Todos" options={pelotaOptions} values={filterPelota} onChange={setFilterPelota} />
+              </div>
+              <div>
+                <label className="label">Responsable</label>
+                <MultiSelect placeholder="Todos" options={responsableOptions} values={filterResponsable} onChange={setFilterResponsable} />
+              </div>
+              <div>
+                <label className="label">Proveedor</label>
+                <MultiSelect placeholder="Todos" options={proveedorOptions} values={filterProveedor} onChange={setFilterProveedor} />
+              </div>
+              <div>
+                <label className="label">Prioridad hasta (1–30)</label>
+                <input type="number" min="1" max="30" className="input"
+                  placeholder="Sin límite" value={filterPrioridad}
+                  onChange={e => setFilterPrioridad(e.target.value)} />
               </div>
             </div>
             <div className="flex gap-2 mt-5">
