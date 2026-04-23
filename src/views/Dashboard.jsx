@@ -785,52 +785,72 @@ function MobileFilters({
 }
 
 // ── Mobile card ───────────────────────────────────────────────────
-function MobileCard({ row, onClick }) {
+function MobileCard({ row, onClick, onEdit }) {
   const { partida, project, client, latest, daysSince } = row
   const isOverdue = latest?.nextActionDate && latest?.status &&
     !['ganado','perdido','pausado'].includes(latest.status) &&
     isAfter(new Date(), parseISO(latest.nextActionDate))
 
   return (
-    <button
-      onClick={onClick}
-      className={`w-full text-left card px-4 py-4 hover:shadow-md active:bg-gray-50 transition-all ${isOverdue ? 'border-l-4 border-red-400' : ''}`}
-    >
-      <div className="flex items-start justify-between gap-2 mb-2">
-        <div className="min-w-0">
-          <p className="text-xs text-gray-400 truncate">
-            {client?.name || '—'}
-            {project?.name ? <span className="mx-1 text-gray-300">›</span> : null}
-            {project?.name}
-          </p>
-          <p className="font-semibold text-gray-900 text-sm mt-0.5 leading-tight">{partida.name}</p>
+    <div className={`card overflow-hidden ${isOverdue ? 'border-l-4 border-red-400' : ''}`}>
+      {/* Área principal — abre ActivityForm */}
+      <button onClick={onClick} className="w-full text-left px-4 pt-4 pb-3 active:bg-gray-50 transition-colors">
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <div className="min-w-0">
+            <p className="text-xs text-gray-400 truncate">
+              {client?.name || '—'}
+              {project?.name ? <span className="mx-1 text-gray-300">›</span> : null}
+              {project?.name}
+            </p>
+            <p className="font-semibold text-gray-900 text-sm mt-0.5 leading-tight">{partida.name}</p>
+          </div>
+          <div className="flex-shrink-0 flex flex-col items-end gap-1">
+            <StatusBadge value={latest?.status || 'cotizando'} />
+            {partida.provider && <span className="text-xs text-gray-400">{partida.provider}</span>}
+          </div>
         </div>
-        <div className="flex-shrink-0 flex flex-col items-end gap-1">
-          <StatusBadge value={latest?.status || 'cotizando'} />
-          {partida.provider && <span className="text-xs text-gray-400">{partida.provider}</span>}
-        </div>
-      </div>
 
-      {latest?.comment && (
-        <p className="text-xs text-gray-500 line-clamp-2 mb-2">{latest.comment}</p>
-      )}
-
-      <div className="flex items-center gap-2 flex-wrap">
-        {latest?.nextActionDate && <NextActionChip date={latest.nextActionDate} />}
-        <DaysChip days={daysSince} />
-        {latest?.pelota && latest.pelota !== '-' && (
-          <span className={`badge text-xs ${getPelota(latest.pelota).color}`}>
-            {getPelota(latest.pelota).label}
-          </span>
+        {latest?.comment && (
+          <p className="text-xs text-gray-500 line-clamp-2 mb-2">{latest.comment}</p>
         )}
-      </div>
 
-      {latest?.nextAction && (
-        <p className="text-xs text-gray-400 mt-2 truncate">
-          <span className="font-medium text-gray-500">Próximo:</span> {latest.nextAction}
-        </p>
-      )}
-    </button>
+        <div className="flex items-center gap-2 flex-wrap">
+          {latest?.nextActionDate && <NextActionChip date={latest.nextActionDate} />}
+          <DaysChip days={daysSince} />
+          {latest?.pelota && latest.pelota !== '-' && (
+            <span className={`badge text-xs ${getPelota(latest.pelota).color}`}>
+              {getPelota(latest.pelota).label}
+            </span>
+          )}
+        </div>
+
+        {latest?.nextAction && (
+          <p className="text-xs text-gray-400 mt-2 truncate">
+            <span className="font-medium text-gray-500">Próximo:</span> {latest.nextAction}
+          </p>
+        )}
+      </button>
+
+      {/* Barra de acciones */}
+      <div className="flex border-t border-gray-100">
+        <button onClick={onClick}
+          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs text-navy-600 font-medium active:bg-gray-50">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          Nuevo registro
+        </button>
+        <div className="w-px bg-gray-100" />
+        <button onClick={onEdit}
+          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs text-gray-600 font-medium active:bg-gray-50">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Editar
+        </button>
+      </div>
+    </div>
   )
 }
 
