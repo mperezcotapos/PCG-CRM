@@ -3,6 +3,7 @@ import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import { auth } from '../lib/firebase'
 
 const provider = new GoogleAuthProvider()
+provider.setCustomParameters({ prompt: 'select_account' })
 
 export default function Login() {
   const [error,   setError]   = useState('')
