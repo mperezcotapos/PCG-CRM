@@ -795,7 +795,7 @@ function MobileFilters({
 }
 
 // ── Mobile card ───────────────────────────────────────────────────
-function MobileCard({ row, onClick, onEdit }) {
+function MobileCard({ row, onClick, onNew, onEdit }) {
   const { partida, project, client, latest, daysSince } = row
   const isOverdue = latest?.nextActionDate && latest?.status &&
     !['ganado','perdido','pausado'].includes(latest.status) &&
