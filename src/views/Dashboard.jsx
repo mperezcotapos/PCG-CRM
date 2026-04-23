@@ -247,6 +247,7 @@ export default function Dashboard() {
   const [filterPelota,      setFilterPelota]       = useState(new Set())
   const [filterResponsable, setFilterResponsable]  = useState(new Set())
   const [filterProveedor,   setFilterProveedor]    = useState(new Set())
+  const [filterProyectos,   setFilterProyectos]    = useState(new Set())
   const [filterPrioridad,   setFilterPrioridad]    = useState('')
   const [filterSearch,      setFilterSearch]       = useState('')
 
