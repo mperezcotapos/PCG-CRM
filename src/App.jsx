@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { onAuthStateChanged } from 'firebase/auth'
+import { onAuthStateChanged, signOut } from 'firebase/auth'
 import { auth } from './lib/firebase'
+
+const ALLOWED_EMAILS = ['mperezcotapos@pcggroup.cl', 'gperezcotapos@pcggroup.cl']
 import { AppProvider } from './context/AppContext'
 import Sidebar    from './components/Sidebar'
 import BottomNav  from './components/BottomNav'
