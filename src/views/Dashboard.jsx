@@ -293,8 +293,12 @@ export default function Dashboard() {
   // Filter — global bar + per-column
   const filtered = useMemo(() => rows.filter(({ partida, project, client, latest, daysSince }) => {
     // global bar
-    if (filterClientes.size && !filterClientes.has(client?.id)) return false
-    if (filterEstados.size  && !filterEstados.has(latest?.status)) return false
+    if (filterClientes.size    && !filterClientes.has(client?.id))                      return false
+    if (filterEstados.size     && !filterEstados.has(latest?.status))                   return false
+    if (filterPelota.size      && !filterPelota.has(latest?.pelota || '-'))             return false
+    if (filterResponsable.size && !filterResponsable.has(latest?.responsible || ''))   return false
+    if (filterProveedor.size   && !filterProveedor.has(partida.provider || ''))        return false
+    if (filterPrioridad        && Number(partida.priority || 15) > Number(filterPrioridad)) return false
     if (filterSearch) {
       const q = filterSearch.toLowerCase()
       const hay = [client?.name, project?.name, partida.name, latest?.comment, latest?.responsible, partida.pcgId]
