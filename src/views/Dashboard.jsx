@@ -513,7 +513,8 @@ export default function Dashboard() {
         )}
         {sorted.map(row => (
           <MobileCard key={row.partida.id} row={row}
-            onClick={() => setSelectedRow(row)}
+            onClick={() => setHistoryRow(row)}
+            onNew={() => setSelectedRow(row)}
             onEdit={() => setEditRow(row)}
           />
         ))}
