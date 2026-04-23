@@ -153,7 +153,6 @@ export default function Chat() {
   const bottomRef = useRef(null)
   const textareaRef = useRef(null)
   const recognitionRef = useRef(null)
-  const micStreamRef = useRef(null) // stream activo = permiso ya concedido esta sesión
 
   const startRecording = async () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
