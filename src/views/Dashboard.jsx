@@ -105,7 +105,8 @@ function PriorityCell({ partida }) {
   else if (n <= 20) cls = 'bg-gray-100 text-gray-600'
   else              cls = 'bg-gray-50 text-gray-300'
 
-  const startEdit = () => {
+  const startEdit = (e) => {
+    e.stopPropagation()
     setDraft(String(n))
     setEditing(true)
     setTimeout(() => inputRef.current?.select(), 0)
