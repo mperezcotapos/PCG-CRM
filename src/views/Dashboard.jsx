@@ -834,9 +834,7 @@ export default function Dashboard() {
                     onClick={e => { if (!e.target.closest('[data-priority-cell]')) setHistoryRow(row) }}
                   >
                     {activeCols.map(key => (
-                      <td key={key} className="px-4 py-3"
-                        onClick={key === 'prioridad' ? e => e.stopPropagation() : undefined}
-                      >
+                      <td key={key} className="px-4 py-3">
                         <Cell colKey={key} row={row} />
                       </td>
                     ))}
