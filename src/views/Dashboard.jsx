@@ -413,34 +413,186 @@ export default function Dashboard() {
 
   const activeCols = colOrder.filter(k => visibleCols.has(k))
 
-  // ── Export CSV ────────────────────────────────────────────────────
-  const exportCSV = () => {
-    const headers = ['Cliente','Proyecto','Partida','Estado','Pelota','Responsable','Proveedor','Prioridad','ID PCG','Último comentario','Fecha comentario','Próxima acción','Fecha próxima acción','Días sin actividad']
-    const priNum = { alta: '1', media: '2', normal: '3', baja: '4' }
-    const rows = sorted.map(({ partida, project, client, latest, daysSince }) => [
-      client?.name   || '',
-      project?.name  || '',
-      partida.name   || '',
-      ESTADOS.find(e => e.value === latest?.status)?.label || latest?.status || '',
-      PELOTA.find(p => p.value === latest?.pelota)?.label || '',
-      latest?.responsible || '',
-      partida.provider || '',
-      String(Number(partida.priority) || 15),
-      buildPcgId(client?.name, project?.name, partida.name, partida.provider),
-      latest?.comment || '',
-      latest?.date || '',
-      latest?.nextAction || '',
-      latest?.nextActionDate || '',
-      daysSince != null ? String(daysSince) : '',
-    ])
-    const csv = [headers, ...rows]
-      .map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-      .join('\n')
-    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' })
-    const url  = URL.createObjectURL(blob)
-    const a    = document.createElement('a')
-    a.href     = url
-    a.download = `PCG_CRM_${format(new Date(), 'yyyy-MM-dd')}.csv`
+  // ── Export XLSX ───────────────────────────────────────────────────
+  const exportXLSX = async () => {
+    const ExcelJS = (await import('exceljs')).default
+    const wb = new ExcelJS.Workbook()
+    wb.creator = 'PCG Group CRM'
+    wb.created = new Date()
+
+    const monthYear = format(new Date(), 'MMMM yyyy', { locale: es })
+      .replace(/^\w/, c => c.toUpperCase())
+    const fileName  = `PCG_Supplier_Report_${format(new Date(), 'MMMMyyyy', { locale: es }).replace(/^\w/, c => c.toUpperCase())}.xlsx`
+
+    // ── helpers ──
+    const actionRequired = (status, nextAction) => {
+      if (nextAction) return nextAction
+      switch (status) {
+        case 'esp_antecedentes': return '⏳ Awaiting project specs from client'
+        case 'ant_recibidos':    return '📋 Specs received — please prepare quote'
+        case 'cotizando':        return '🔄 Quote in preparation — pending from supplier'
+        case 'cot_recibida':     return '✅ Quote received — under PCG review'
+        case 'cot_enviada':      return '📤 Quote sent to client — awaiting response'
+        case 'negociacion':      return '🤝 Under negotiation'
+        case 'ganado':           return '✅ Awarded'
+        case 'perdido':          return '✖ Not awarded'
+        case 'pausado':          return '⏸ On hold — project paused'
+        default:                 return ''
+      }
+    }
+    const priorityLabel = (n) => {
+      if (n <= 5)  return '🔴 High'
+      if (n <= 15) return '🟡 Medium'
+      return '⬇ Low'
+    }
+    const statusLabel = (s) => ESTADOS.find(e => e.value === s)?.label || s || ''
+
+    // Navy-ish fill and font helpers
+    const navy    = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1B3A5C' } }
+    const white   = { argb: 'FFFFFFFF' }
+    const bold14  = { name: 'Calibri', size: 14, bold: true, color: white }
+    const bold11  = { name: 'Calibri', size: 11, bold: true, color: white }
+    const bold10  = { name: 'Calibri', size: 10, bold: true }
+    const reg10   = { name: 'Calibri', size: 10 }
+    const gray50  = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF2F2F2' } }
+    const thinBorder = {
+      top:    { style: 'thin', color: { argb: 'FFD0D0D0' } },
+      left:   { style: 'thin', color: { argb: 'FFD0D0D0' } },
+      bottom: { style: 'thin', color: { argb: 'FFD0D0D0' } },
+      right:  { style: 'thin', color: { argb: 'FFD0D0D0' } },
+    }
+
+    const applyHeaderRow = (ws, colCount, labels) => {
+      const headerRow = ws.getRow(6)
+      labels.forEach((lbl, i) => {
+        const cell = headerRow.getCell(i + 1)
+        cell.value = lbl
+        cell.font  = bold10
+        cell.fill  = navy
+        cell.font  = { ...bold10, color: white }
+        cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true }
+        cell.border = thinBorder
+      })
+      headerRow.height = 22
+    }
+
+    const applyTitleBlock = (ws, title, colCount, statsText) => {
+      // Row 1: title
+      ws.mergeCells(1, 1, 1, colCount)
+      const t = ws.getCell('A1')
+      t.value = title
+      t.font  = bold14
+      t.fill  = navy
+      t.alignment = { vertical: 'middle', horizontal: 'left' }
+      ws.getRow(1).height = 32
+
+      // Row 2: subtitle
+      ws.mergeCells(2, 1, 2, colCount)
+      const s = ws.getCell('A2')
+      s.value = `PCG Group · Commercial Report · ${monthYear}`
+      s.font  = { name: 'Calibri', size: 10, italic: true, color: { argb: 'FF555555' } }
+      s.fill  = gray50
+      ws.getRow(2).height = 16
+
+      // Row 3: stats
+      ws.mergeCells(3, 1, 3, colCount)
+      const st = ws.getCell('A3')
+      st.value = statsText
+      st.font  = { name: 'Calibri', size: 10, bold: true, color: { argb: 'FF333333' } }
+      st.fill  = gray50
+      ws.getRow(3).height = 16
+
+      // Row 4: empty spacer
+      ws.mergeCells(4, 1, 4, colCount)
+      ws.getRow(4).height = 6
+    }
+
+    const applyFooter = (ws, colCount, dataRowCount) => {
+      const footerRow = 7 + dataRowCount
+      ws.mergeCells(footerRow, 1, footerRow, colCount)
+      const f = ws.getCell(`A${footerRow}`)
+      f.value = `PCG Group · Commercial Team · ${monthYear} · Confidential`
+      f.font  = { name: 'Calibri', size: 9, italic: true, color: { argb: 'FF888888' } }
+      f.alignment = { horizontal: 'center' }
+      ws.getRow(footerRow).height = 18
+    }
+
+    // ── Build data rows from sorted ──
+    const dataRows = sorted.map(({ partida, project, client, latest }) => ({
+      project:  project?.name  || '',
+      client:   client?.name   || '',
+      itemType: partida.name   || '',
+      pcgId:    buildPcgId(client?.name, project?.name, partida.name, partida.provider),
+      supplier: partida.provider || '',
+      status:   statusLabel(latest?.status),
+      priority: priorityLabel(Number(partida.priority) || 15),
+      action:   actionRequired(latest?.status, latest?.nextAction),
+      comment:  latest?.comment || '',
+    }))
+
+    // ── Master Summary sheet ──
+    const masterCols  = ['PROJECT', 'CLIENT', 'ITEM TYPE', 'PCG-ID', 'SUPPLIER', 'STATUS', 'PRIORITY', 'ACTION REQUIRED', 'COMMENTS']
+    const masterWidths = [28, 22, 28, 14, 20, 22, 14, 42, 40]
+    const ws0 = wb.addWorksheet('Master Summary')
+    masterWidths.forEach((w, i) => { ws0.getColumn(i + 1).width = w })
+
+    applyTitleBlock(ws0, 'PCG Group · Supplier Report', masterCols.length,
+      `Total items: ${dataRows.length}  |  Suppliers: ${[...new Set(dataRows.map(r => r.supplier).filter(Boolean))].length}  |  Month: ${monthYear}`)
+    applyHeaderRow(ws0, masterCols.length, masterCols)
+
+    dataRows.forEach((r, idx) => {
+      const row = ws0.getRow(7 + idx)
+      const vals = [r.project, r.client, r.itemType, r.pcgId, r.supplier, r.status, r.priority, r.action, r.comment]
+      vals.forEach((v, i) => {
+        const cell = row.getCell(i + 1)
+        cell.value = v
+        cell.font  = reg10
+        cell.fill  = idx % 2 === 0 ? { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFFFF' } } : gray50
+        cell.border = thinBorder
+        cell.alignment = { vertical: 'top', wrapText: i >= 7 }
+      })
+      row.height = 18
+    })
+    applyFooter(ws0, masterCols.length, dataRows.length)
+
+    // ── One sheet per supplier ──
+    const suppliers = [...new Set(dataRows.map(r => r.supplier).filter(Boolean))].sort()
+    const supplierCols  = ['PROJECT', 'CLIENT', 'ITEM TYPE', 'PCG-ID', 'STATUS', 'PRIORITY', 'ACTION REQUIRED', 'COMMENTS']
+    const supplierWidths = [28, 22, 28, 14, 22, 14, 42, 40]
+
+    for (const supplier of suppliers) {
+      const sheetName = supplier.slice(0, 31) // Excel max 31 chars
+      const ws = wb.addWorksheet(sheetName)
+      supplierWidths.forEach((w, i) => { ws.getColumn(i + 1).width = w })
+
+      const sRows = dataRows.filter(r => r.supplier === supplier)
+      applyTitleBlock(ws, supplier, supplierCols.length,
+        `Items: ${sRows.length}  |  Month: ${monthYear}`)
+      applyHeaderRow(ws, supplierCols.length, supplierCols)
+
+      sRows.forEach((r, idx) => {
+        const row = ws.getRow(7 + idx)
+        const vals = [r.project, r.client, r.itemType, r.pcgId, r.status, r.priority, r.action, r.comment]
+        vals.forEach((v, i) => {
+          const cell = row.getCell(i + 1)
+          cell.value = v
+          cell.font  = reg10
+          cell.fill  = idx % 2 === 0 ? { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFFFF' } } : gray50
+          cell.border = thinBorder
+          cell.alignment = { vertical: 'top', wrapText: i >= 6 }
+        })
+        row.height = 18
+      })
+      applyFooter(ws, supplierCols.length, sRows.length)
+    }
+
+    // ── Download ──
+    const buffer = await wb.xlsx.writeBuffer()
+    const blob   = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+    const url    = URL.createObjectURL(blob)
+    const a      = document.createElement('a')
+    a.href       = url
+    a.download   = fileName
     a.click()
     URL.revokeObjectURL(url)
   }
