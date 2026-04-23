@@ -322,7 +322,7 @@ export default function Dashboard() {
       }
     }
     return true
-  }), [rows, filterClientes, filterEstados, filterSearch, colFilters])
+  }), [rows, filterClientes, filterEstados, filterPelota, filterResponsable, filterProveedor, filterPrioridad, filterSearch, colFilters])
 
   // Sort
   const sorted = useMemo(() => {
