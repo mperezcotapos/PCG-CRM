@@ -154,24 +154,12 @@ export default function Chat() {
   const textareaRef = useRef(null)
   const recognitionRef = useRef(null)
 
-  const startRecording = async () => {
+  const startRecording = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
     if (!SpeechRecognition) {
       alert('Tu navegador no soporta reconocimiento de voz.')
       return
     }
-
-    // Si no tenemos permiso concedido esta sesión, pedirlo ahora
-    if (!micStreamRef.current) {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-        micStreamRef.current = stream // guardamos: ya no preguntará de nuevo esta sesión
-      } catch {
-        // Usuario negó — no guardamos nada, así la próxima vez que toque el botón preguntará de nuevo
-        return
-      }
-    }
-
     const recognition = new SpeechRecognition()
     recognition.lang = 'es-CL'
     recognition.interimResults = false
@@ -180,7 +168,7 @@ export default function Chat() {
 
     recognition.onstart  = () => setRecording(true)
     recognition.onend    = () => setRecording(false)
-    recognition.onerror  = () => setRecording(false)
+    recognition.onerror  = () => setRecording(false) // si niega, el botón queda disponible para volver a tocar
     recognition.onresult = (e) => {
       const transcript = e.results[0][0].transcript
       sendMessage(transcript)
