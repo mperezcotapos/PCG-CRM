@@ -494,10 +494,14 @@ export default function Dashboard() {
 
       {/* Filters — desktop inline, mobile collapsible */}
       <MobileFilters
-        filterSearch={filterSearch} setFilterSearch={setFilterSearch}
-        filterClientes={filterClientes} setFilterClientes={setFilterClientes}
-        filterEstados={filterEstados} setFilterEstados={setFilterEstados}
-        clients={clients} count={sorted.length}
+        filterSearch={filterSearch}           setFilterSearch={setFilterSearch}
+        filterClientes={filterClientes}       setFilterClientes={setFilterClientes}
+        filterEstados={filterEstados}         setFilterEstados={setFilterEstados}
+        filterPelota={filterPelota}           setFilterPelota={setFilterPelota}
+        filterResponsable={filterResponsable} setFilterResponsable={setFilterResponsable}
+        filterProveedor={filterProveedor}     setFilterProveedor={setFilterProveedor}
+        filterPrioridad={filterPrioridad}     setFilterPrioridad={setFilterPrioridad}
+        clients={clients} rows={rows} count={sorted.length}
       />
 
       {/* Mobile: card list */}
