@@ -504,8 +504,9 @@ export default function Dashboard() {
         filterPelota={filterPelota}           setFilterPelota={setFilterPelota}
         filterResponsable={filterResponsable} setFilterResponsable={setFilterResponsable}
         filterProveedor={filterProveedor}     setFilterProveedor={setFilterProveedor}
+        filterProyectos={filterProyectos}     setFilterProyectos={setFilterProyectos}
         filterPrioridad={filterPrioridad}     setFilterPrioridad={setFilterPrioridad}
-        clients={clients} rows={rows} count={sorted.length}
+        clients={clients} projects={projects} rows={rows} count={sorted.length}
       />
 
       {/* Mobile: card list */}
