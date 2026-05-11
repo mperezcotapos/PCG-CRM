@@ -331,6 +331,7 @@ export default function Dashboard() {
   const [filterSearch,      setFilterSearch]       = useState('')
 
   // Financial summary
+  const [finView,           setFinView]           = useState('estado')
   const [finFilterClientes, setFinFilterClientes] = useState(new Set())
   const [finFilterProyectos,setFinFilterProyectos]= useState(new Set())
   const [finFilterPartidas, setFinFilterPartidas] = useState(new Set())
@@ -929,10 +930,83 @@ export default function Dashboard() {
               </div>
             )}
 
+            {/* Fila 3: tabs de vista */}
+            <div className="flex gap-1 mt-1">
+              {[
+                { key: 'estado',   label: 'Por estado'   },
+                { key: 'proyecto', label: 'Por proyecto' },
+                { key: 'partidas', label: 'Por partidas' },
+              ].map(tab => (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => setFinView(tab.key)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-t transition-colors ${
+                    finView === tab.key
+                      ? 'bg-white text-navy-700 border border-b-white border-gray-200 -mb-px relative z-10'
+                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Vista: proyectos con sus partidas */}
-          <div>
+          {/* Vista: Por estado */}
+          {finView === 'estado' && (
+            <div className="divide-y divide-gray-50">
+              {ESTADOS
+                .filter(e => financialStats.byEstado[e.value]?.venta > 0)
+                .map(e => {
+                  const d = financialStats.byEstado[e.value]
+                  const utilPct = d.venta > 0 ? (d.util / d.venta * 100).toFixed(1) + '%' : ''
+                  return (
+                    <div key={e.value} className="px-4 py-2 flex items-center gap-3 hover:bg-gray-50/60 transition-colors">
+                      <span className={`badge text-xs flex-shrink-0 ${e.color}`}>{e.label}</span>
+                      <span className="text-xs text-gray-400">{d.count} partida{d.count !== 1 ? 's' : ''}</span>
+                      <span className="ml-auto font-semibold text-gray-900 tabular-nums text-sm">
+                        {d.venta.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                      </span>
+                      <span className="text-xs text-green-700 font-medium tabular-nums w-36 text-right">
+                        {d.util.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD util{utilPct ? ` · ${utilPct}` : ''}
+                      </span>
+                    </div>
+                  )
+                })
+              }
+            </div>
+          )}
+
+          {/* Vista: Por proyecto */}
+          {finView === 'proyecto' && (
+            <div className="divide-y divide-gray-50">
+              {Object.entries(financialStats.byProject)
+                .sort((a, b) => b[1].venta - a[1].venta)
+                .map(([pid, d]) => {
+                  const utilPct = d.venta > 0 ? (d.util / d.venta * 100).toFixed(1) + '%' : ''
+                  return (
+                    <div key={pid} className="px-4 py-2.5 flex items-center gap-3 hover:bg-gray-50/60 transition-colors">
+                      <div className="min-w-0 flex-1">
+                        <span className="text-sm font-medium text-gray-800 truncate block">{d.name}</span>
+                        <span className="text-xs text-gray-400">{d.count} partida{d.count !== 1 ? 's' : ''}</span>
+                      </div>
+                      <span className="font-semibold text-gray-900 tabular-nums text-sm flex-shrink-0">
+                        {d.venta.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                      </span>
+                      <span className="text-xs text-green-700 font-medium tabular-nums w-36 text-right flex-shrink-0">
+                        {d.util.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD util{utilPct ? ` · ${utilPct}` : ''}
+                      </span>
+                    </div>
+                  )
+                })
+              }
+            </div>
+          )}
+
+          {/* Vista: Partidas por proyecto */}
+          {finView === 'partidas' && (
+            <div>
               {Object.entries(financialStats.byProject)
                 .sort((a, b) => b[1].venta - a[1].venta)
                 .map(([pid, d]) => {
@@ -976,6 +1050,7 @@ export default function Dashboard() {
                 })
               }
             </div>
+          )}
         </div>
         )
       })()}
