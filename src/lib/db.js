@@ -50,6 +50,34 @@ export const updatePartida = (id, data) =>
 export const deletePartida = (id) =>
   deleteDoc(ref('partidas', id))
 
+export const batchUpdatePriorities = async (updates) => {
+  if (!updates.length) return
+  const CHUNK = 400
+  for (let i = 0; i < updates.length; i += CHUNK) {
+    const batch = writeBatch(db)
+    updates.slice(i, i + CHUNK).forEach(({ id, priority }) => {
+      batch.update(ref('partidas', id), { priority })
+    })
+    await batch.commit()
+  }
+}
+
+// Returns cascade updates when moving an existing partida's priority
+export const calcPriorityCascadeUpdates = (allPartidas, targetId, oldPriority, newPriority) => {
+  if (oldPriority === newPriority) return []
+  const updates = []
+  allPartidas.forEach(p => {
+    if (p.id === targetId) return
+    const prio = Number(p.priority) || 15
+    if (newPriority < oldPriority) {
+      if (prio >= newPriority && prio < oldPriority) updates.push({ id: p.id, priority: prio + 1 })
+    } else {
+      if (prio > oldPriority && prio <= newPriority) updates.push({ id: p.id, priority: prio - 1 })
+    }
+  })
+  return updates
+}
+
 // ---- Activities ----
 export const subscribeActivities = (cb) =>
   onSnapshot(query(col('activities'), orderBy('date', 'desc')), snap =>

@@ -47,11 +47,11 @@ export default function App() {
   return (
     <BrowserRouter>
       <AppProvider>
-        <div className="flex min-h-dvh">
-          {/* Sidebar: solo desktop */}
+        <div className="min-h-dvh">
+          {/* Sidebar: solo desktop, fixed */}
           <Sidebar />
-          {/* Main content */}
-          <main className="flex-1 md:ml-60 p-4 md:p-6 pb-28 md:pb-6 w-full">
+          {/* Main content: block element, ml-60 da el ancho correcto = viewport - 240px */}
+          <main className="md:ml-60 p-4 md:p-6 pb-28 md:pb-6">
             <Routes>
               <Route path="/"            element={<Dashboard />} />
               <Route path="/registro"    element={<QuickEntry />} />

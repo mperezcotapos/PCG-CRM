@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useApp } from '../context/AppContext'
-import { addProject, updateProject, deleteProject, addPartida, updatePartida, deletePartida } from '../lib/db'
+import { addProject, updateProject, deleteProject, addPartida, updatePartida, deletePartida, batchUpdatePriorities } from '../lib/db'
 import Modal from '../components/Modal'
 import StatusBadge from '../components/StatusBadge'
 import { ESTADOS, CATEGORIAS, getPelota, buildPcgId } from '../lib/constants'
@@ -16,6 +16,7 @@ export default function Projects() {
   const [expandedProject, setExpandedProject] = useState(null)
   const [creatingPartida, setCreatingPartida] = useState(null)
   const [editingProject, setEditingProject] = useState(null) // project object
+  const [editingPartidaMontos, setEditingPartidaMontos] = useState(null) // partida object
   const [registeringActivity, setRegisteringActivity] = useState(null)
   const [viewingPartida, setViewingPartida] = useState(null) // { partida, project, client }
 
@@ -141,9 +142,27 @@ export default function Projects() {
                                 <p className="text-xs text-gray-500 truncate mt-0.5">{latest.comment}</p>
                               )}
                             </div>
-                            <div className="text-xs text-gray-400 whitespace-nowrap">
-                              {daysSince !== null ? `${daysSince}d sin act.` : 'Sin registro'}
+                            <div className="flex items-center gap-3 text-xs text-gray-400 whitespace-nowrap">
+                              {partida.montoVenta ? (
+                                <span className="font-medium text-gray-600">
+                                  {Number(partida.montoVenta).toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                                  {partida.utilidad ? (
+                                    <span className="text-green-600 ml-1">
+                                      · {Number(partida.utilidad).toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD util
+                                      {Number(partida.montoVenta) > 0 && ` (${(Number(partida.utilidad) / Number(partida.montoVenta) * 100).toFixed(1)}%)`}
+                                    </span>
+                                  ) : null}
+                                </span>
+                              ) : null}
+                              <span>{daysSince !== null ? `${daysSince}d sin act.` : 'Sin registro'}</span>
                             </div>
+                            <button
+                              className="btn-ghost text-xs whitespace-nowrap"
+                              onClick={() => setEditingPartidaMontos(partida)}
+                              title="Editar monto de venta y utilidad"
+                            >
+                              💰 Montos
+                            </button>
                             <button
                               className="btn-ghost text-xs whitespace-nowrap"
                               onClick={() => setViewingPartida({ partida, project: proj, client })}
@@ -206,7 +225,14 @@ export default function Projects() {
         <Modal title="Nueva partida" onClose={() => setCreatingPartida(null)}>
           <PartidaForm
             projectId={creatingPartida}
-            onSave={async (data) => { await addPartida(data); setCreatingPartida(null) }}
+            onSave={async (data) => {
+              const priority = Number(data.priority) || 15
+              const cascades = partidas
+                .filter(p => (Number(p.priority) || 15) >= priority)
+                .map(p => ({ id: p.id, priority: (Number(p.priority) || 15) + 1 }))
+              await Promise.all([addPartida(data), batchUpdatePriorities(cascades)])
+              setCreatingPartida(null)
+            }}
             onCancel={() => setCreatingPartida(null)}
           />
         </Modal>
@@ -225,6 +251,16 @@ export default function Projects() {
             client={registeringActivity.client}
             onSave={() => setRegisteringActivity(null)}
             onCancel={() => setRegisteringActivity(null)}
+          />
+        </Modal>
+      )}
+
+      {/* Edit partida montos modal */}
+      {editingPartidaMontos && (
+        <Modal title={`Monto y utilidad · ${editingPartidaMontos.name}`} onClose={() => setEditingPartidaMontos(null)}>
+          <EditPartidaMontosForm
+            partida={editingPartidaMontos}
+            onClose={() => setEditingPartidaMontos(null)}
           />
         </Modal>
       )}
@@ -294,7 +330,7 @@ function PartidaForm({ projectId, onSave, onCancel }) {
   const project  = projects.find(p => p.id === projectId)
   const client   = clients.find(c => c.id === project?.clientId)
 
-  const [form, setForm]   = useState({ projectId, name: '', category: '', provider: '', priority: 15 })
+  const [form, setForm]   = useState({ projectId, name: '', category: '', provider: '', priority: 15, montoVenta: '', utilidad: '' })
   const [saving, setSaving] = useState(false)
   const [idError, setIdError] = useState('')
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
@@ -310,7 +346,12 @@ function PartidaForm({ projectId, onSave, onCancel }) {
       return
     }
     setSaving(true)
-    try { await onSave({ ...form, pcgId }) } finally { setSaving(false) }
+    const payload = { ...form, pcgId }
+    if (payload.montoVenta !== '') payload.montoVenta = parseFloat(payload.montoVenta)
+    else delete payload.montoVenta
+    if (payload.utilidad !== '') payload.utilidad = parseFloat(payload.utilidad)
+    else delete payload.utilidad
+    try { await onSave(payload) } finally { setSaving(false) }
   }
 
   return (
@@ -332,10 +373,27 @@ function PartidaForm({ projectId, onSave, onCancel }) {
           </select>
         </div>
         <div>
-          <label className="label">Prioridad (1 urgente · 30 baja)</label>
-          <input type="number" className="input" min="1" max="30" step="1"
+          <label className="label">Prioridad (1 = más urgente)</label>
+          <input type="number" className="input" min="1" step="1"
             value={form.priority}
-            onChange={e => set('priority', Math.min(30, Math.max(1, Number(e.target.value) || 15)))} />
+            onChange={e => set('priority', Math.max(1, Number(e.target.value) || 15))} />
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="label">Monto de venta (USD)</label>
+          <input type="number" className="input" min="0" step="0.01" placeholder="0.00"
+            value={form.montoVenta} onChange={e => set('montoVenta', e.target.value)} />
+        </div>
+        <div>
+          <label className="label">Utilidad (USD)</label>
+          <input type="number" className="input" min="0" step="0.01" placeholder="0.00"
+            value={form.utilidad} onChange={e => set('utilidad', e.target.value)} />
+          {form.montoVenta && form.utilidad && parseFloat(form.montoVenta) > 0 && (
+            <p className="text-xs text-green-700 mt-1">
+              = {(parseFloat(form.utilidad) / parseFloat(form.montoVenta) * 100).toFixed(1)}% sobre la venta
+            </p>
+          )}
         </div>
       </div>
       <div className="bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-600">
@@ -435,5 +493,64 @@ function PartidaHistory({ partida, project, client, onNewRecord }) {
         </div>
       )}
     </div>
+  )
+}
+
+// ── Editar monto de venta y utilidad de una partida ───────────────
+function EditPartidaMontosForm({ partida, onClose }) {
+  const [montoVenta, setMontoVenta] = useState(partida.montoVenta != null ? String(partida.montoVenta) : '')
+  const [utilidad,   setUtilidad]   = useState(partida.utilidad   != null ? String(partida.utilidad)   : '')
+  const [saving,     setSaving]     = useState(false)
+
+  const mv = parseFloat(montoVenta) || 0
+  const ut = parseFloat(utilidad)   || 0
+  const utilPct = mv > 0 && ut > 0 ? (ut / mv * 100).toFixed(1) : null
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setSaving(true)
+    try {
+      await updatePartida(partida.id, {
+        montoVenta: montoVenta !== '' ? parseFloat(montoVenta) : null,
+        utilidad:   utilidad   !== '' ? parseFloat(utilidad)   : null,
+      })
+      onClose()
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="label">Monto de venta (USD)</label>
+          <input
+            type="number" className="input" min="0" step="0.01" placeholder="0.00"
+            value={montoVenta} onChange={e => setMontoVenta(e.target.value)}
+            autoFocus
+          />
+        </div>
+        <div>
+          <label className="label">Utilidad (USD)</label>
+          <input
+            type="number" className="input" min="0" step="0.01" placeholder="0.00"
+            value={utilidad} onChange={e => setUtilidad(e.target.value)}
+          />
+        </div>
+      </div>
+      {ut > 0 && (
+        <div className="bg-green-50 border border-green-100 rounded-lg px-4 py-3 text-sm text-green-800">
+          💰 Utilidad: <span className="font-bold">USD {ut.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</span>
+          {utilPct && <span className="text-green-600 ml-2">· {utilPct}% sobre la venta</span>}
+        </div>
+      )}
+      <div className="flex gap-2 justify-end pt-2">
+        <button type="button" className="btn-secondary" onClick={onClose}>Cancelar</button>
+        <button type="submit" className="btn-primary" disabled={saving}>
+          {saving ? 'Guardando…' : 'Guardar'}
+        </button>
+      </div>
+    </form>
   )
 }
