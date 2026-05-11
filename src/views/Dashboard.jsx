@@ -850,48 +850,48 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Resumen financiero — drill-down: estado → proyecto → partidas */}
+      {/* Resumen financiero con selector de vista */}
       {financialStats.totalVenta > 0 && (
         <div className="card overflow-hidden">
-          {/* Header clicable — cicla entre vistas */}
-          <button
-            type="button"
-            onClick={() => setFinView(v => v === 'estado' ? 'proyecto' : v === 'proyecto' ? 'partidas' : 'estado')}
-            className="w-full px-4 py-2.5 border-b border-gray-100 flex items-center justify-between bg-gray-50/60 hover:bg-gray-100/60 transition-colors group text-left"
-          >
-            <div className="flex items-center gap-2 min-w-0">
-              <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide whitespace-nowrap">
-                Resumen financiero
-              </span>
-              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                finView === 'estado'   ? 'bg-gray-200 text-gray-600' :
-                finView === 'proyecto' ? 'bg-blue-100 text-blue-700'  :
-                                         'bg-indigo-100 text-indigo-700'
-              }`}>
-                {finView === 'estado' ? 'Por estado' : finView === 'proyecto' ? 'Por proyecto' : 'Por partidas'}
-              </span>
-              <span className="text-xs text-gray-400 group-hover:text-gray-500 hidden sm:inline">
-                {finView === 'estado' ? '↓ clic → por proyecto' : finView === 'proyecto' ? '↓ clic → por partidas' : '↺ clic → por estado'}
-              </span>
-            </div>
-            <div className="flex items-center gap-3 text-xs text-gray-500 flex-shrink-0 ml-3">
-              <span className="hidden sm:inline">
-                Pipeline: <span className="font-bold text-gray-800">
+          {/* Header con totales + tabs de vista */}
+          <div className="px-4 pt-3 pb-0 bg-gray-50/60 border-b border-gray-100">
+            {/* Totales */}
+            <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+              <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Resumen financiero</span>
+              <div className="flex items-center gap-4 text-xs text-gray-500">
+                <span>Pipeline: <span className="font-bold text-gray-800">
                   {financialStats.totalVenta.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
-                </span>
-              </span>
-              <span className="hidden sm:inline">
-                Util: <span className="font-bold text-green-700">
+                </span></span>
+                <span>Utilidad: <span className="font-bold text-green-700">
                   {financialStats.totalUtil.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
-                </span>
-              </span>
-              {financialStats.totalVenta > 0 && (
+                </span></span>
                 <span className="font-bold text-emerald-700">
                   {(financialStats.totalUtil / financialStats.totalVenta * 100).toFixed(1)}%
                 </span>
-              )}
+              </div>
             </div>
-          </button>
+            {/* Tabs */}
+            <div className="flex gap-1">
+              {[
+                { key: 'estado',   label: 'Por estado'   },
+                { key: 'proyecto', label: 'Por proyecto' },
+                { key: 'partidas', label: 'Por partidas' },
+              ].map(tab => (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => setFinView(tab.key)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-t transition-colors ${
+                    finView === tab.key
+                      ? 'bg-white text-navy-700 border border-b-white border-gray-200 -mb-px relative z-10'
+                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* Vista: Por estado */}
           {finView === 'estado' && (
