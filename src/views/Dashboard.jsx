@@ -330,8 +330,13 @@ export default function Dashboard() {
   const [filterPrioridad,   setFilterPrioridad]    = useState('')
   const [filterSearch,      setFilterSearch]       = useState('')
 
-  // Financial summary drill-down: 'estado' → 'proyecto' → 'partidas'
-  const [finView, setFinView] = useState('estado')
+  // Financial summary
+  const [finView,           setFinView]           = useState('estado')
+  const [finFilterClientes, setFinFilterClientes] = useState(new Set())
+  const [finFilterProyectos,setFinFilterProyectos]= useState(new Set())
+  const [finFilterPartidas, setFinFilterPartidas] = useState(new Set())
+  const [finFilterEstados,  setFinFilterEstados]  = useState(new Set())
+  const [showFinFilters,    setShowFinFilters]    = useState(false)
 
   // Modals
   const [selectedRow, setSelectedRow] = useState(null)
@@ -389,21 +394,26 @@ export default function Dashboard() {
     return true
   }), [rows, filterClientes, filterProyectos, filterPartidas, filterEstados, filterPelota, filterResponsable, filterProveedor, filterPrioridad, filterSearch])
 
-  // Financial breakdown (responds to active filters)
+  // Financial breakdown — filtros propios independientes de la tabla
   const financialStats = useMemo(() => {
+    const finFiltered = rows.filter(r => {
+      if (finFilterClientes.size  && !finFilterClientes.has(r.client?.id))         return false
+      if (finFilterProyectos.size && !finFilterProyectos.has(r.project?.id))       return false
+      if (finFilterPartidas.size  && !finFilterPartidas.has(r.partida.id))         return false
+      if (finFilterEstados.size   && !finFilterEstados.has(r.latest?.status || '')) return false
+      return true
+    })
     const byEstado  = {}
     const byProject = {}
-    filtered.forEach(r => {
+    finFiltered.forEach(r => {
       const mv = Number(r.partida.montoVenta) || 0
       const ut = Number(r.partida.utilidad)   || 0
       if (!mv) return
-      // by estado
       const st = r.latest?.status || ''
       if (!byEstado[st]) byEstado[st] = { count: 0, venta: 0, util: 0 }
       byEstado[st].count++
       byEstado[st].venta += mv
       byEstado[st].util  += ut
-      // by project
       const pid = r.project?.id || '__sin_proyecto'
       if (!byProject[pid]) byProject[pid] = { name: r.project?.name || '(sin proyecto)', count: 0, venta: 0, util: 0, rows: [] }
       byProject[pid].count++
@@ -414,7 +424,7 @@ export default function Dashboard() {
     const totalVenta = Object.values(byEstado).reduce((s, d) => s + d.venta, 0)
     const totalUtil  = Object.values(byEstado).reduce((s, d) => s + d.util, 0)
     return { byEstado, byProject, totalVenta, totalUtil }
-  }, [filtered])
+  }, [rows, finFilterClientes, finFilterProyectos, finFilterPartidas, finFilterEstados])
 
   // Sort
   const sorted = useMemo(() => {
@@ -850,28 +860,78 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Resumen financiero con selector de vista */}
-      {financialStats.totalVenta > 0 && (
+      {/* Resumen financiero con selector de vista y filtros propios */}
+      {(() => {
+        const finClientOptions  = clients.map(c => ({ value: c.id, label: c.name }))
+        const finProyectOptions = projects
+          .filter(p => !finFilterClientes.size || finFilterClientes.has(p.clientId))
+          .map(p => ({ value: p.id, label: p.name }))
+        const finPartidaOptions = [...new Map(
+          rows
+            .filter(r => !finFilterProyectos.size || finFilterProyectos.has(r.project?.id))
+            .map(r => [r.partida.id, r.partida.name])
+        ).entries()]
+          .sort((a, b) => a[1].localeCompare(b[1], 'es'))
+          .map(([id, name]) => ({ value: id, label: name }))
+        const finEstadoOptions  = ESTADOS.map(e => ({ value: e.value, label: e.label }))
+        const hasFinFilters = finFilterClientes.size || finFilterProyectos.size || finFilterPartidas.size || finFilterEstados.size
+        const clearFinFilters = () => {
+          setFinFilterClientes(new Set()); setFinFilterProyectos(new Set())
+          setFinFilterPartidas(new Set()); setFinFilterEstados(new Set())
+        }
+        return (
         <div className="card overflow-hidden">
-          {/* Header con totales + tabs de vista */}
+          {/* Header con totales + botón filtros + tabs */}
           <div className="px-4 pt-3 pb-0 bg-gray-50/60 border-b border-gray-100">
-            {/* Totales */}
-            <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-              <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Resumen financiero</span>
+            {/* Fila 1: título + totales + botón filtros */}
+            <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Resumen financiero</span>
+                <button
+                  type="button"
+                  onClick={() => setShowFinFilters(v => !v)}
+                  className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border transition-colors ${
+                    hasFinFilters
+                      ? 'bg-navy-50 border-navy-300 text-navy-700 font-medium'
+                      : 'border-gray-200 text-gray-400 hover:text-gray-600 hover:border-gray-300'
+                  }`}
+                >
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h18M6 8h12M9 12h6" />
+                  </svg>
+                  {hasFinFilters ? `${[...finFilterClientes,...finFilterProyectos,...finFilterPartidas,...finFilterEstados].length} filtros` : 'Filtrar'}
+                </button>
+                {hasFinFilters && (
+                  <button type="button" onClick={clearFinFilters} className="text-xs text-gray-400 hover:text-red-500 transition-colors">✕ limpiar</button>
+                )}
+              </div>
               <div className="flex items-center gap-4 text-xs text-gray-500">
                 <span>Pipeline: <span className="font-bold text-gray-800">
                   {financialStats.totalVenta.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
                 </span></span>
-                <span>Utilidad: <span className="font-bold text-green-700">
+                <span className="hidden sm:inline">Utilidad: <span className="font-bold text-green-700">
                   {financialStats.totalUtil.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
                 </span></span>
-                <span className="font-bold text-emerald-700">
-                  {(financialStats.totalUtil / financialStats.totalVenta * 100).toFixed(1)}%
-                </span>
+                {financialStats.totalVenta > 0 && (
+                  <span className="font-bold text-emerald-700">
+                    {(financialStats.totalUtil / financialStats.totalVenta * 100).toFixed(1)}%
+                  </span>
+                )}
               </div>
             </div>
-            {/* Tabs */}
-            <div className="flex gap-1">
+
+            {/* Fila 2: filtros desplegables */}
+            {showFinFilters && (
+              <div className="flex flex-wrap gap-2 pb-2 pt-1 border-t border-gray-100">
+                <MultiSelect placeholder="Clientes"  options={finClientOptions}  values={finFilterClientes}  onChange={setFinFilterClientes} />
+                <MultiSelect placeholder="Proyectos" options={finProyectOptions} values={finFilterProyectos} onChange={setFinFilterProyectos} />
+                <MultiSelect placeholder="Partidas"  options={finPartidaOptions} values={finFilterPartidas}  onChange={setFinFilterPartidas} />
+                <MultiSelect placeholder="Estados"   options={finEstadoOptions}  values={finFilterEstados}   onChange={setFinFilterEstados} />
+              </div>
+            )}
+
+            {/* Fila 3: tabs de vista */}
+            <div className="flex gap-1 mt-1">
               {[
                 { key: 'estado',   label: 'Por estado'   },
                 { key: 'proyecto', label: 'Por proyecto' },
@@ -992,7 +1052,8 @@ export default function Dashboard() {
             </div>
           )}
         </div>
-      )}
+        )
+      })()}
 
       {/* Filters — desktop inline, mobile collapsible */}
       <MobileFilters
