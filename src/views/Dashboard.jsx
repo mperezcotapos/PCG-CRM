@@ -7,7 +7,7 @@ import ActivityForm from '../components/ActivityForm'
 import { EditActivityForm } from './History'
 import { differenceInDays, format, parseISO, isAfter, startOfToday } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { updatePartida, updateProject, updateActivity, deletePartida, deleteActivity } from '../lib/db'
+import { updatePartida, updateProject, updateActivity, deletePartida, deleteActivity, batchUpdatePriorities, calcPriorityCascadeUpdates } from '../lib/db'
 
 // ── Column definitions ────────────────────────────────────────────
 const COL_DEFS = [
@@ -23,8 +23,28 @@ const COL_DEFS = [
   { key: 'comentario',   label: 'Último comentario' },
   { key: 'proxima',      label: 'Próxima acción'    },
   { key: 'sinAct',       label: 'Sin act.'          },
+  { key: 'montoVenta',   label: 'Monto venta (USD)'  },
+  { key: 'utilidad',     label: 'Utilidad (USD)'    },
 ]
-const DEFAULT_VISIBLE = new Set(['cliente','proyecto','partida','estado','pelota','responsable','proveedor','prioridad','comentario','proxima','sinAct'])
+
+// px widths for table-fixed
+const COL_WIDTHS = {
+  cliente:     75,
+  proyecto:    85,
+  partida:     75,
+  estado:      120,
+  pelota:      65,
+  responsable: 70,
+  proveedor:   70,
+  prioridad:   50,
+  pcgId:       80,
+  comentario:  150,
+  proxima:     125,
+  sinAct:      48,
+  montoVenta:  100,
+  utilidad:    80,
+}
+const DEFAULT_VISIBLE = new Set(['cliente','proyecto','partida','estado','pelota','responsable','proveedor','prioridad','comentario','proxima','sinAct','montoVenta','utilidad'])
 const LS_ORDER = 'crm_col_order_v4'
 const LS_VIS   = 'crm_col_vis_v4'
 
@@ -49,6 +69,8 @@ function sortVal(colKey, row) {
     case 'comentario': return (latest?.comment || '').toLowerCase()
     case 'proxima':    return latest?.nextActionDate || 'zzzz'
     case 'sinAct':     return daysSince ?? 9999
+    case 'montoVenta': return Number(partida.montoVenta) || 0
+    case 'utilidad':   return Number(partida.utilidad)   || 0
     default:           return ''
   }
 }
@@ -94,6 +116,7 @@ function SortIcon({ active, dir }) {
 
 // ── Inline priority editor ────────────────────────────────────────
 function PriorityCell({ partida }) {
+  const { partidas } = useApp()
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(String(Number(partida.priority) || 15))
   const inputRef = useRef(null)
@@ -113,9 +136,14 @@ function PriorityCell({ partida }) {
   }
 
   const commit = async () => {
-    const val = Math.min(30, Math.max(1, Number(draft) || n))
+    const val = Math.max(1, Number(draft) || n)
     setEditing(false)
-    if (val !== n) await updatePartida(partida.id, { priority: val })
+    if (val === n) return
+    const cascades = calcPriorityCascadeUpdates(partidas, partida.id, n, val)
+    await Promise.all([
+      updatePartida(partida.id, { priority: val }),
+      batchUpdatePriorities(cascades),
+    ])
   }
 
   const onKeyDown = (e) => {
@@ -128,7 +156,7 @@ function PriorityCell({ partida }) {
       <input
         ref={inputRef}
         type="number"
-        min="1" max="30" step="1"
+        min="1" step="1"
         value={draft}
         onChange={e => setDraft(e.target.value)}
         onBlur={commit}
@@ -155,31 +183,31 @@ function Cell({ colKey, row }) {
   const pelota = getPelota(latest?.pelota)
   switch (colKey) {
     case 'cliente':
-      return <span className="font-medium text-gray-900 whitespace-nowrap">{client?.name || '—'}</span>
+      return <div className="truncate font-medium text-gray-900">{client?.name || '—'}</div>
     case 'proyecto':
-      return <span className="text-gray-600 whitespace-nowrap">{project?.name || '—'}</span>
+      return <div className="truncate text-gray-600">{project?.name || '—'}</div>
     case 'partida':
-      return <span className="font-medium text-gray-800">{partida.name}</span>
+      return <div className="truncate font-medium text-gray-800">{partida.name}</div>
     case 'estado':
-      return <StatusBadge value={latest?.status || 'cotizando'} />
+      return <div className="overflow-hidden"><StatusBadge value={latest?.status || 'cotizando'} /></div>
     case 'pelota':
       return latest?.pelota && latest.pelota !== '-'
         ? <span className={`badge ${pelota.color}`}>{pelota.label}</span>
         : <span className="text-gray-300 text-xs">—</span>
     case 'responsable':
-      return <span className="text-gray-600 whitespace-nowrap text-sm">{latest?.responsible || '—'}</span>
+      return <div className="truncate text-gray-600 text-sm">{latest?.responsible || '—'}</div>
     case 'proveedor':
-      return <span className="text-gray-600 whitespace-nowrap text-xs">{partida.provider || '—'}</span>
+      return <div className="truncate text-gray-600 text-xs">{partida.provider || '—'}</div>
     case 'prioridad':
       return <PriorityCell partida={partida} />
     case 'pcgId':
-      return <span className="text-xs text-gray-400 font-mono">{buildPcgId(client?.name, project?.name, partida.name, partida.provider)}</span>
+      return <div className="truncate text-xs text-gray-400 font-mono">{buildPcgId(client?.name, project?.name, partida.name, partida.provider)}</div>
     case 'comentario':
       return (
-        <div className="max-w-xs">
+        <div className="overflow-hidden">
           <p className="truncate text-gray-700">{latest?.comment || '—'}</p>
           {latest?.date && (
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="text-xs text-gray-400 mt-0.5 truncate">
               {format(parseISO(latest.date), 'd MMM yyyy', { locale: es })}
               {latest.responsible && ` · ${latest.responsible}`}
             </p>
@@ -188,13 +216,29 @@ function Cell({ colKey, row }) {
       )
     case 'proxima':
       return (
-        <div className="max-w-xs">
+        <div className="overflow-hidden">
           {latest?.nextAction && <p className="text-xs text-gray-600 truncate mb-0.5">{latest.nextAction}</p>}
           <NextActionChip date={latest?.nextActionDate} />
         </div>
       )
     case 'sinAct':
       return <DaysChip days={daysSince} />
+    case 'montoVenta':
+      return partida.montoVenta
+        ? <div className="text-right font-medium text-gray-800 tabular-nums">{Number(partida.montoVenta).toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 2 })} USD</div>
+        : <span className="text-gray-300 text-xs">—</span>
+    case 'utilidad': {
+      const ut = Number(partida.utilidad)
+      const mv = Number(partida.montoVenta)
+      if (!ut) return <span className="text-gray-300 text-xs">—</span>
+      const pct = mv > 0 ? (ut / mv * 100).toFixed(1) + '%' : ''
+      return (
+        <div className="text-right tabular-nums">
+          <span className="font-medium text-green-700">{ut.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD</span>
+          {pct && <span className="text-xs text-gray-400 ml-1">· {pct}</span>}
+        </div>
+      )
+    }
     default:
       return null
   }
@@ -271,18 +315,6 @@ function ColPicker({ colOrder, visibleCols, onToggle, onReset, onClose }) {
   )
 }
 
-// ── Per-column filter input ───────────────────────────────────────
-function ColFilterInput({ colKey, value, onChange, options }) {
-  if (!options || options.length === 0) return null
-  const cls = 'w-full text-xs rounded border border-gray-200 bg-gray-50 px-1.5 py-1 focus:outline-none focus:border-navy-400 focus:bg-white transition-colors'
-  return (
-    <select className={cls} value={value} onChange={e => onChange(e.target.value)}>
-      <option value="">—</option>
-      {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-    </select>
-  )
-}
-
 // ── Dashboard ─────────────────────────────────────────────────────
 export default function Dashboard() {
   const { getDashboardRows, clients, projects, loading } = useApp()
@@ -294,14 +326,12 @@ export default function Dashboard() {
   const [filterResponsable, setFilterResponsable]  = useState(new Set())
   const [filterProveedor,   setFilterProveedor]    = useState(new Set())
   const [filterProyectos,   setFilterProyectos]    = useState(new Set())
+  const [filterPartidas,    setFilterPartidas]     = useState(new Set())
   const [filterPrioridad,   setFilterPrioridad]    = useState('')
   const [filterSearch,      setFilterSearch]       = useState('')
 
-  // Per-column filters (desktop filter row)
-  const [colFilters, setColFilters] = useState({})
-  const setColFilter = (key, val) => setColFilters(f => ({ ...f, [key]: val }))
-  const hasColFilters = Object.values(colFilters).some(v => v)
-  const clearColFilters = () => setColFilters({})
+  // Financial summary drill-down: 'estado' → 'proyecto' → 'partidas'
+  const [finView, setFinView] = useState('estado')
 
   // Modals
   const [selectedRow, setSelectedRow] = useState(null)
@@ -344,6 +374,7 @@ export default function Dashboard() {
     // global bar
     if (filterClientes.size    && !filterClientes.has(client?.id))                      return false
     if (filterProyectos.size   && !filterProyectos.has(project?.id))                   return false
+    if (filterPartidas.size    && !filterPartidas.has(partida.id))                     return false
     if (filterEstados.size     && !filterEstados.has(latest?.status))                   return false
     if (filterPelota.size      && !filterPelota.has(latest?.pelota || '-'))             return false
     if (filterResponsable.size && !filterResponsable.has(latest?.responsible || ''))   return false
@@ -355,24 +386,35 @@ export default function Dashboard() {
         .join(' ').toLowerCase()
       if (!hay.includes(q)) return false
     }
-    // per-column filters (all dropdowns → exact match)
-    for (const [key, val] of Object.entries(colFilters)) {
-      if (!val) continue
-      switch (key) {
-        case 'cliente':     if ((client?.name        || '') !== val) return false; break
-        case 'proyecto':    if ((project?.name       || '') !== val) return false; break
-        case 'partida':     if ((partida.name        || '') !== val) return false; break
-        case 'estado':      if ((latest?.status      || '') !== val) return false; break
-        case 'pelota':      if ((latest?.pelota      || '') !== val) return false; break
-        case 'responsable': if ((latest?.responsible || '') !== val) return false; break
-        case 'proveedor':   if ((partida.provider    || '') !== val) return false; break
-        case 'prioridad':   if ((partida.priority    || '') !== val) return false; break
-        case 'pcgId':       if (buildPcgId(client?.name, project?.name, partida.name, partida.provider) !== val) return false; break
-        default: break
-      }
-    }
     return true
-  }), [rows, filterClientes, filterProyectos, filterEstados, filterPelota, filterResponsable, filterProveedor, filterPrioridad, filterSearch, colFilters])
+  }), [rows, filterClientes, filterProyectos, filterPartidas, filterEstados, filterPelota, filterResponsable, filterProveedor, filterPrioridad, filterSearch])
+
+  // Financial breakdown (responds to active filters)
+  const financialStats = useMemo(() => {
+    const byEstado  = {}
+    const byProject = {}
+    filtered.forEach(r => {
+      const mv = Number(r.partida.montoVenta) || 0
+      const ut = Number(r.partida.utilidad)   || 0
+      if (!mv) return
+      // by estado
+      const st = r.latest?.status || ''
+      if (!byEstado[st]) byEstado[st] = { count: 0, venta: 0, util: 0 }
+      byEstado[st].count++
+      byEstado[st].venta += mv
+      byEstado[st].util  += ut
+      // by project
+      const pid = r.project?.id || '__sin_proyecto'
+      if (!byProject[pid]) byProject[pid] = { name: r.project?.name || '(sin proyecto)', count: 0, venta: 0, util: 0, rows: [] }
+      byProject[pid].count++
+      byProject[pid].venta += mv
+      byProject[pid].util  += ut
+      byProject[pid].rows.push(r)
+    })
+    const totalVenta = Object.values(byEstado).reduce((s, d) => s + d.venta, 0)
+    const totalUtil  = Object.values(byEstado).reduce((s, d) => s + d.util, 0)
+    return { byEstado, byProject, totalVenta, totalUtil }
+  }, [filtered])
 
   // Sort
   const sorted = useMemo(() => {
@@ -387,23 +429,6 @@ export default function Dashboard() {
     })
   }, [filtered, sortKey, sortDir])
 
-  // Per-column dropdown options (built from all rows)
-  const colOptions = useMemo(() => {
-    const uniq = (arr) => [...new Set(arr.filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'))
-    const opts = (arr) => uniq(arr).map(v => ({ value: v, label: v }))
-    return {
-      cliente:     opts(rows.map(r => r.client?.name)),
-      proyecto:    opts(rows.map(r => r.project?.name)),
-      partida:     opts(rows.map(r => r.partida?.name)),
-      estado:      ESTADOS.map(e => ({ value: e.value, label: e.label })),
-      pelota:      PELOTA.filter(p => p.value !== '-').map(p => ({ value: p.value, label: p.label })),
-      responsable: opts(rows.map(r => r.latest?.responsible)),
-      proveedor:   opts(rows.map(r => r.partida?.provider)),
-      prioridad:   [], // filtro numérico no aplica como dropdown
-      pcgId:       opts(rows.map(r => r.partida?.pcgId)),
-    }
-  }, [rows])
-
   // Stats
   const stats = useMemo(() => {
     const total     = rows.filter(r => r.latest?.status !== 'perdido' && r.latest?.status !== 'pausado').length
@@ -411,7 +436,24 @@ export default function Dashboard() {
     const enviadas  = rows.filter(r => ['cot_enviada','negociacion'].includes(r.latest?.status)).length
     const ganadas   = rows.filter(r => r.latest?.status === 'ganado').length
     const sinUpdate = rows.filter(r => r.daysSince != null && r.daysSince > 7 && !['ganado','perdido','pausado'].includes(r.latest?.status)).length
-    return { total, cotizando, enviadas, ganadas, sinUpdate }
+
+    // Totales financieros por estado — solo partidas con monto cargado
+    const byEstado = {}
+    rows.forEach(r => {
+      const mv = Number(r.partida.montoVenta) || 0
+      if (!mv) return                          // ignorar partidas sin monto
+      const st = r.latest?.status || ''
+      if (!byEstado[st]) byEstado[st] = { count: 0, venta: 0, util: 0 }
+      byEstado[st].count++
+      byEstado[st].venta += mv
+      byEstado[st].util  += Number(r.partida.utilidad) || 0
+    })
+
+    const activeRows   = rows.filter(r => !['perdido','pausado'].includes(r.latest?.status))
+    const ventaActiva  = activeRows.reduce((s, r) => s + (Number(r.partida.montoVenta) || 0), 0)
+    const utilActiva   = activeRows.reduce((s, r) => s + (Number(r.partida.utilidad)   || 0), 0)
+
+    return { total, cotizando, enviadas, ganadas, sinUpdate, byEstado, ventaActiva, utilActiva }
   }, [rows])
 
   // Column handlers
@@ -466,11 +508,48 @@ export default function Dashboard() {
     wb.creator = 'PCG Group CRM'
     wb.created = new Date()
 
-    const monthYear = format(new Date(), 'MMMM yyyy', { locale: es })
-      .replace(/^\w/, c => c.toUpperCase())
+    const monthYear = format(new Date(), 'MMMM yyyy', { locale: es }).replace(/^\w/, c => c.toUpperCase())
     const fileName  = `PCG_Supplier_Report_${format(new Date(), 'MMMMyyyy', { locale: es }).replace(/^\w/, c => c.toUpperCase())}.xlsx`
 
-    // ── helpers ──
+    // ── Load PCG logo (graceful fallback if file not present) ────────
+    let logoImageId = null
+    try {
+      const resp = await fetch('/logo.png')
+      if (resp.ok) {
+        const buf   = await resp.arrayBuffer()
+        const bytes = new Uint8Array(buf)
+        let binary  = ''
+        for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i])
+        const b64 = btoa(binary)
+        logoImageId = wb.addImage({ base64: b64, extension: 'png' })
+      }
+    } catch { /* logo no disponible, continúa sin él */ }
+
+    // ── Section definitions ──────────────────────────────────────────
+    const SECTIONS = [
+      {
+        title:    '1. QUOTATIONS TO WORK NOW',
+        statuses: ['cotizando'],
+        color:    'FF1B3A5C',   // navy dark
+      },
+      {
+        title:    '2. QUOTED / COMMERCIAL FOLLOW-UP',
+        statuses: ['cot_recibida', 'cot_enviada', 'negociacion'],
+        color:    'FF2D5A8E',   // navy medium
+      },
+      {
+        title:    '3. FUTURE QUOTATIONS',
+        statuses: ['esp_antecedentes', 'ant_recibidos'],
+        color:    'FF4F7AAC',   // navy light
+      },
+      {
+        title:    '4. AWARDED / IN EXECUTION',
+        statuses: ['ganado'],
+        color:    'FF2D8C7A',   // teal
+      },
+    ]
+
+    // ── Helpers ──────────────────────────────────────────────────────
     const actionRequired = (status, nextAction) => {
       if (nextAction) return nextAction
       switch (status) {
@@ -486,11 +565,6 @@ export default function Dashboard() {
         default:                 return ''
       }
     }
-    const priorityLabel = (n) => {
-      if (n <= 5)  return '🔴 High'
-      if (n <= 15) return '🟡 Medium'
-      return '⬇ Low'
-    }
     const STATUS_EN = {
       esp_antecedentes: 'Awaiting Specs',
       ant_recibidos:    'Specs Received',
@@ -504,146 +578,190 @@ export default function Dashboard() {
     }
     const statusLabel = (s) => STATUS_EN[s] || s || ''
 
-    // Navy-ish fill and font helpers
-    const navy    = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1B3A5C' } }
-    const white   = { argb: 'FFFFFFFF' }
-    const bold14  = { name: 'Calibri', size: 14, bold: true, color: white }
-    const bold11  = { name: 'Calibri', size: 11, bold: true, color: white }
-    const bold10  = { name: 'Calibri', size: 10, bold: true }
-    const reg10   = { name: 'Calibri', size: 10 }
-    const gray50  = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF2F2F2' } }
+    // ── Styles ───────────────────────────────────────────────────────
+    const navy   = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1B3A5C' } }
+    const gray50 = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF2F2F2' } }
+    const white  = { argb: 'FFFFFFFF' }
+    const bold14 = { name: 'Calibri', size: 14, bold: true, color: white }
+    const reg10  = { name: 'Calibri', size: 10 }
     const thinBorder = {
       top:    { style: 'thin', color: { argb: 'FFD0D0D0' } },
       left:   { style: 'thin', color: { argb: 'FFD0D0D0' } },
       bottom: { style: 'thin', color: { argb: 'FFD0D0D0' } },
       right:  { style: 'thin', color: { argb: 'FFD0D0D0' } },
     }
-
-    const applyHeaderRow = (ws, colCount, labels) => {
-      const headerRow = ws.getRow(6)
-      labels.forEach((lbl, i) => {
-        const cell = headerRow.getCell(i + 1)
-        cell.value = lbl
-        cell.font  = bold10
-        cell.fill  = navy
-        cell.font  = { ...bold10, color: white }
-        cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true }
-        cell.border = thinBorder
-      })
-      headerRow.height = 22
+    const sectionBorder = {
+      top:    { style: 'medium', color: { argb: 'FF1B3A5C' } },
+      left:   { style: 'medium', color: { argb: 'FF1B3A5C' } },
+      bottom: { style: 'medium', color: { argb: 'FF1B3A5C' } },
+      right:  { style: 'medium', color: { argb: 'FF1B3A5C' } },
     }
 
-    const applyTitleBlock = (ws, title, colCount, statsText) => {
-      // Row 1: title
-      ws.mergeCells(1, 1, 1, colCount)
-      const t = ws.getCell('A1')
-      t.value = title
-      t.font  = bold14
-      t.fill  = navy
-      t.alignment = { vertical: 'middle', horizontal: 'left' }
-      ws.getRow(1).height = 32
-
-      // Row 2: subtitle
-      ws.mergeCells(2, 1, 2, colCount)
-      const s = ws.getCell('A2')
-      s.value = `PCG Group · Commercial Report · ${monthYear}`
-      s.font  = { name: 'Calibri', size: 10, italic: true, color: { argb: 'FF555555' } }
-      s.fill  = gray50
-      ws.getRow(2).height = 16
-
-      // Row 3: stats
-      ws.mergeCells(3, 1, 3, colCount)
-      const st = ws.getCell('A3')
-      st.value = statsText
-      st.font  = { name: 'Calibri', size: 10, bold: true, color: { argb: 'FF333333' } }
-      st.fill  = gray50
-      ws.getRow(3).height = 16
-
-      // Row 4: empty spacer
-      ws.mergeCells(4, 1, 4, colCount)
-      ws.getRow(4).height = 6
-    }
-
-    const applyFooter = (ws, colCount, dataRowCount) => {
-      const footerRow = 7 + dataRowCount
-      ws.mergeCells(footerRow, 1, footerRow, colCount)
-      const f = ws.getCell(`A${footerRow}`)
-      f.value = `PCG Group · Commercial Team · ${monthYear} · Confidential`
-      f.font  = { name: 'Calibri', size: 9, italic: true, color: { argb: 'FF888888' } }
-      f.alignment = { horizontal: 'center' }
-      ws.getRow(footerRow).height = 18
-    }
-
-    // ── Build data rows from sorted ──
-    const dataRows = sorted.map(({ partida, project, client, latest }) => ({
-      project:  project?.name  || '',
-      client:   client?.name   || '',
-      itemType: partida.name   || '',
-      pcgId:    buildPcgId(client?.name, project?.name, partida.name, partida.provider),
-      supplier: partida.provider || '',
-      status:   statusLabel(latest?.status),
-      priority: priorityLabel(Number(partida.priority) || 15),
-      action:   actionRequired(latest?.status, latest?.nextAction),
-      comment:  latest?.comment || '',
+    // ── Build enriched rows (preserve rawStatus & rawPriority for sectioning) ──
+    const allRows = sorted.map(({ partida, project, client, latest }) => ({
+      project:     project?.name     || '',
+      client:      client?.name      || '',
+      itemType:    partida.name      || '',
+      pcgId:       buildPcgId(client?.name, project?.name, partida.name, partida.provider),
+      supplier:    partida.provider  || '',
+      rawStatus:   latest?.status    || '',
+      rawPriority: Number(partida.priority) || 99,
+      status:      statusLabel(latest?.status),
+      action:      actionRequired(latest?.status, latest?.nextAction),
+      comment:     latest?.comment   || '',
     }))
 
-    // ── Master Summary sheet ──
-    const masterCols  = ['PROJECT', 'CLIENT', 'ITEM TYPE', 'PCG-ID', 'SUPPLIER', 'STATUS', 'PRIORITY', 'ACTION REQUIRED', 'COMMENTS']
-    const masterWidths = [28, 22, 28, 14, 20, 22, 14, 42, 40]
-    const ws0 = wb.addWorksheet('Master Summary')
-    masterWidths.forEach((w, i) => { ws0.getColumn(i + 1).width = w })
+    // ── Core function: write a sheet with 4 grouped sections ─────────
+    const writeSectionedSheet = (ws, sheetTitle, colWidths, colLabels, rowsPool) => {
+      const colCount     = colLabels.length
+      const priorityIdx  = colLabels.indexOf('PRIORITY')   // col where sequential # goes
+      const hasSuplCol   = colLabels.includes('SUPPLIER')
 
-    applyTitleBlock(ws0, 'PCG Group · Supplier Report', masterCols.length,
-      `Total items: ${dataRows.length}  |  Suppliers: ${[...new Set(dataRows.map(r => r.supplier).filter(Boolean))].length}  |  Month: ${monthYear}`)
-    applyHeaderRow(ws0, masterCols.length, masterCols)
+      colWidths.forEach((w, i) => { ws.getColumn(i + 1).width = w })
 
-    dataRows.forEach((r, idx) => {
-      const row = ws0.getRow(7 + idx)
-      const vals = [r.project, r.client, r.itemType, r.pcgId, r.supplier, r.status, r.priority, r.action, r.comment]
-      vals.forEach((v, i) => {
-        const cell = row.getCell(i + 1)
-        cell.value = v
-        cell.font  = reg10
-        cell.fill  = idx % 2 === 0 ? { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFFFF' } } : gray50
-        cell.border = thinBorder
-        cell.alignment = { vertical: 'top', wrapText: i >= 7 }
-      })
-      row.height = 18
-    })
-    applyFooter(ws0, masterCols.length, dataRows.length)
+      // Freeze first 6 rows so column headers stay visible on scroll
+      ws.views = [{ state: 'frozen', xSplit: 0, ySplit: 6 }]
 
-    // ── One sheet per supplier ──
-    const suppliers = [...new Set(dataRows.map(r => r.supplier).filter(Boolean))].sort()
-    const supplierCols  = ['PROJECT', 'CLIENT', 'ITEM TYPE', 'PCG-ID', 'STATUS', 'PRIORITY', 'ACTION REQUIRED', 'COMMENTS']
-    const supplierWidths = [28, 22, 28, 14, 22, 14, 42, 40]
+      // ── Row 1: main title (+ logo overlay if available) ──
+      ws.mergeCells(1, 1, 1, colCount)
+      const titleCell = ws.getCell('A1')
+      titleCell.value     = sheetTitle
+      titleCell.font      = bold14
+      titleCell.fill      = navy
+      // Indent title text to the right so logo doesn't overlap
+      titleCell.alignment = { vertical: 'middle', horizontal: 'left', indent: logoImageId !== null ? 6 : 1 }
+      ws.getRow(1).height = logoImageId !== null ? 54 : 34
 
-    for (const supplier of suppliers) {
-      const sheetName = supplier.slice(0, 31) // Excel max 31 chars
-      const ws = wb.addWorksheet(sheetName)
-      supplierWidths.forEach((w, i) => { ws.getColumn(i + 1).width = w })
-
-      const sRows = dataRows.filter(r => r.supplier === supplier)
-      applyTitleBlock(ws, supplier, supplierCols.length,
-        `Items: ${sRows.length}  |  Month: ${monthYear}`)
-      applyHeaderRow(ws, supplierCols.length, supplierCols)
-
-      sRows.forEach((r, idx) => {
-        const row = ws.getRow(7 + idx)
-        const vals = [r.project, r.client, r.itemType, r.pcgId, r.status, r.priority, r.action, r.comment]
-        vals.forEach((v, i) => {
-          const cell = row.getCell(i + 1)
-          cell.value = v
-          cell.font  = reg10
-          cell.fill  = idx % 2 === 0 ? { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFFFF' } } : gray50
-          cell.border = thinBorder
-          cell.alignment = { vertical: 'top', wrapText: i >= 6 }
+      // Logo positioned at top-left of row 1 (110×48 px)
+      if (logoImageId !== null) {
+        ws.addImage(logoImageId, {
+          tl: { col: 0, row: 0 },
+          ext: { width: 110, height: 48 },
+          editAs: 'oneCell',
         })
-        row.height = 18
+      }
+
+      // ── Row 2: subtitle ──
+      ws.mergeCells(2, 1, 2, colCount)
+      const subCell = ws.getCell('A2')
+      subCell.value = `PCG Group  ·  Commercial Report  ·  ${monthYear}`
+      subCell.font  = { name: 'Calibri', size: 10, italic: true, color: { argb: 'FF555555' } }
+      subCell.fill  = gray50
+      ws.getRow(2).height = 16
+
+      // ── Row 3: item counts ──
+      const sectionCounts = SECTIONS.map(s => {
+        const n = rowsPool.filter(r => s.statuses.includes(r.rawStatus)).length
+        return n > 0 ? `${s.title.split('.')[1].trim()}: ${n}` : null
+      }).filter(Boolean).join('   |   ')
+      ws.mergeCells(3, 1, 3, colCount)
+      const statsCell = ws.getCell('A3')
+      statsCell.value = sectionCounts || `Items: ${rowsPool.length}  |  Month: ${monthYear}`
+      statsCell.font  = { name: 'Calibri', size: 10, bold: true, color: { argb: 'FF333333' } }
+      statsCell.fill  = gray50
+      ws.getRow(3).height = 16
+
+      // ── Row 4: spacer ──
+      ws.mergeCells(4, 1, 4, colCount)
+      ws.getRow(4).height = 5
+
+      // ── Row 5: spacer ──
+      ws.mergeCells(5, 1, 5, colCount)
+      ws.getRow(5).height = 5
+
+      // ── Row 6: column headers ──
+      const headerRow = ws.getRow(6)
+      colLabels.forEach((lbl, i) => {
+        const cell      = headerRow.getCell(i + 1)
+        cell.value      = lbl
+        cell.font       = { name: 'Calibri', size: 10, bold: true, color: white }
+        cell.fill       = navy
+        cell.alignment  = { vertical: 'middle', horizontal: 'center', wrapText: true }
+        cell.border     = thinBorder
       })
-      applyFooter(ws, supplierCols.length, sRows.length)
+      headerRow.height = 22
+
+      // ── Sections start at row 7 ──
+      let curRow = 7
+
+      for (const section of SECTIONS) {
+        // Filter rows for this section, sorted by rawPriority asc
+        const sRows = rowsPool
+          .filter(r => section.statuses.includes(r.rawStatus))
+          .sort((a, b) => a.rawPriority - b.rawPriority)
+
+        if (sRows.length === 0) continue   // skip empty sections
+
+        // Section header row (full-width merge)
+        ws.mergeCells(curRow, 1, curRow, colCount)
+        const secCell   = ws.getCell(`A${curRow}`)
+        secCell.value   = `  ${section.title}   (${sRows.length} item${sRows.length !== 1 ? 's' : ''})`
+        secCell.font    = { name: 'Calibri', size: 10, bold: true, color: { argb: 'FFFFFFFF' } }
+        secCell.fill    = { type: 'pattern', pattern: 'solid', fgColor: { argb: section.color } }
+        secCell.alignment = { vertical: 'middle', horizontal: 'left' }
+        secCell.border  = sectionBorder
+        ws.getRow(curRow).height = 20
+        curRow++
+
+        // Data rows with sequential priority
+        sRows.forEach((r, idx) => {
+          const seqPriority = idx + 1
+          const vals = hasSuplCol
+            ? [r.project, r.client, r.itemType, r.pcgId, r.supplier, r.status, seqPriority, r.action, r.comment]
+            : [r.project, r.client, r.itemType, r.pcgId, r.status, seqPriority, r.action, r.comment]
+
+          const row  = ws.getRow(curRow)
+          const fill = idx % 2 === 0
+            ? { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFFFF' } }
+            : gray50
+
+          vals.forEach((v, i) => {
+            const cell      = row.getCell(i + 1)
+            cell.value      = v
+            cell.font       = i === priorityIdx
+              ? { name: 'Calibri', size: 10, bold: true }  // priority col bold
+              : reg10
+            cell.fill       = fill
+            cell.border     = thinBorder
+            cell.alignment  = i === priorityIdx
+              ? { vertical: 'middle', horizontal: 'center' }
+              : { vertical: 'top', wrapText: i >= vals.length - 2 }
+          })
+          row.height = 18
+          curRow++
+        })
+
+        // One empty row between sections
+        curRow++
+      }
+
+      // ── Footer ──
+      ws.mergeCells(curRow, 1, curRow, colCount)
+      const footerCell   = ws.getCell(`A${curRow}`)
+      footerCell.value   = `PCG Group  ·  Commercial Team  ·  ${monthYear}  ·  Confidential`
+      footerCell.font    = { name: 'Calibri', size: 9, italic: true, color: { argb: 'FF888888' } }
+      footerCell.alignment = { horizontal: 'center' }
+      ws.getRow(curRow).height = 18
     }
 
-    // ── Download ──
+    // ── Master Summary sheet ─────────────────────────────────────────
+    const masterCols   = ['PROJECT', 'CLIENT', 'ITEM TYPE', 'PCG-ID', 'SUPPLIER', 'STATUS', 'PRIORITY', 'ACTION REQUIRED', 'COMMENTS']
+    const masterWidths = [28, 22, 28, 14, 20, 22, 10, 42, 40]
+    const ws0 = wb.addWorksheet('Master Summary')
+    writeSectionedSheet(ws0, 'PCG Group · Supplier Report', masterWidths, masterCols, allRows)
+
+    // ── One sheet per supplier ───────────────────────────────────────
+    const supplierList  = [...new Set(allRows.map(r => r.supplier).filter(Boolean))].sort()
+    const supplierCols  = ['PROJECT', 'CLIENT', 'ITEM TYPE', 'PCG-ID', 'STATUS', 'PRIORITY', 'ACTION REQUIRED', 'COMMENTS']
+    const supplierWidths = [28, 22, 28, 14, 22, 10, 42, 40]
+
+    for (const supplier of supplierList) {
+      const sRows = allRows.filter(r => r.supplier === supplier)
+      const ws    = wb.addWorksheet(supplier.slice(0, 31))
+      writeSectionedSheet(ws, supplier, supplierWidths, supplierCols, sRows)
+    }
+
+    // ── Download ─────────────────────────────────────────────────────
     const buffer = await wb.xlsx.writeBuffer()
     const blob   = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
     const url    = URL.createObjectURL(blob)
@@ -666,14 +784,14 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-sm text-gray-500 mt-0.5">
             {format(new Date(), "EEEE d 'de' MMMM, yyyy", { locale: es })}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <button className="btn-secondary" onClick={exportXLSX}>
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -689,7 +807,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* KPI Cards */}
+      {/* KPI Cards — operacionales */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         {[
           { label: 'Activas',           value: stats.total,     color: 'text-gray-900',   bg: '' },
@@ -705,6 +823,177 @@ export default function Dashboard() {
         ))}
       </div>
 
+      {/* KPI Cards — financieros */}
+      {stats.ventaActiva > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="card px-4 py-3 bg-blue-50">
+            <div className="text-xs text-blue-500 uppercase tracking-wide font-semibold mb-0.5">Venta activa</div>
+            <div className="text-xl font-bold text-blue-800 tabular-nums">
+              {stats.ventaActiva.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+            </div>
+            <div className="text-xs text-blue-400 mt-0.5">pipeline total sin perdidas/pausadas</div>
+          </div>
+          <div className="card px-4 py-3 bg-green-50">
+            <div className="text-xs text-green-500 uppercase tracking-wide font-semibold mb-0.5">Utilidad activa</div>
+            <div className="text-xl font-bold text-green-800 tabular-nums">
+              {stats.utilActiva.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+            </div>
+            <div className="text-xs text-green-400 mt-0.5">sobre partidas con monto cargado</div>
+          </div>
+          <div className="card px-4 py-3 bg-emerald-50">
+            <div className="text-xs text-emerald-500 uppercase tracking-wide font-semibold mb-0.5">Margen %</div>
+            <div className="text-xl font-bold text-emerald-800 tabular-nums">
+              {stats.ventaActiva > 0 ? (stats.utilActiva / stats.ventaActiva * 100).toFixed(1) + '%' : '—'}
+            </div>
+            <div className="text-xs text-emerald-400 mt-0.5">utilidad / venta activa</div>
+          </div>
+        </div>
+      )}
+
+      {/* Resumen financiero — drill-down: estado → proyecto → partidas */}
+      {financialStats.totalVenta > 0 && (
+        <div className="card overflow-hidden">
+          {/* Header clicable — cicla entre vistas */}
+          <button
+            type="button"
+            onClick={() => setFinView(v => v === 'estado' ? 'proyecto' : v === 'proyecto' ? 'partidas' : 'estado')}
+            className="w-full px-4 py-2.5 border-b border-gray-100 flex items-center justify-between bg-gray-50/60 hover:bg-gray-100/60 transition-colors group text-left"
+          >
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide whitespace-nowrap">
+                Resumen financiero
+              </span>
+              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                finView === 'estado'   ? 'bg-gray-200 text-gray-600' :
+                finView === 'proyecto' ? 'bg-blue-100 text-blue-700'  :
+                                         'bg-indigo-100 text-indigo-700'
+              }`}>
+                {finView === 'estado' ? 'Por estado' : finView === 'proyecto' ? 'Por proyecto' : 'Por partidas'}
+              </span>
+              <span className="text-xs text-gray-400 group-hover:text-gray-500 hidden sm:inline">
+                {finView === 'estado' ? '↓ clic → por proyecto' : finView === 'proyecto' ? '↓ clic → por partidas' : '↺ clic → por estado'}
+              </span>
+            </div>
+            <div className="flex items-center gap-3 text-xs text-gray-500 flex-shrink-0 ml-3">
+              <span className="hidden sm:inline">
+                Pipeline: <span className="font-bold text-gray-800">
+                  {financialStats.totalVenta.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                </span>
+              </span>
+              <span className="hidden sm:inline">
+                Util: <span className="font-bold text-green-700">
+                  {financialStats.totalUtil.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                </span>
+              </span>
+              {financialStats.totalVenta > 0 && (
+                <span className="font-bold text-emerald-700">
+                  {(financialStats.totalUtil / financialStats.totalVenta * 100).toFixed(1)}%
+                </span>
+              )}
+            </div>
+          </button>
+
+          {/* Vista: Por estado */}
+          {finView === 'estado' && (
+            <div className="divide-y divide-gray-50">
+              {ESTADOS
+                .filter(e => financialStats.byEstado[e.value]?.venta > 0)
+                .map(e => {
+                  const d = financialStats.byEstado[e.value]
+                  const utilPct = d.venta > 0 ? (d.util / d.venta * 100).toFixed(1) + '%' : ''
+                  return (
+                    <div key={e.value} className="px-4 py-2 flex items-center gap-3 hover:bg-gray-50/60 transition-colors">
+                      <span className={`badge text-xs flex-shrink-0 ${e.color}`}>{e.label}</span>
+                      <span className="text-xs text-gray-400">{d.count} partida{d.count !== 1 ? 's' : ''}</span>
+                      <span className="ml-auto font-semibold text-gray-900 tabular-nums text-sm">
+                        {d.venta.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                      </span>
+                      <span className="text-xs text-green-700 font-medium tabular-nums w-36 text-right">
+                        {d.util.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD util{utilPct ? ` · ${utilPct}` : ''}
+                      </span>
+                    </div>
+                  )
+                })
+              }
+            </div>
+          )}
+
+          {/* Vista: Por proyecto */}
+          {finView === 'proyecto' && (
+            <div className="divide-y divide-gray-50">
+              {Object.entries(financialStats.byProject)
+                .sort((a, b) => b[1].venta - a[1].venta)
+                .map(([pid, d]) => {
+                  const utilPct = d.venta > 0 ? (d.util / d.venta * 100).toFixed(1) + '%' : ''
+                  return (
+                    <div key={pid} className="px-4 py-2.5 flex items-center gap-3 hover:bg-gray-50/60 transition-colors">
+                      <div className="min-w-0 flex-1">
+                        <span className="text-sm font-medium text-gray-800 truncate block">{d.name}</span>
+                        <span className="text-xs text-gray-400">{d.count} partida{d.count !== 1 ? 's' : ''}</span>
+                      </div>
+                      <span className="font-semibold text-gray-900 tabular-nums text-sm flex-shrink-0">
+                        {d.venta.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                      </span>
+                      <span className="text-xs text-green-700 font-medium tabular-nums w-36 text-right flex-shrink-0">
+                        {d.util.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD util{utilPct ? ` · ${utilPct}` : ''}
+                      </span>
+                    </div>
+                  )
+                })
+              }
+            </div>
+          )}
+
+          {/* Vista: Partidas por proyecto */}
+          {finView === 'partidas' && (
+            <div>
+              {Object.entries(financialStats.byProject)
+                .sort((a, b) => b[1].venta - a[1].venta)
+                .map(([pid, d]) => {
+                  const projUtil = d.venta > 0 ? (d.util / d.venta * 100).toFixed(1) + '%' : ''
+                  return (
+                    <div key={pid}>
+                      {/* Project header */}
+                      <div className="px-4 py-1.5 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+                        <span className="text-xs font-semibold text-gray-700">{d.name}</span>
+                        <span className="text-xs text-gray-500 tabular-nums">
+                          {d.venta.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                          {projUtil && <span className="text-green-600 ml-2">{projUtil}</span>}
+                        </span>
+                      </div>
+                      {/* Partidas */}
+                      {d.rows
+                        .sort((a, b) => (Number(a.partida.priority) || 99) - (Number(b.partida.priority) || 99))
+                        .map(r => {
+                          const mv = Number(r.partida.montoVenta) || 0
+                          const ut = Number(r.partida.utilidad)   || 0
+                          const pct = mv > 0 ? (ut / mv * 100).toFixed(1) + '%' : ''
+                          return (
+                            <div key={r.partida.id} className="px-4 py-2 flex items-center gap-3 border-b border-gray-50 hover:bg-gray-50/40 transition-colors">
+                              <StatusBadge value={r.latest?.status || 'cotizando'} />
+                              <span className="text-sm text-gray-700 flex-1 truncate min-w-0">{r.partida.name}</span>
+                              {r.partida.provider && (
+                                <span className="text-xs text-gray-400 hidden sm:inline truncate max-w-24">{r.partida.provider}</span>
+                              )}
+                              <span className="font-medium text-gray-800 tabular-nums text-sm flex-shrink-0">
+                                {mv.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                              </span>
+                              <span className="text-xs text-green-700 tabular-nums w-28 text-right flex-shrink-0">
+                                {ut.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD{pct ? ` · ${pct}` : ''}
+                              </span>
+                            </div>
+                          )
+                        })
+                      }
+                    </div>
+                  )
+                })
+              }
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Filters — desktop inline, mobile collapsible */}
       <MobileFilters
         filterSearch={filterSearch}           setFilterSearch={setFilterSearch}
@@ -714,6 +1003,7 @@ export default function Dashboard() {
         filterResponsable={filterResponsable} setFilterResponsable={setFilterResponsable}
         filterProveedor={filterProveedor}     setFilterProveedor={setFilterProveedor}
         filterProyectos={filterProyectos}     setFilterProyectos={setFilterProyectos}
+        filterPartidas={filterPartidas}       setFilterPartidas={setFilterPartidas}
         filterPrioridad={filterPrioridad}     setFilterPrioridad={setFilterPrioridad}
         clients={clients} projects={projects} rows={rows} count={sorted.length}
       />
@@ -734,19 +1024,8 @@ export default function Dashboard() {
 
       {/* Desktop: table */}
       <div className="hidden md:block card overflow-hidden">
-        {hasColFilters && (
-          <div className="px-4 py-2 bg-navy-50 border-b border-navy-100 flex items-center gap-2 text-xs text-navy-700">
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h18M6 8h12M9 12h6" />
-            </svg>
-            Filtros de columna activos
-            <button className="ml-auto text-navy-600 hover:underline font-medium" onClick={clearColFilters}>
-              Limpiar filtros
-            </button>
-          </div>
-        )}
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-sm table-fixed">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50/80">
                 {activeCols.map(key => {
@@ -761,7 +1040,8 @@ export default function Dashboard() {
                       onDragOver={e  => onDragOver(e, key)}
                       onDrop={e      => onDrop(e, key)}
                       onDragEnd={onDragEnd}
-                      className={`px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap select-none cursor-grab active:cursor-grabbing transition-colors ${isOver ? 'bg-navy-50 border-l-2 border-navy-400' : ''}`}
+                      style={{ width: COL_WIDTHS[key] ? `${COL_WIDTHS[key]}px` : undefined }}
+                      className={`px-2 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap select-none cursor-grab active:cursor-grabbing transition-colors ${isOver ? 'bg-navy-50 border-l-2 border-navy-400' : ''}`}
                     >
                       <button
                         className="flex items-center gap-1 hover:text-gray-800 transition-colors"
@@ -774,7 +1054,7 @@ export default function Dashboard() {
                   )
                 })}
                 {/* Column picker + actions */}
-                <th className="px-4 py-3 text-right whitespace-nowrap">
+                <th className="px-2 py-2.5 text-right whitespace-nowrap w-12">
                   <div className="relative inline-block" ref={pickerRef}>
                     <button
                       className="btn-ghost px-2 py-1 text-xs flex items-center gap-1"
@@ -799,20 +1079,6 @@ export default function Dashboard() {
                   </div>
                 </th>
               </tr>
-              {/* Per-column filter row */}
-              <tr className="border-b border-gray-100 bg-white">
-                {activeCols.map(key => (
-                  <td key={key} className="px-2 py-1.5">
-                    <ColFilterInput
-                      colKey={key}
-                      value={colFilters[key] || ''}
-                      onChange={val => setColFilter(key, val)}
-                      options={colOptions[key]}
-                    />
-                  </td>
-                ))}
-                <td className="px-2 py-1.5" />
-              </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
               {sorted.length === 0 && (
@@ -832,11 +1098,11 @@ export default function Dashboard() {
                     onClick={e => { if (e.target.closest('.priority-edit-cell')) return; setHistoryRow(row) }}
                   >
                     {activeCols.map(key => (
-                      <td key={key} className="px-4 py-3">
+                      <td key={key} className="px-2 py-2.5 overflow-hidden">
                         <Cell colKey={key} row={row} />
                       </td>
                     ))}
-                    <td className="px-4 py-3 text-right whitespace-nowrap">
+                    <td className="px-2 py-2.5 text-right whitespace-nowrap w-12">
                       <button
                         className="btn-ghost px-2 py-1 text-gray-400 hover:text-gray-600"
                         title="Editar partida"
@@ -981,18 +1247,19 @@ function MobileFilters({
   filterResponsable, setFilterResponsable,
   filterProveedor, setFilterProveedor,
   filterProyectos, setFilterProyectos,
+  filterPartidas, setFilterPartidas,
   filterPrioridad, setFilterPrioridad,
   clients, projects, rows, count,
 }) {
   const [open, setOpen] = useState(false)
 
-  const hasFilters = filterSearch || filterClientes.size || filterProyectos.size || filterEstados.size ||
-    filterPelota.size || filterResponsable.size || filterProveedor.size || filterPrioridad
+  const hasFilters = filterSearch || filterClientes.size || filterProyectos.size || filterPartidas.size ||
+    filterEstados.size || filterPelota.size || filterResponsable.size || filterProveedor.size || filterPrioridad
 
   const clear = () => {
     setFilterSearch(''); setFilterClientes(new Set()); setFilterProyectos(new Set())
-    setFilterEstados(new Set()); setFilterPelota(new Set()); setFilterResponsable(new Set())
-    setFilterProveedor(new Set()); setFilterPrioridad('')
+    setFilterPartidas(new Set()); setFilterEstados(new Set()); setFilterPelota(new Set())
+    setFilterResponsable(new Set()); setFilterProveedor(new Set()); setFilterPrioridad('')
   }
 
   const clientOptions     = clients.map(c => ({ value: c.id, label: c.name }))
@@ -1000,6 +1267,14 @@ function MobileFilters({
   const proyectoOptions   = projects
     .filter(p => !filterClientes.size || filterClientes.has(p.clientId))
     .map(p => ({ value: p.id, label: p.name }))
+  // Partidas filtradas por proyecto seleccionado (si hay alguno)
+  const partidaOptions    = [...new Map(
+    rows
+      .filter(r => !filterProyectos.size || filterProyectos.has(r.project?.id))
+      .map(r => [r.partida.id, r.partida.name])
+  ).entries()]
+    .sort((a, b) => a[1].localeCompare(b[1], 'es'))
+    .map(([id, name]) => ({ value: id, label: name }))
   const estadoOptions     = ESTADOS.map(e => ({ value: e.value, label: e.label }))
   const pelotaOptions     = PELOTA.filter(p => p.value !== '-').map(p => ({ value: p.value, label: p.label }))
   const responsableOptions = [...new Set(rows.map(r => r.latest?.responsible).filter(Boolean))].sort()
@@ -1015,14 +1290,15 @@ function MobileFilters({
           value={filterSearch} onChange={e => setFilterSearch(e.target.value)} />
         <MultiSelect placeholder="Clientes"     options={clientOptions}      values={filterClientes}    onChange={setFilterClientes} />
         <MultiSelect placeholder="Proyectos"    options={proyectoOptions}    values={filterProyectos}   onChange={setFilterProyectos} />
+        <MultiSelect placeholder="Partidas"     options={partidaOptions}     values={filterPartidas}    onChange={setFilterPartidas} />
         <MultiSelect placeholder="Estados"      options={estadoOptions}      values={filterEstados}     onChange={setFilterEstados} />
         <MultiSelect placeholder="Pelota"       options={pelotaOptions}      values={filterPelota}      onChange={setFilterPelota} />
         <MultiSelect placeholder="Responsable"  options={responsableOptions} values={filterResponsable} onChange={setFilterResponsable} />
         <MultiSelect placeholder="Proveedor"    options={proveedorOptions}   values={filterProveedor}   onChange={setFilterProveedor} />
         <div className="flex items-center gap-1.5">
           <span className="text-xs text-gray-500 whitespace-nowrap">Prioridad hasta</span>
-          <input type="number" min="1" max="30" className="input w-16 text-center"
-            placeholder="30" value={filterPrioridad}
+          <input type="number" min="1" className="input w-16 text-center"
+            placeholder="—" value={filterPrioridad}
             onChange={e => setFilterPrioridad(e.target.value)} />
         </div>
         {hasFilters && <button className="btn-ghost text-xs" onClick={clear}>Limpiar</button>}
@@ -1062,6 +1338,10 @@ function MobileFilters({
                 <MultiSelect placeholder="Todos los proyectos" options={proyectoOptions} values={filterProyectos} onChange={setFilterProyectos} />
               </div>
               <div>
+                <label className="label">Partida</label>
+                <MultiSelect placeholder="Todas las partidas" options={partidaOptions} values={filterPartidas} onChange={setFilterPartidas} />
+              </div>
+              <div>
                 <label className="label">Estado</label>
                 <MultiSelect placeholder="Todos los estados" options={estadoOptions} values={filterEstados} onChange={setFilterEstados} />
               </div>
@@ -1078,8 +1358,8 @@ function MobileFilters({
                 <MultiSelect placeholder="Todos" options={proveedorOptions} values={filterProveedor} onChange={setFilterProveedor} />
               </div>
               <div>
-                <label className="label">Prioridad hasta (1–30)</label>
-                <input type="number" min="1" max="30" className="input"
+                <label className="label">Prioridad hasta</label>
+                <input type="number" min="1" className="input"
                   placeholder="Sin límite" value={filterPrioridad}
                   onChange={e => setFilterPrioridad(e.target.value)} />
               </div>
@@ -1216,7 +1496,7 @@ function QuickEntryInline({ onSave, onCancel }) {
 // ── Edit row form ─────────────────────────────────────────────────
 function EditRowForm({ row, clients, projects, onClose }) {
   const { partida, project, latest } = row
-  const { activities } = useApp()
+  const { activities, partidas } = useApp()
 
   // Campos de partida
   const [clientId,    setClientId]    = useState(project?.clientId   || '')
@@ -1224,6 +1504,8 @@ function EditRowForm({ row, clients, projects, onClose }) {
   const [name,        setName]        = useState(partida.name        || '')
   const [provider,    setProvider]    = useState(partida.provider    || '')
   const [priority,    setPriority]    = useState(Number(partida.priority) || 15)
+  const [montoVenta,  setMontoVenta]  = useState(partida.montoVenta != null ? String(partida.montoVenta) : '')
+  const [utilidad,    setUtilidad]    = useState(partida.utilidad    != null ? String(partida.utilidad)    : '')
 
   // Campos de la última actividad
   const [date,           setDate]           = useState(latest?.date           || '')
@@ -1255,7 +1537,16 @@ function EditRowForm({ row, clients, projects, onClose }) {
       if (status    !== partida.status)                  partidaUp.status    = status
       if (provider  !== (partida.provider || ''))        partidaUp.provider  = provider
       if (projectId !== partida.projectId)               partidaUp.projectId = projectId
-      if (priority  !== (Number(partida.priority) || 15)) partidaUp.priority  = priority
+      const oldPriority = Number(partida.priority) || 15
+      if (priority !== oldPriority) {
+        partidaUp.priority = priority
+        const cascades = calcPriorityCascadeUpdates(partidas, partida.id, oldPriority, priority)
+        await batchUpdatePriorities(cascades)
+      }
+      const mvNum = montoVenta !== '' ? parseFloat(montoVenta) : null
+      const utNum = utilidad   !== '' ? parseFloat(utilidad)   : null
+      if (mvNum !== (partida.montoVenta ?? null)) partidaUp.montoVenta = mvNum
+      if (utNum !== (partida.utilidad   ?? null)) partidaUp.utilidad   = utNum
       if (Object.keys(partidaUp).length > 0)
         await updatePartida(partida.id, partidaUp)
 
@@ -1322,9 +1613,26 @@ function EditRowForm({ row, clients, projects, onClose }) {
             value={provider} onChange={e => setProvider(e.target.value)} />
         </div>
         <div>
-          <label className="label">Prioridad (1 urgente · 30 baja)</label>
-          <input type="number" className="input" min="1" max="30" step="1"
-            value={priority} onChange={e => setPriority(Math.min(30, Math.max(1, Number(e.target.value) || 15)))} />
+          <label className="label">Prioridad (1 = más urgente)</label>
+          <input type="number" className="input" min="1" step="1"
+            value={priority} onChange={e => setPriority(Math.max(1, Number(e.target.value) || 15))} />
+        </div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label className="label">Monto de venta (USD)</label>
+          <input type="number" className="input" min="0" step="0.01" placeholder="0.00"
+            value={montoVenta} onChange={e => setMontoVenta(e.target.value)} />
+        </div>
+        <div>
+          <label className="label">Utilidad (USD)</label>
+          <input type="number" className="input" min="0" step="0.01" placeholder="0.00"
+            value={utilidad} onChange={e => setUtilidad(e.target.value)} />
+          {montoVenta && utilidad && parseFloat(montoVenta) > 0 && (
+            <p className="text-xs text-green-700 mt-1">
+              = {(parseFloat(utilidad) / parseFloat(montoVenta) * 100).toFixed(1)}% sobre la venta
+            </p>
+          )}
         </div>
       </div>
 
