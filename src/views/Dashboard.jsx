@@ -767,9 +767,22 @@ export default function Dashboard() {
     const supplierCols  = ['PROJECT', 'CLIENT', 'ITEM TYPE', 'PCG-ID', 'STATUS', 'PRIORITY', 'ACTION REQUIRED', 'COMMENTS']
     const supplierWidths = [28, 22, 28, 14, 22, 10, 42, 40]
 
+    const usedSheetNames = new Set(['Master Summary'])
+    const uniqueSheetName = (name) => {
+      let base = name.slice(0, 31)
+      let candidate = base
+      let i = 2
+      while (usedSheetNames.has(candidate)) {
+        const suffix = ` (${i++})`
+        candidate = base.slice(0, 31 - suffix.length) + suffix
+      }
+      usedSheetNames.add(candidate)
+      return candidate
+    }
+
     for (const supplier of supplierList) {
       const sRows = allRows.filter(r => r.supplier === supplier)
-      const ws    = wb.addWorksheet(supplier.slice(0, 31))
+      const ws    = wb.addWorksheet(uniqueSheetName(supplier))
       writeSectionedSheet(ws, supplier, supplierWidths, supplierCols, sRows)
     }
 
