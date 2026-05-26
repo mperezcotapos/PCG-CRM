@@ -513,7 +513,9 @@ export default function Dashboard() {
 
   // ── Export XLSX ───────────────────────────────────────────────────
   const exportXLSX = async () => {
-    const ExcelJS = (await import('exceljs')).default
+    try {
+    const excelMod = await import('exceljs')
+    const ExcelJS  = excelMod.default ?? excelMod
     const wb = new ExcelJS.Workbook()
     wb.creator = 'PCG Group CRM'
     wb.created = new Date()
@@ -778,8 +780,14 @@ export default function Dashboard() {
     const a      = document.createElement('a')
     a.href       = url
     a.download   = fileName
+    document.body.appendChild(a)
     a.click()
-    URL.revokeObjectURL(url)
+    document.body.removeChild(a)
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
+    } catch (err) {
+      console.error('Export error:', err)
+      alert(`Error al exportar: ${err.message}`)
+    }
   }
 
   if (loading) return (
